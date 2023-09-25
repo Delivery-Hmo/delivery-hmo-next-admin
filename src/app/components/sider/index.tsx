@@ -1,6 +1,6 @@
-import { useState } from 'react'
-import { Layout, Menu } from "antd"
-import { HomeOutlined, PoweroffOutlined } from "@ant-design/icons"
+import { useState } from 'react';
+import { Layout, Menu } from "antd";
+import { HomeOutlined, PoweroffOutlined } from "@ant-design/icons";
 import { auth } from "@src/app/firebase";
 
 const Sider = () => {
@@ -17,12 +17,12 @@ const Sider = () => {
         mode="inline"
         items={[
           {
-            key: 'inicio',
+            key: 'Inicio',
             label: 'Inicio',
             icon: <HomeOutlined />
           },
           {
-            key: '3',
+            key: 'Cerrar sesión',
             label: 'Cerrar sesión',
             icon: <PoweroffOutlined />,
             onClick: () => auth.signOut()
@@ -30,7 +30,7 @@ const Sider = () => {
         ]}
       />
     </Layout.Sider>
-  )
-}
+  );
+};
 
-export default Sider
+export default Sider;

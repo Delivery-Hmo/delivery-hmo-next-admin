@@ -7,6 +7,7 @@
 
 .card {
   margin-bottom: 20vh;
+  padding: 20px;
   background-color: #206A5D;
   box-shadow:
     inset 0 -3em 3em rgba(0, 0, 0, 0.1),

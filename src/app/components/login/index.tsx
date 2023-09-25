@@ -1,9 +1,9 @@
-'use client'
-import React, { useState } from 'react'
+'use client';
+import React, { useState } from 'react';
 import styles from './login.module.css';
-import { Button, Card, Form, Input, message } from "antd";
-import useIsSmallScreen from "../../hooks/useIsSmallScreen";
+import { App, Button, Card, Form, Input } from "antd";
 import { signInWithEmail } from "@src/app/firebase/auth";
+import useIsSmallScreen from "@src/app/hooks/useIsSmallScreen";
 
 interface User {
   email: string;
@@ -13,6 +13,7 @@ interface User {
 const Login = () => {
   const isSmallScreen = useIsSmallScreen();
   const [loading, setLoading] = useState(false);
+  const { message } = App.useApp();
 
   const onFinish = async (values: User) => {
     if (loading) return;
@@ -29,7 +30,7 @@ const Login = () => {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   return (
     <div className={styles.container}>
@@ -48,7 +49,7 @@ const Login = () => {
               name="email"
               rules={[{ type: 'email', required: true, message: 'Correo válido requerido!' }]}
             >
-              <Input />
+              <Input autoComplete="email" />
             </Form.Item>
             <Form.Item<User>
               label="Contraseña"
@@ -64,7 +65,7 @@ const Login = () => {
         </Card>
       </Card>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;
