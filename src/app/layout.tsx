@@ -1,33 +1,30 @@
 'use client';
 import './globals.css';
-import { useState, ReactNode, useRef } from "react";
+import { ReactNode } from "react";
 import { App, ConfigProvider, Layout } from "antd";
-import { User } from "firebase/auth";
-import AuthProvider from "./context/auth";
-import Sider from "./components/sider";
-import ErrorBoundary from "./components/errorBoundary";
+import AuthProvider from "@src/context/auth";
+import ErrorBoundary from "@src/components/errorBoundary";
+import Sider from "@src/components/sider";
 
 export default function RootLayout({
   children,
 }: {
   children: ReactNode;
 }) {
-  const [user, setUser] = useState<User | null>(null);
-
   return (
     <html lang="en">
       <body>
         <ConfigProvider
           theme={{
             token: {
-              colorPrimary: "#206A5D"
+              colorPrimary: "#304878"
             }
           }}
         >
           <App>
-            <AuthProvider onLoadUser={setUser}>
+            <AuthProvider>
               <Layout style={{ height: "100vh" }}>
-                {user && <Sider />}
+                <Sider />
                 <ErrorBoundary>
                   <Layout.Content style={{ margin: 20 }}>
                     {children}

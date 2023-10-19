@@ -1,4 +1,4 @@
-import { getCurrentToken, getHeaders, handleError } from "@src/app/utils/functions";
+import { getCurrentToken, getHeaders, handleError } from "@src/utils/functions";
 
 const baseUrl: string = "http://localhost:3001/";
 

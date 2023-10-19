@@ -1,35 +1,33 @@
 import { useEffect, useState, useContext, createContext, FC, ReactNode } from "react";
 import { User, onIdTokenChanged } from "firebase/auth";
-import { useRouter } from 'next/navigation';
-import { auth } from "@src/app/firebase";
-import FullLoader from "@src/app/components/fullLoader";
+import { useRouter } from "next/navigation";
+import { auth } from "@src/firebase";
+import FullLoader from "@src/components/fullLoader";
 
 interface Props {
   children: ReactNode;
-  onLoadUser: (user: User | null) => void;
 }
 
 const AuthContext = createContext<{ user: User | null, loading: boolean; }>({
   user: null,
-  loading: true,
+  loading: true
 });
 
-const AuthProvider: FC<Props> = ({ children, onLoadUser }) => {
+const AuthProvider: FC<Props> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<Boolean>(true);
   const router = useRouter();
 
   useEffect(() => {
     const uns = onIdTokenChanged(auth, async (user: User | null) => {
-      setUser(user);
-      onLoadUser(user);
-      setLoading(false);
-
       if (user) {
-        router.push('/home');
+        router.push('/inicio');
       } else {
         router.push('/');
       }
+
+      setUser(user);
+      setLoading(false);
     });
 
     return () => {

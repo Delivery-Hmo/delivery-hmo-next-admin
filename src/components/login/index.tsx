@@ -1,9 +1,9 @@
 'use client';
+import styles from './styles.module.css';
 import React, { useState } from 'react';
-import styles from './login.module.css';
 import { App, Button, Card, Form, Input } from "antd";
-import { signInWithEmail } from "@src/app/firebase/auth";
-import useIsSmallScreen from "@src/app/hooks/useIsSmallScreen";
+import useIsSmallScreen from "@src/hooks/useIsSmallScreen";
+import { signInWithEmail } from "@src/firebase/auth";
 
 interface User {
   email: string;
@@ -36,7 +36,7 @@ const Login = () => {
     <div className={styles.container}>
       <Card className={styles.card} style={{ width: isSmallScreen ? 360 : 640 }}>
         <Card>
-          <h2 style={{ color: "#206A5D" }}>Bienvenido</h2>
+          <h2 style={{ color: "#304878" }}>Bienvenido</h2>
           <hr />
           <Form
             style={{ paddingTop: 10 }}

@@ -13,14 +13,17 @@ export const getCurrentToken = () => new Promise<string>((resolve, reject) => {
       uns();
 
       if (!user) {
-        reject("Error de autenticación");
+        reject("Error de autenticación.");
         return;
       }
 
       const token = await user.getIdToken();
       resolve(token);
     },
-    () => reject("Error de autenticación")
+    (error) => {
+      console.log(error);
+      reject("Error de autenticación.");
+    }
   );
 });
 
