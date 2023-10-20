@@ -1,6 +1,6 @@
-const Home = async () => {
+const Home = () => {
   return (
-    <div>home</div>
+    <div>homer</div>
   );
 };
 

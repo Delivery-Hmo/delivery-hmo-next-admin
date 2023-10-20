@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { App, Button, Card, Form, Input } from "antd";
 import useIsSmallScreen from "@src/hooks/useIsSmallScreen";
 import { signInWithEmail } from "@src/firebase/auth";
+import { useRouter } from "next/navigation";
 
 interface User {
   email: string;
@@ -11,6 +12,7 @@ interface User {
 }
 
 const Login = () => {
+  const router = useRouter();
   const isSmallScreen = useIsSmallScreen();
   const [loading, setLoading] = useState(false);
   const { message } = App.useApp();
@@ -26,7 +28,10 @@ const Login = () => {
 
       if (error) {
         message.error("Error al iniciar sesión.");
+        return;
       }
+
+      router.push("/inicio");
     } finally {
       setLoading(false);
     }

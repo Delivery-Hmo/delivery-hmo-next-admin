@@ -5,6 +5,7 @@ import { App, ConfigProvider, Layout } from "antd";
 import AuthProvider from "@src/context/auth";
 import ErrorBoundary from "@src/components/errorBoundary";
 import Sider from "@src/components/sider";
+import Breadcrumb from "@src/components/breadcrumb";
 
 export default function RootLayout({
   children,
@@ -27,6 +28,7 @@ export default function RootLayout({
                 <Sider />
                 <ErrorBoundary>
                   <Layout.Content style={{ margin: 20 }}>
+                    <Breadcrumb />
                     {children}
                   </Layout.Content>
                 </ErrorBoundary>

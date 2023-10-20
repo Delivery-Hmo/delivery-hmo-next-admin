@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext, createContext, FC, ReactNode } from "react";
 import { User, onIdTokenChanged } from "firebase/auth";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { auth } from "@src/firebase";
 import FullLoader from "@src/components/fullLoader";
 
@@ -17,12 +17,15 @@ const AuthProvider: FC<Props> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<Boolean>(true);
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     const uns = onIdTokenChanged(auth, async (user: User | null) => {
-      if (user) {
+      if (user && pathname === "/") {
         router.push('/inicio');
-      } else {
+      }
+
+      if (!user) {
         router.push('/');
       }
 
