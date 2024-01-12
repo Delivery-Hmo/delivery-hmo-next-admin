@@ -1,3 +1,4 @@
+"use client";
 import { FC } from 'react';
 import { Col, Row } from 'antd';
 import CreateButton from '../registerButton';
@@ -11,6 +12,7 @@ interface Props {
 }
 
 const textButtonsCreate: Record<string, string> = {
+  "Empresas": "empresa",
   "Sucursales": "sucursal",
   "Vendedores": "vendedor",
   "Repartidores": "repartidores",
