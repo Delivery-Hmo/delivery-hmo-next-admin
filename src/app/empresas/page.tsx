@@ -3,6 +3,8 @@ import HeaderView from "@src/components/headerView";
 import Table from "@src/components/table";
 
 const Companies = (searchParams: { [key: string]: string | string[] | undefined; }) => {
+  console.log(searchParams);
+
   return (
     <>
       <HeaderView

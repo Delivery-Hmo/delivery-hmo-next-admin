@@ -6,20 +6,22 @@ const firstPage = "?page=1&limit=5";
 
 const items = [
   {
-    key: '/inicio',
-    label: 'Inicio',
+    key: "/inicio",
+    url: "/inicio",
+    label: "Inicio",
     icon: <HomeOutlined />,
   },
   {
-    key: `/empresas${firstPage}`,
-    label: 'Empresas',
+    key: "/empresas",
+    url: `/empresas${firstPage}`,
+    label: "Empresas",
     icon: <MdBusiness style={{ fontSize: 18 }} />,
   },
   {
-    key: 'Cerrar sesión',
-    label: 'Cerrar sesión',
+    key: "/cerrar-sesión",
+    label: "Cerrar sesión",
     icon: <PoweroffOutlined />,
-    onClick: () => getAuth().signOut()
+    onClick: () => getAuth().signOut(),
   },
 ];
 
