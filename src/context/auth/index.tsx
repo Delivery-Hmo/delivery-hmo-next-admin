@@ -2,6 +2,7 @@ import { useEffect, useState, useContext, createContext, FC, ReactNode } from "r
 import { User, onIdTokenChanged } from "firebase/auth";
 import { auth } from "@src/firebase";
 import FullLoader from "@src/components/fullLoader";
+import { setCookie, deleteCookie } from 'cookies-next';
 
 interface Props {
   children: ReactNode;
@@ -19,6 +20,13 @@ const AuthProvider: FC<Props> = ({ children, onLoadUser }) => {
 
   useEffect(() => {
     const uns = onIdTokenChanged(auth, async (user: User | null) => {
+      if (user) {
+        const token = await user.getIdToken();
+        setCookie('token', token);
+      } else {
+        deleteCookie('token');
+      }
+
       setUser(user);
       setLoading(false);
       onLoadUser(user);

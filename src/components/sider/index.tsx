@@ -13,21 +13,21 @@ const Sider = () => {
 
   return (
     <Layout.Sider collapsible>
-      <div style={{ textAlign: "center" }}>
+      <div style={{ textAlign: "center", wordWrap: "break-word", margin: 5 }}>
         <br />
         <Avatar style={{ backgroundColor: "grey" }} size="large" icon={<UserOutlined />} />
-        <h3 style={{ color: "white" }}>{user.email}</h3>
+        <div style={{ color: "white" }}>{user.email}</div>
       </div>
       <Menu
-        defaultSelectedKeys={["/" + pathname.split("/")[1]]}
+        selectedKeys={["/" + pathname.split("/")[1]]}
         theme="dark"
         mode="inline"
         items={
           items.map((item) => {
-            if (!item.url) return item;
+            if (!item.path) return item;
 
             return {
-              onClick: () => router.push(item.url.toString().toLocaleLowerCase()),
+              onClick: () => router.push(item.path.toString().toLocaleLowerCase()),
               ...item
             };
           })

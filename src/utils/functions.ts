@@ -1,4 +1,5 @@
-import { User, getAuth, onIdTokenChanged } from "firebase/auth";
+import { auth } from "@src/firebase";
+import { User, onIdTokenChanged } from "firebase/auth";
 
 export const getHeaders = (token: string) => ({
   Accept: 'application/json',
@@ -8,7 +9,7 @@ export const getHeaders = (token: string) => ({
 
 export const getCurrentToken = () => new Promise<string>((resolve, reject) => {
   const uns = onIdTokenChanged(
-    getAuth(),
+    auth,
     async (user: User | null) => {
       uns();
 
@@ -18,6 +19,7 @@ export const getCurrentToken = () => new Promise<string>((resolve, reject) => {
       }
 
       const token = await user.getIdToken();
+
       resolve(token);
     },
     (error) => {

@@ -1,30 +1,16 @@
 import React from 'react';
 import { Table as TableAnt } from "antd";
 import { ColumnsType } from "antd/es/table";
-
-const getData = async () => {
-  await new Promise((resolve) => setTimeout(resolve, 2000));
-
-  return [
-    {
-      id: 1,
-      name: 'Empresa 1',
-    },
-    {
-      id: 2,
-      name: 'Empresa 2',
-    },
-  ];
-};
+import { get } from "@src/services/http";
 
 const Table = async <T extends {}>({ url, columns }: { url?: string; columns: ColumnsType<T>; }) => {
-  const data = (await getData()) as any as T[];
+  const data = await get<T>("companiesApi", "userAdmin/list") as T[];
 
   return (
     <>
       <TableAnt
         columns={columns}
-        dataSource={data}
+        dataSource={[]}
         rowKey="id"
         sticky
         scroll={{ x: 400 }}

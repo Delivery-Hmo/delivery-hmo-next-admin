@@ -6,8 +6,9 @@ import AuthProvider from "@src/context/auth";
 import ErrorBoundary from "@src/components/errorBoundary";
 import Sider from "@src/components/sider";
 import Breadcrumb from "@src/components/breadcrumb";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { User } from "firebase/auth";
+import { setCookie, deleteCookie } from 'cookies-next';
 
 export default function RootLayout({
   children,
@@ -15,9 +16,18 @@ export default function RootLayout({
   children: ReactNode;
 }) {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const page = searchParams.get("page") || "1";
+    const limit = searchParams.get("limit") || "5";
+
+    setCookie("page", page);
+    setCookie("limit", limit);
+  }, [searchParams]);
 
   useEffect(() => {
     if (loading) return;

@@ -2,18 +2,18 @@ import { MdBusiness } from "react-icons/md";
 import { HomeOutlined, PoweroffOutlined } from "@ant-design/icons";
 import { getAuth } from "firebase/auth";
 
-const firstPage = "?page=1&limit=5";
+export const firstPage = "?page=1&limit=5";
 
 const items = [
   {
     key: "/inicio",
-    url: "/inicio",
+    path: "/inicio",
     label: "Inicio",
     icon: <HomeOutlined />,
   },
   {
     key: "/empresas",
-    url: `/empresas${firstPage}`,
+    path: `/empresas${firstPage}`,
     label: "Empresas",
     icon: <MdBusiness style={{ fontSize: 18 }} />,
   },

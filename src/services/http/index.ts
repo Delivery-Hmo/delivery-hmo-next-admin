@@ -1,13 +1,23 @@
 import { getCurrentToken, getHeaders, handleError } from "@src/utils/functions";
+import { getCookie } from 'cookies-next';
+import { cookies } from 'next/headers';
 
-const baseUrl: string = "http://localhost:3001/";
+type BaseUrlTypes = "companiesApi";
 
-export const get = async <T>(url: string, abortController?: AbortController) => {
+const baseUrlCompaniesApi: string = "http://localhost:3001/";
+
+const baseUrls: Record<BaseUrlTypes, string> = {
+  "companiesApi": "http://localhost:3001/"
+};
+
+export const get = async <T>(baseUrlType: BaseUrlTypes, url: string, abortController?: AbortController) => {
   try {
-    const token = await getCurrentToken();
+    const token = getCookie("token", { cookies }) as string;
+    const page = getCookie("page", { cookies }) as string;
+    const limit = getCookie("limit", { cookies }) as string;
 
     const response = await fetch(
-      baseUrl + url,
+      `${baseUrls[baseUrlType]}${url}?page=${page}&limit=${limit}`,
       {
         method: 'GET',
         headers: getHeaders(token),
@@ -29,7 +39,7 @@ export const get = async <T>(url: string, abortController?: AbortController) => 
 export const patch = async <T>(url: string, body: Record<string, any>, abortController: AbortController) => {
   const token = await getCurrentToken();
   const response = await fetch(
-    baseUrl + url,
+    baseUrlCompaniesApi + url,
     {
       method: 'PATCH',
       body: JSON.stringify(body),
