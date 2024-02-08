@@ -25,6 +25,11 @@ export default function RootLayout({
     if (user && pathname === "/") {
       router.push('/inicio');
     }
+   
+    if (!user && pathname === "/usuarios/registrar") {
+      router.push('/usuarios/registrar');
+      return
+    }
 
     if (!user) {
       router.push('/');
