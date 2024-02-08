@@ -66,6 +66,14 @@ const Login = () => {
             </Form.Item>
             <br />
             <Button htmlType="submit" type="primary" style={{ width: "100%" }} loading={loading}>Entrar</Button>
+            <br />
+            <a style={{
+              marginLeft: '200px', fontSize: '16px', color: '#0070f3', textDecoration: 'none', cursor: 'pointer',
+            }}
+              onClick={() => router.push('/usuarios/registrar')}
+            >
+              @ Registrarse
+            </a>
           </Form>
         </Card>
       </Card>
