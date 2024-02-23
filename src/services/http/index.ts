@@ -1,23 +1,19 @@
+import { BaseUrlTypes } from "@src/types/services/htts";
+import { baseUrlCompaniesApi, baseUrlsApis } from "@src/utils/constanst";
 import { getCurrentToken, getHeaders, handleError } from "@src/utils/functions";
 import { getCookie } from 'cookies-next';
 import { cookies } from 'next/headers';
 
-type BaseUrlTypes = "companiesApi";
-
-const baseUrlCompaniesApi: string = "http://localhost:3001/";
-
-const baseUrls: Record<BaseUrlTypes, string> = {
-  "companiesApi": "http://localhost:3001/"
-};
-
-export const get = async <T>(baseUrlType: BaseUrlTypes, url: string, abortController?: AbortController) => {
+export const get = async <T extends { total?: number; }>(baseUrlType: BaseUrlTypes, url: string, abortController?: AbortController) => {
   try {
     const token = getCookie("token", { cookies }) as string;
     const page = getCookie("page", { cookies }) as string;
     const limit = getCookie("limit", { cookies }) as string;
 
+    if (page && limit) url += `?page=${page}&limit=${limit}`;
+
     const response = await fetch(
-      `${baseUrls[baseUrlType]}${url}?page=${page}&limit=${limit}`,
+      `${baseUrlsApis[baseUrlType]}${url}`,
       {
         method: 'GET',
         headers: getHeaders(token),
@@ -30,7 +26,9 @@ export const get = async <T>(baseUrlType: BaseUrlTypes, url: string, abortContro
       throw handleError(error);
     }
 
-    return response.json() as Promise<T>;
+    const json = await response.json() as T;
+
+    return json;
   } catch (error) {
     throw handleError(error);
   }
@@ -50,7 +48,7 @@ export const patch = async <T>(url: string, body: Record<string, any>, abortCont
 
   if (!response.ok) {
     const error = await response.json();
-    throw error;
+    throw handleError(error);
   }
 
   return response.json() as Promise<T>;

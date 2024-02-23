@@ -1,8 +1,7 @@
 import { MdBusiness } from "react-icons/md";
 import { HomeOutlined, PoweroffOutlined } from "@ant-design/icons";
 import { getAuth } from "firebase/auth";
-
-export const firstPage = "?page=1&limit=5";
+import { firstPage } from "@src/utils/constanst";
 
 const items = [
   {

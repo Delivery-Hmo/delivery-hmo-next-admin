@@ -4,7 +4,7 @@ const RegisterCompany = () => {
   return (
     <>
       <HeaderView
-        title="Registrar empresa"
+        title="Editar empresa"
       />
     </>
   );

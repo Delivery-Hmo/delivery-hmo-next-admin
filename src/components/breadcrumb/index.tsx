@@ -1,8 +1,9 @@
 import { useMemo } from 'react';
 import { Breadcrumb as BreadcrumbAnt } from 'antd';
-import items, { firstPage } from "../sider/items";
+import items from "../sider/items";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@src/context/auth";
+import { firstPage } from "@src/utils/constanst";
 
 const pathsWithQuery: readonly string[] = ["empresas"];
 

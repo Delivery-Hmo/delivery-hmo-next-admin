@@ -1,3 +1,5 @@
+"use client";
+
 import { FC } from 'react';
 import { Button, message, Space, Modal } from 'antd';
 import { EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';

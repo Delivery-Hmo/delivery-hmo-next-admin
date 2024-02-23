@@ -1,6 +1,6 @@
-import React from 'react';
 import HeaderView from "@src/components/headerView";
 import Table from "@src/components/table";
+import { useEffect } from "react";
 
 const Companies = () => {
   return (
@@ -10,18 +10,19 @@ const Companies = () => {
         path="/empresas/registrar"
       />
       <Table
+        url="userAdmin/list"
         columns={[
           {
             key: "id",
             title: "ID",
-            dataIndex: "id",
           },
           {
             key: "name",
             title: "Nombre",
-            dataIndex: "name",
-          }
+          },
         ]}
+        urlEdit="/empresas/editar"
+        urlDelete="/empresas"
       />
     </>
   );

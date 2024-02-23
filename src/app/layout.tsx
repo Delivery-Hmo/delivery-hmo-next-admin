@@ -1,6 +1,6 @@
 'use client';
 import './globals.css';
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { App, ConfigProvider, Layout } from "antd";
 import AuthProvider from "@src/context/auth";
 import ErrorBoundary from "@src/components/errorBoundary";
@@ -8,7 +8,7 @@ import Sider from "@src/components/sider";
 import Breadcrumb from "@src/components/breadcrumb";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { User } from "firebase/auth";
-import { setCookie, deleteCookie } from 'cookies-next';
+import { setCookie } from 'cookies-next';
 
 export default function RootLayout({
   children,
