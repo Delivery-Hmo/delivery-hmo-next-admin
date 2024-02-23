@@ -23,8 +23,6 @@ const Pagination = () => {
     setTotal(+totalElement?.textContent! || 0);
   }, []);
 
-  console.log(total);
-
   useEffect(() => {
     const idDelete = searchParams.get('borrar');
 
