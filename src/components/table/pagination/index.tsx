@@ -21,9 +21,7 @@ const Pagination = () => {
     const totalElement = window.document.getElementById("total");
 
     setTotal(+totalElement?.textContent! || 0);
-  }, []);
 
-  useEffect(() => {
     const idDelete = searchParams.get('borrar');
 
     if (!idDelete) return;
