@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Breadcrumb as BreadcrumbAnt } from 'antd';
+import { Breadcrumb as BreadcrumbAnt, Col, Row } from 'antd';
 import items from "../sider/items";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@src/context/auth";
@@ -8,8 +8,8 @@ import { firstPage } from "@src/utils/constanst";
 const pathsWithQuery: readonly string[] = ["empresas"];
 
 const Breadcrumb = () => {
-  const pathname = usePathname();
   const { user } = useAuth();
+  const pathname = usePathname();
 
   const { icon, paths } = useMemo(() => {
     const paths = pathname.split("/");
@@ -37,24 +37,26 @@ const Breadcrumb = () => {
   if (!user) return null;
 
   return (
-    <div style={{ display: "flex" }}>
-      <div style={{ marginRight: 10 }}>
+    <Row gutter={10}>
+      <Col style={{ paddingTop: 2 }}>
         {icon}
-      </div>
-      <BreadcrumbAnt
-        items={
-          paths.map(path => {
-            const paths = path.split("/");
-            const lastPath = paths[paths.length - 1].split("?")[0];
+      </Col>
+      <Col>
+        <BreadcrumbAnt
+          items={
+            paths.map(path => {
+              const paths = path.split("/");
+              const lastPath = paths[paths.length - 1].split("?")[0];
 
-            return {
-              href: `/${path}`,
-              title: lastPath.charAt(0).toUpperCase() + lastPath.slice(1),
-            };
-          })
-        }
-      />
-    </div>
+              return {
+                href: `/${path}`,
+                title: lastPath.charAt(0).toUpperCase() + lastPath.slice(1),
+              };
+            })
+          }
+        />
+      </Col>
+    </Row>
   );
 };
 

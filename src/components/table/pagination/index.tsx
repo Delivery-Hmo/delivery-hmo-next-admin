@@ -7,22 +7,27 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const Pagination = () => {
-  const modal = useModal();
-
   const searchParams = useSearchParams();
-  const page = searchParams.get('page');
-  const limit = searchParams.get('limit');
-
+  const modal = useModal();
   const router = useRouter();
   const pathname = usePathname();
   const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(5);
 
   useEffect(() => {
-    const totalElement = window.document.getElementById("total");
-
-    setTotal(+totalElement?.textContent! || 0);
-
+    const page = searchParams.get('page') || 1;
+    const limit = searchParams.get('limit') || 5;
     const idDelete = searchParams.get('borrar');
+
+    const totalElement = window.document.getElementById("total");
+    const total = totalElement?.textContent || 0;
+
+    setCookie("page", page);
+    setCookie("limit", limit);
+    setPage(+page);
+    setLimit(+limit);
+    setTotal(+total);
 
     if (!idDelete) return;
 
@@ -42,6 +47,7 @@ const Pagination = () => {
 
   return (
     <PaginationAnt
+      style={{ marginTop: 10 }}
       showSizeChanger
       total={total}
       current={+page! || 1}

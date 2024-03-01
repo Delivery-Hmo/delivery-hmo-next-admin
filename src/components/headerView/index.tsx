@@ -1,42 +1,61 @@
-"use client";
-import { FC } from 'react';
 import { Col, Row } from 'antd';
+import { usePathname, useRouter } from "next/navigation";
 import CreateButton from '../registerButton';
 import BackButton from '../backButton';
-import { useRouter } from "next/navigation";
-
-interface Props {
-  title: string;
-  path?: string;
-  goBack?: boolean;
-}
+import { useMemo } from "react";
+import { useAuth } from "@src/context/auth";
 
 const textButtonsCreate: Record<string, string> = {
-  "Empresas": "empresa",
-  "Sucursales": "sucursal",
-  "Vendedores": "vendedor",
-  "Repartidores": "repartidores",
-  "Productos": "productos"
+  "empresas": "empresa",
+  "sucursales": "sucursal",
+  "vendedores": "vendedor",
+  "repartidores": "repartidor",
+  "productos": "producto"
 } as const;
 
-const HeaderView: FC<Props> = ({ title, path, goBack }) => {
+const HeaderView = () => {
+  const { user } = useAuth();
+  const pathname = usePathname();
   const router = useRouter();
+
+  const firstPath = useMemo<string>(() =>
+    pathname?.split("/")[1] || "",
+    [pathname]
+  );
+
+  const inPathWithTable = useMemo(() =>
+    Object.keys(textButtonsCreate).some(k => k === firstPath),
+    [firstPath]
+  );
+
+  const inPathRegister = useMemo(() =>
+    inPathWithTable && pathname.split("/").length > 2,
+    [inPathWithTable, pathname]
+  );
+
+  if (!user) return null;
+
+  console.log(firstPath);
 
   return (
     <>
       <Row justify='space-between' align="middle">
         <Col>
           <h1>
-            {title}
+            {
+              inPathRegister
+                ? "Registrar " + textButtonsCreate[firstPath]
+                : firstPath.charAt(0).toUpperCase() + firstPath.slice(1)
+            }
           </h1>
         </Col>
         {
-          path && <Col>
+          Object.keys(textButtonsCreate).some(k => k === firstPath) && <Col>
             {
-              goBack
-                ? <BackButton onClick={() => router.push(path)} />
-                : <CreateButton onClick={() => router.push(path)}>
-                  {"Registar " + textButtonsCreate[title]}
+              inPathRegister
+                ? <BackButton onClick={() => router.push(`/${firstPath}`)} />
+                : <CreateButton onClick={() => router.push(`/${firstPath}/registrar`)}>
+                  {"Registrar " + textButtonsCreate[firstPath]}
                 </CreateButton>
             }
           </Col>
@@ -47,4 +66,4 @@ const HeaderView: FC<Props> = ({ title, path, goBack }) => {
   );
 };
 
-export default HeaderView;
+export default HeaderView;;

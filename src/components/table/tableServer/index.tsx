@@ -1,4 +1,6 @@
 
+"use server";
+
 import { Get } from "@src/interfaces/services/http";
 import { get } from "@src/services/http";
 import { TableProps } from "@src/interfaces/components/table";
@@ -17,14 +19,15 @@ const TableServer = async <T extends Document>({ url, columns, urlEdit, urlDelet
 
   return (
     <>
-      <div id="total">{total}</div>
+      <div id="total" style={{ display: "none" }}>{total}</div>
       <table
         style={{
           width: "100%",
           border: "1px solid #ccc",
           boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
           backgroundColor: "#fff",
-          padding: 20
+          padding: 20,
+          borderRadius: 20
         }}
       >
         <thead>

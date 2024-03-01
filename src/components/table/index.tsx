@@ -1,4 +1,6 @@
 
+import { Suspense } from "react";
+import { Skeleton } from "antd";
 import TableServer from "./tableServer";
 import Pagination from "./pagination";
 import { TableProps } from "@src/interfaces/components/table";
@@ -6,7 +8,16 @@ import { TableProps } from "@src/interfaces/components/table";
 const Table = <T extends {}>(props: TableProps<T>) => {
   return (
     <>
-      <TableServer {...props} />
+      <Suspense
+        fallback={
+          <Skeleton
+            title={false}
+            paragraph={{ rows: 6, width: "100%" }}
+          />
+        }
+      >
+        <TableServer {...props} />
+      </Suspense>
       <Pagination />
     </>
   );
