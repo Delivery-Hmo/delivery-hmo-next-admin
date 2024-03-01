@@ -8,7 +8,7 @@ import ErrorBoundary from "@src/components/errorBoundary";
 import Sider from "@src/components/sider";
 import Breadcrumb from "@src/components/breadcrumb";
 import Error from "@src/app/error";
-import HeaderView from "@src/components/headerView";
+import HeaderPage from "@src/components/headerPage";
 
 export default function RootLayout({
   children
@@ -31,7 +31,7 @@ export default function RootLayout({
                 <Sider />
                 <div style={{ display: "block", padding: 20, width: "100%" }}>
                   <Breadcrumb />
-                  <HeaderView />
+                  <HeaderPage />
                   <ErrorBoundary fallback={<Error />}>
                     <Layout.Content >
                       {children}
