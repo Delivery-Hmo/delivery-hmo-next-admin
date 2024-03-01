@@ -1,25 +1,26 @@
 import { MdBusiness } from "react-icons/md";
 import { HomeOutlined, PoweroffOutlined } from "@ant-design/icons";
 import { getAuth } from "firebase/auth";
-
-const firstPage = "?page=1&limit=5";
+import { firstPage } from "@src/utils/constanst";
 
 const items = [
   {
-    key: '/inicio',
-    label: 'Inicio',
+    key: "/inicio",
+    path: "/inicio",
+    label: "Inicio",
     icon: <HomeOutlined />,
   },
   {
-    key: `/empresas${firstPage}`,
-    label: 'Empresas',
+    key: "/empresas",
+    path: `/empresas${firstPage}`,
+    label: "Empresas",
     icon: <MdBusiness style={{ fontSize: 18 }} />,
   },
   {
-    key: 'Cerrar sesión',
-    label: 'Cerrar sesión',
+    key: "/cerrar-sesión",
+    label: "Cerrar sesión",
     icon: <PoweroffOutlined />,
-    onClick: () => getAuth().signOut()
+    onClick: () => getAuth().signOut(),
   },
 ];
 

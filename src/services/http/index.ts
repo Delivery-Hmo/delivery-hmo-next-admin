@@ -1,13 +1,19 @@
+import { BaseUrlTypes } from "@src/types/services/htts";
+import { baseUrlCompaniesApi, baseUrlsApis } from "@src/utils/constanst";
 import { getCurrentToken, getHeaders, handleError } from "@src/utils/functions";
+import { getCookie } from 'cookies-next';
+import { cookies } from 'next/headers';
 
-const baseUrl: string = "http://localhost:3001/";
-
-export const get = async <T>(url: string, abortController?: AbortController) => {
+export const get = async <T extends { total?: number; }>(baseUrlType: BaseUrlTypes, url: string, abortController?: AbortController) => {
   try {
-    const token = await getCurrentToken();
+    const token = getCookie("token", { cookies }) as string;
+    const page = getCookie("page", { cookies }) as string;
+    const limit = getCookie("limit", { cookies }) as string;
+
+    if (page && limit) url += `?page=${page}&limit=${limit}`;
 
     const response = await fetch(
-      baseUrl + url,
+      `${baseUrlsApis[baseUrlType]}${url}`,
       {
         method: 'GET',
         headers: getHeaders(token),
@@ -20,7 +26,9 @@ export const get = async <T>(url: string, abortController?: AbortController) => 
       throw handleError(error);
     }
 
-    return response.json() as Promise<T>;
+    const json = await response.json() as T;
+
+    return json;
   } catch (error) {
     throw handleError(error);
   }
@@ -29,7 +37,7 @@ export const get = async <T>(url: string, abortController?: AbortController) => 
 export const patch = async <T>(url: string, body: Record<string, any>, abortController: AbortController) => {
   const token = await getCurrentToken();
   const response = await fetch(
-    baseUrl + url,
+    baseUrlCompaniesApi + url,
     {
       method: 'PATCH',
       body: JSON.stringify(body),
@@ -40,7 +48,7 @@ export const patch = async <T>(url: string, body: Record<string, any>, abortCont
 
   if (!response.ok) {
     const error = await response.json();
-    throw error;
+    throw handleError(error);
   }
 
   return response.json() as Promise<T>;

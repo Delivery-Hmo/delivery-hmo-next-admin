@@ -12,7 +12,7 @@ const BackButton: FC<ButtonProps> = (props) => {
     >
       Regresar
     </Button>
-  )
-}
+  );
+};
 
 export default BackButton;

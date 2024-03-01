@@ -2,14 +2,16 @@ import { useEffect, useState } from 'react';
 import { message } from 'antd';
 import useAbortController from "../useAbortController";
 import { get } from "@src/services/http";
+import { BaseUrlTypes } from "@src/types/services/htts";
 
 export interface PropsUseGet {
+  baseUrl: BaseUrlTypes;
   url: string;
   wait?: boolean;
   mergeResponse?: boolean;
 }
 
-const useGet = <T extends {}>({ url, wait, mergeResponse }: PropsUseGet) => {
+const useGet = <T extends {}>({ baseUrl, url, wait, mergeResponse }: PropsUseGet) => {
   const abortController = useAbortController();
   const [loading, setLoading] = useState(true);
   const [response, setResponse] = useState<T>();
@@ -21,7 +23,7 @@ const useGet = <T extends {}>({ url, wait, mergeResponse }: PropsUseGet) => {
       setLoading(true);
 
       try {
-        const _response = await get<T>(url, abortController.current!);
+        const _response = await get<T>(baseUrl, url, abortController.current!);
 
         setResponse(r =>
           mergeResponse

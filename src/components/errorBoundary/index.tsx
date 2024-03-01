@@ -2,6 +2,7 @@ import { Component, ErrorInfo, ReactNode } from "react";
 
 interface ErrorBoundaryProps {
   children: ReactNode;
+  fallback: ReactNode;
 }
 
 interface ErrorBoundaryState {
@@ -24,11 +25,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
   render(): ReactNode {
     if (this.state.hasError) {
-      return (
-        <div style={{ padding: 20 }}>
-          <h2>Oops, ocurrio un error!</h2>
-        </div>
-      );
+      return this.props.fallback;
     }
 
     return this.props.children;
