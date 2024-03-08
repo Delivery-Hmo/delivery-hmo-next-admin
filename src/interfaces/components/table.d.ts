@@ -1,11 +1,11 @@
 export interface TableProps<T> {
   url: string;
-  columns: Column[];
+  columns: Column<T>[];
   urlEdit?: string;
   urlDelete?: string;
 }
 
-interface Column {
+interface Column<T> {
   key: string;
   title: string;
 }

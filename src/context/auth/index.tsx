@@ -21,6 +21,11 @@ const AuthProvider: FC<Props> = ({ children }) => {
   const [loading, setLoading] = useState<Boolean>(true);
 
   useEffect(() => {
+    setCookie("page", 1);
+    setCookie("limit", 5);
+  }, []);
+
+  useEffect(() => {
     if (loading) return;
 
     if (user && pathname === "/") {

@@ -36,7 +36,10 @@ const TableServer = async <T extends Document>({ url, columns, urlEdit, urlDelet
               columns.map((column) => (
                 <th
                   key={column.key}
-                  style={{ textAlign: "start" }}
+                  style={{
+                    textAlign: "start",
+                    width: "40%"
+                  }}
                 >
                   {column.title}
                 </th>
@@ -64,14 +67,22 @@ const TableServer = async <T extends Document>({ url, columns, urlEdit, urlDelet
                   ))
                 }
                 {
-                  Boolean(urlEdit) && <td>
+                  Boolean(urlEdit) && <td
+                    style={{
+                      width: 50
+                    }}
+                  >
                     <Link href={`${urlEdit}?id=${item.id}`!}>
                       Editar
                     </Link>
                   </td>
                 }
                 {
-                  Boolean(urlDelete) && <td>
+                  Boolean(urlDelete) && <td
+                    style={{
+                      width: 50
+                    }}
+                  >
                     <Link href={`${urlDelete}?page=${page}&limit=${limit}&borrar=${item.id}`}>
                       Eliminar
                     </Link>
