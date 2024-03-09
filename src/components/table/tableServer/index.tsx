@@ -7,12 +7,10 @@ import { TableProps } from "@src/interfaces/components/table";
 import { cookies } from 'next/headers';
 import { getCookie } from "cookies-next";
 import Link from "next/link";
+import { Switch } from "antd";
+import { urlImageDefaultProfile } from "@src/utils/constanst";
 
-interface Document {
-  id: string;
-}
-
-const TableServer = async <T extends Document>({ url, columns, urlEdit, urlDelete }: TableProps<T>) => {
+const TableServer = async <T extends { id?: string; }>({ url, columns, urlEdit, urlDelete }: TableProps<T>) => {
   const { list, total } = await get<Get<T>>("companiesApi", url);
   const page = getCookie("page", { cookies }) as string;
   const limit = getCookie("limit", { cookies }) as string;
@@ -35,7 +33,7 @@ const TableServer = async <T extends Document>({ url, columns, urlEdit, urlDelet
             {
               columns.map((column) => (
                 <th
-                  key={column.key}
+                  key={column.key.toString()}
                   style={{
                     textAlign: "start",
                     width: "40%"
@@ -60,11 +58,29 @@ const TableServer = async <T extends Document>({ url, columns, urlEdit, urlDelet
         <tbody>
           {
             list.map((item) => {
+              const _item = (item as Record<string, string | number | boolean>);
+
               return <tr key={item.id}>
                 {
-                  columns.map((column) => (
-                    <td key={column.key}>{item[column.key as keyof Document]}</td>
-                  ))
+                  columns.map((column) => {
+                    const value = _item[column.key] as string | number | boolean;
+
+                    return (
+                      <td key={column.key.toString()}>
+                        {
+                          typeof value === "boolean"
+                            ? <Switch checked={value} disabled />
+                            : column.key === "image"
+                              ? <img
+                                src={value.toString() || urlImageDefaultProfile}
+                                height={50}
+                                style={{ borderRadius: 10 }}
+                              />
+                              : value
+                        }
+                      </td>
+                    );
+                  })
                 }
                 {
                   Boolean(urlEdit) && <td

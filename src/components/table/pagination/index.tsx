@@ -16,6 +16,21 @@ const Pagination = () => {
   const [limit, setLimit] = useState(5);
 
   useEffect(() => {
+    const totalElement = window.document.getElementById("total");
+    const total = totalElement?.textContent || 0;
+
+    setTotal(+total);
+
+    return () => {
+      setCookie("page", 1);
+      setCookie("limit", 5);
+      setPage(1);
+      setLimit(5);
+      setTotal(0);
+    };
+  }, []);
+
+  useEffect(() => {
     const page = searchParams.get('page') || 1;
     const limit = searchParams.get('limit') || 5;
     const idDelete = searchParams.get('borrar');
@@ -49,6 +64,7 @@ const Pagination = () => {
     <PaginationAnt
       style={{ marginTop: 10 }}
       showSizeChanger
+      pageSizeOptions={[5, 10, 25, 50, 100]}
       total={total}
       current={+page! || 1}
       pageSize={+limit! || 5}

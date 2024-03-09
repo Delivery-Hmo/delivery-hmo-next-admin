@@ -1,8 +1,9 @@
 import Table from "@src/components/table";
+import { UserAdmin } from "@src/interfaces/users";
 
 const Companies = () => {
   return (
-    <Table
+    <Table<UserAdmin>
       url="userAdmin/list"
       columns={[
         {
@@ -13,9 +14,18 @@ const Companies = () => {
           key: "name",
           title: "Nombre",
         },
+        {
+          key: "active",
+          title: "Activo",
+        },
+        {
+          key: "image",
+          title: "Imagen",
+        }
       ]}
       urlEdit="/empresas/editar"
       urlDelete="/empresas"
+    //eliminar urlDelete sacando la base de la url de urlEdit.
     />
   );
 };

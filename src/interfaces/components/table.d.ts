@@ -6,6 +6,6 @@ export interface TableProps<T> {
 }
 
 interface Column<T> {
-  key: string;
+  key: keyof T;
   title: string;
 }
