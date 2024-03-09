@@ -35,8 +35,6 @@ const HeaderView = () => {
 
   if (!user) return null;
 
-  console.log(firstPath);
-
   return (
     <>
       <Row justify='space-between' align="middle">
