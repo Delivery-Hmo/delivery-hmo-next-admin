@@ -1,5 +1,5 @@
-import { FC } from 'react';
-import { Button, ButtonProps } from 'antd';
+import { FC } from "react";
+import { Button, ButtonProps } from "antd";
 import { RollbackOutlined } from "@ant-design/icons";
 
 const BackButton: FC<ButtonProps> = (props) => {

@@ -4,7 +4,7 @@ import { UserAdmin } from "@src/interfaces/users";
 const Companies = () => {
   return (
     <Table<UserAdmin>
-      url="userAdmin/list"
+      baseUrlType="companiesApi"
       columns={[
         {
           key: "id",
@@ -23,9 +23,7 @@ const Companies = () => {
           title: "Imagen",
         }
       ]}
-      urlEdit="/empresas/editar"
-      urlDelete="/empresas"
-    //eliminar urlDelete sacando la base de la url de urlEdit.
+      showEdit
     />
   );
 };

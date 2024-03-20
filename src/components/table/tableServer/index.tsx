@@ -1,19 +1,22 @@
 
 "use server";
 
+import Link from "next/link";
+import { cookies } from "next/headers";
+import { getCookie } from "cookies-next";
+import { Switch } from "antd";
 import { Get } from "@src/interfaces/services/http";
 import { get } from "@src/services/http";
 import { TableProps } from "@src/interfaces/components/table";
-import { cookies } from 'next/headers';
-import { getCookie } from "cookies-next";
-import Link from "next/link";
-import { Switch } from "antd";
 import { urlImageDefaultProfile } from "@src/utils/constanst";
 
-const TableServer = async <T extends { id?: string; }>({ url, columns, urlEdit, urlDelete }: TableProps<T>) => {
-  const { list, total } = await get<Get<T>>("companiesApi", url);
+const TableServer = async <T extends { id?: string; }>({ baseUrlType, columns, showEdit, showDelete }: TableProps<T>) => {
+  const url = getCookie("pathname", { cookies }) as string;
   const page = getCookie("page", { cookies }) as string;
   const limit = getCookie("limit", { cookies }) as string;
+  const pathname = getCookie("pathname", { cookies }) as string;
+
+  const { list, total } = await get<Get<T>>({ baseUrlType, url: `${url}/list` });
 
   return (
     <>
@@ -44,12 +47,12 @@ const TableServer = async <T extends { id?: string; }>({ url, columns, urlEdit, 
               ))
             }
             {
-              Boolean(urlEdit) && <th style={{ textAlign: "start" }}>
+              showEdit && <th style={{ textAlign: "start" }}>
                 Editar
               </th>
             }
             {
-              Boolean(urlDelete) && <th style={{ textAlign: "start" }}>
+              showDelete && <th style={{ textAlign: "start" }}>
                 Eliminar
               </th>
             }
@@ -68,8 +71,10 @@ const TableServer = async <T extends { id?: string; }>({ url, columns, urlEdit, 
                     return (
                       <td key={column.key.toString()}>
                         {
-                          typeof value === "boolean"
-                            ? <Switch checked={value} disabled />
+                          typeof value === "boolean" && column.key === "active"
+                            ? <Link href={`${pathname}?pagina=${page}&limite=${limit}&idActivo=${item.id}&estatus=${value}`}>
+                              <Switch checked={value} />
+                            </Link>
                             : column.key === "image"
                               ? <img
                                 src={value.toString() || urlImageDefaultProfile}
@@ -83,24 +88,24 @@ const TableServer = async <T extends { id?: string; }>({ url, columns, urlEdit, 
                   })
                 }
                 {
-                  Boolean(urlEdit) && <td
+                  showEdit && <td
                     style={{
                       width: 50
                     }}
                   >
-                    <Link href={`${urlEdit}?id=${item.id}`!}>
+                    <Link href={`${pathname}/editar?id=${item.id}`!}>
                       Editar
                     </Link>
                   </td>
                 }
                 {
-                  Boolean(urlDelete) && <td
+                  showDelete && <td
                     style={{
                       width: 50
                     }}
                   >
-                    <Link href={`${urlDelete}?page=${page}&limit=${limit}&borrar=${item.id}`}>
-                      Eliminar
+                    <Link href={`${pathname}?pagina=${page}&limite=${limit}&idBorrar=${item.id}`}>
+                      Borrar
                     </Link>
                   </td>
                 }

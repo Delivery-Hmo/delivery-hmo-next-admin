@@ -1,5 +1,5 @@
-import { FC } from 'react';
-import { Button, ButtonProps } from 'antd';
+import { FC } from "react";
+import { Button, ButtonProps } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 
 const DeleteButton: FC<ButtonProps> = (props) => {
@@ -7,7 +7,7 @@ const DeleteButton: FC<ButtonProps> = (props) => {
     <Button
       shape="circle"
       icon={<DeleteOutlined />}
-      style={{ color: '#fff', backgroundColor: '#d34745' }}
+      style={{ color: "#fff", backgroundColor: "#d34745" }}
       size="middle"
       {...props}
     />

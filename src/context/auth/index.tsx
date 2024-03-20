@@ -2,7 +2,7 @@ import { useEffect, useState, useContext, createContext, FC, ReactNode } from "r
 import { User, onIdTokenChanged } from "firebase/auth";
 import { auth } from "@src/firebase";
 import FullLoader from "@src/components/fullLoader";
-import { setCookie, deleteCookie } from 'cookies-next';
+import { setCookie, deleteCookie } from "cookies-next";
 import { usePathname, useRouter } from "next/navigation";
 
 interface Props {
@@ -26,14 +26,16 @@ const AuthProvider: FC<Props> = ({ children }) => {
   }, []);
 
   useEffect(() => {
+    setCookie("pathname", pathname);
+
     if (loading) return;
 
     if (user && pathname === "/") {
-      router.push('/inicio');
+      router.push("/inicio");
     }
 
     if (!user) {
-      router.push('/');
+      router.push("/");
     }
   }, [pathname, user, loading]);
 
@@ -45,18 +47,18 @@ const AuthProvider: FC<Props> = ({ children }) => {
         if (user) {
           const token = await user.getIdToken();
 
-          setCookie('token', token);
+          setCookie("token", token);
 
           if (pathname === "/") {
-            router.push('/inicio');
+            router.push("/inicio");
           }
 
           return;
         }
 
-        deleteCookie('token');
+        deleteCookie("token");
 
-        router.push('/');
+        router.push("/");
       } catch (error) {
         console.log(error);
       } finally {

@@ -1,5 +1,5 @@
-import { FC } from 'react';
-import { Modal as ModalAntd, ModalProps } from 'antd';
+import { FC } from "react";
+import { Modal as ModalAntd, ModalProps } from "antd";
 
 const Modal: FC<ModalProps> = (props) => {
   return (
