@@ -20,6 +20,7 @@ export const signInWithEmail = async (email: string, password: string) => {
 
   try {
     result = await signInWithEmailAndPassword(auth, email, password);
+    // await updateProfile(result.user, { displayName: "SuperAdmin" });
   } catch (e) {
     error = e;
   }

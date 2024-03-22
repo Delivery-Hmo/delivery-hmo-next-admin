@@ -77,7 +77,7 @@ const Pagination = () => {
         }
       });
     }
-  }, [searchParams, pathname]);
+  }, [searchParams, pathname, modal, router]);
 
   return (
     <PaginationAnt
