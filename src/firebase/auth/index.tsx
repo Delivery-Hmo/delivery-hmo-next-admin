@@ -1,5 +1,5 @@
 import { auth } from "../";
-import { UserCredential, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { UserCredential, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 
 export const createUserWithEmail = async (email: string, password: string) => {
   let result: UserCredential | null = null;
