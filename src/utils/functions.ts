@@ -2,8 +2,8 @@ import { auth } from "@src/firebase";
 import { User, onIdTokenChanged } from "firebase/auth";
 
 export const getHeaders = (token: string) => ({
-  Accept: 'application/json',
-  'Content-Type': 'application/json',
+  Accept: "application/json",
+  "Content-Type": "application/json",
   Authorization: "Bearer " + token
 });
 

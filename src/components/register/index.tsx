@@ -1,4 +1,4 @@
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 
 const UserRegister = () => {
   const router = useRouter();
@@ -6,13 +6,13 @@ const UserRegister = () => {
   return (
     <a
       style={{
-        marginLeft: '200px',
-        fontSize: '16px',
-        color: '#0070f3', 
-        textDecoration: 'none', 
-        cursor: 'pointer', 
+        marginLeft: "200px",
+        fontSize: "16px",
+        color: "#0070f3",
+        textDecoration: "none",
+        cursor: "pointer",
       }}
-      onClick={() => router.push('/usuarios/registrar')}
+      onClick={() => router.push("/usuarios/registrar")}
     >
       @ Registrarse
     </a>

@@ -1,7 +1,7 @@
-import { Col, Row } from 'antd';
+import { Col, Row } from "antd";
 import { usePathname, useRouter } from "next/navigation";
-import CreateButton from '../registerButton';
-import BackButton from '../backButton';
+import CreateButton from "../registerButton";
+import BackButton from "../backButton";
 import { useMemo } from "react";
 import { useAuth } from "@src/context/auth";
 
@@ -37,7 +37,7 @@ const HeaderView = () => {
 
   return (
     <>
-      <Row justify='space-between' align="middle">
+      <Row justify="space-between" align="middle">
         <Col>
           <h1>
             {

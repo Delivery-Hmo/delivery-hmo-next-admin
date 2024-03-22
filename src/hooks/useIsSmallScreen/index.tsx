@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo } from "react";
 import { Grid } from "antd";
 
 const { useBreakpoint } = Grid;
@@ -11,6 +11,6 @@ const useIsSmallScreen = () => {
   }, [xs, sm, md, lg, xl, xxl]);
 
   return isSmallScreen;
-}
+};
 
 export default useIsSmallScreen;

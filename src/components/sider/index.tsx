@@ -27,7 +27,7 @@ const Sider = () => {
             if (!item.path) return item;
 
             return {
-              onClick: () => router.push(item.path.toString().toLocaleLowerCase()),
+              onClick: () => router.push(item.path),
               ...item
             };
           })

@@ -1,11 +1,11 @@
 
 import { Suspense } from "react";
 import { Skeleton } from "antd";
-import TableServer from "./tableServer";
+import ServerTable from "./serverTable";
 import Pagination from "./pagination";
 import { TableProps } from "@src/interfaces/components/table";
 
-const Table = <T extends { id?: string; }>(props: TableProps<T>) => {
+const Table = <T extends {}>(props: TableProps<T>) => {
   return (
     <>
       <Suspense
@@ -16,7 +16,7 @@ const Table = <T extends { id?: string; }>(props: TableProps<T>) => {
           />
         }
       >
-        <TableServer {...props} />
+        <ServerTable {...props} />
       </Suspense>
       <Pagination />
     </>
