@@ -1,7 +1,7 @@
 
 import { Suspense } from "react";
 import { Skeleton } from "antd";
-import TableServer from "./tableServer";
+import ServerTable from "./serverTable";
 import Pagination from "./pagination";
 import { TableProps } from "@src/interfaces/components/table";
 import Filters from "./filters";
@@ -27,7 +27,7 @@ const Table = <T extends {}>(props: TableProps<T>) => {
           />
         }
       >
-        <TableServer {...props} />
+        <ServerTable {...props} />
       </Suspense>
       <Pagination />
     </>

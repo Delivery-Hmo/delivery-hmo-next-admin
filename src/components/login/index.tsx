@@ -1,6 +1,6 @@
-'use client';
-import styles from './styles.module.css';
-import React, { useState } from 'react';
+"use client";
+import styles from "./styles.module.css";
+import React, { useState } from "react";
 import { App, Button, Card, Form, Input } from "antd";
 import useIsSmallScreen from "@src/hooks/useIsSmallScreen";
 import { signInWithEmail } from "@src/firebase/auth";
@@ -52,7 +52,7 @@ const Login = () => {
             <Form.Item<User>
               label="Correo"
               name="email"
-              rules={[{ type: 'email', required: true, message: 'Correo válido requerido!' }]}
+              rules={[{ type: "email", required: true, message: "Correo válido requerido!" }]}
             >
               <Input autoComplete="email" />
             </Form.Item>
@@ -60,7 +60,7 @@ const Login = () => {
               label="Contraseña"
               style={{ paddingTop: "10px" }}
               name="password"
-              rules={[{ required: true, message: 'Contraseña requerida!' }]}
+              rules={[{ required: true, message: "Contraseña requerida!" }]}
             >
               <Input.Password autoComplete="current-password" />
             </Form.Item>
@@ -68,9 +68,9 @@ const Login = () => {
             <Button htmlType="submit" type="primary" style={{ width: "100%" }} loading={loading}>Entrar</Button>
             <br />
             <a style={{
-              marginLeft: '200px', fontSize: '16px', color: '#0070f3', textDecoration: 'none', cursor: 'pointer',
+              marginLeft: "200px", fontSize: "16px", color: "#0070f3", textDecoration: "none", cursor: "pointer",
             }}
-              onClick={() => router.push('/usuarios/registrar')}
+              onClick={() => router.push("/usuarios/registrar")}
             >
               @ Registrarse
             </a>

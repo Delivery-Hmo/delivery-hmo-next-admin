@@ -1,5 +1,5 @@
-import { FC } from 'react';
-import { Button, ButtonProps } from 'antd';
+import { FC } from "react";
+import { Button, ButtonProps } from "antd";
 import { PlusCircleOutlined } from "@ant-design/icons";
 
 const CreateButton: FC<ButtonProps> = ({ ...rest }) => {

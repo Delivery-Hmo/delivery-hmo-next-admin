@@ -1,11 +1,12 @@
-export interface TableProps<T> {
-  url: string;
+import { GetProps } from "../services/http";
+
+export interface TableProps<T> extends GetProps {
   columns: Column<T>[];
-  urlEdit?: string;
-  urlDelete?: string;
+  showEdit?: boolean;
+  showDelete?: boolean;
 }
 
 interface Column<T> {
-  key: string;
+  key: keyof T;
   title: string;
 }

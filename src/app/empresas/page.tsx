@@ -1,9 +1,10 @@
 import Table from "@src/components/table";
+import { UserAdmin } from "@src/interfaces/users";
 
 const Companies = () => {
   return (
-    <Table
-      url="userAdmin/list"
+    <Table<UserAdmin>
+      baseUrlType="companiesApi"
       columns={[
         {
           key: "id",
@@ -13,9 +14,16 @@ const Companies = () => {
           key: "name",
           title: "Nombre",
         },
+        {
+          key: "active",
+          title: "Activo",
+        },
+        {
+          key: "image",
+          title: "Imagen",
+        }
       ]}
-      urlEdit="/empresas/editar"
-      urlDelete="/empresas"
+      showEdit
     />
   );
 };
