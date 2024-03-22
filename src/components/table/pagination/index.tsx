@@ -43,7 +43,7 @@ const Pagination = () => {
     };
 
     deleteRow();
-  }, [searchParams, pathname]);
+  }, [searchParams, pathname, modal, router]);
 
   return (
     <PaginationAnt

@@ -1,5 +1,5 @@
 import { auth } from "../";
-import { UserCredential, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { UserCredential, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 
 export const createUserWithEmail = async (email: string, password: string) => {
   let result: UserCredential | null = null;
@@ -20,6 +20,7 @@ export const signInWithEmail = async (email: string, password: string) => {
 
   try {
     result = await signInWithEmailAndPassword(auth, email, password);
+    // await updateProfile(result.user, { displayName: "SuperAdmin" });
   } catch (e) {
     error = e;
   }
