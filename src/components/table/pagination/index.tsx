@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 import useModal from "@src/hooks/useModal";
 import { Pagination as PaginationAnt, message } from "antd";
-import { setCookie } from "cookies-next";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { post } from "@src/services/http";
+import { setCookie } from "cookies-next";
 
 const Pagination = () => {
   const searchParams = useSearchParams();
@@ -28,8 +28,6 @@ const Pagination = () => {
     }, 200);
 
     return () => {
-      setCookie("page", 1);
-      setCookie("limit", 5);
       setPage(1);
       setLimit(5);
       setTotal(0);
@@ -44,9 +42,6 @@ const Pagination = () => {
     const idActive = searchParams.get("idActivo");
     const status = searchParams.get("estatus");
 
-    setCookie("page", page);
-    setCookie("limit", limit);
-    setCookie("pathname", pathname);
     setPage(+page);
     setLimit(+limit);
 
@@ -71,10 +66,11 @@ const Pagination = () => {
         },
         onOk: async () => {
           try {
-            await post({ baseUrlType: "companiesApi", body: { active: !(status === "true") } });
+            //await post({ baseUrlType: "companiesApi", body: { active: !(status === "true") } });
+            modal.error({ title: "Error al cambiar el estatus." });
+
           } catch (error) {
             console.log(error);
-            message.error("Error al cambiar el estatus.");
           } finally {
             router.push(`${pathname}?pagina=${page}&limite=${limit}`);
           }

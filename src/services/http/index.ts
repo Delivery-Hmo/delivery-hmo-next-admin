@@ -12,7 +12,7 @@ export const get = async <T extends { total?: number; }>({ baseUrlType, url, abo
     const page = getCookie("page", { cookies }) as string;
     const limit = getCookie("limit", { cookies }) as string;
 
-    if (page && limit) url += `?pagina=${page}&limite=${limit}`;
+    if (page && limit) url += `?page=${page}&limit=${limit}`;
 
     const response = await fetch(
       `${baseUrlsApis[baseUrlType]}${url}`,

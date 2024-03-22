@@ -10,13 +10,12 @@ import { get } from "@src/services/http";
 import { TableProps } from "@src/interfaces/components/table";
 import { urlImageDefaultProfile } from "@src/utils/constanst";
 
-const TableServer = async <T extends { id?: string; }>({ baseUrlType, columns, showEdit, showDelete }: TableProps<T>) => {
-  const url = getCookie("pathname", { cookies }) as string;
-  const page = getCookie("page", { cookies }) as string;
-  const limit = getCookie("limit", { cookies }) as string;
+const ServerTable = async <T extends { id?: string; }>({ baseUrlType, columns, showEdit, showDelete }: TableProps<T>) => {
+  const page = getCookie("pagina", { cookies }) as string;
+  const limit = getCookie("limite", { cookies }) as string;
   const pathname = getCookie("pathname", { cookies }) as string;
 
-  const { list, total } = await get<Get<T>>({ baseUrlType, url: `${url}/list` });
+  const { list, total } = await get<Get<T>>({ baseUrlType, url: `${pathname}/list` });
 
   return (
     <>
@@ -118,4 +117,4 @@ const TableServer = async <T extends { id?: string; }>({ baseUrlType, columns, s
   );
 };
 
-export default TableServer;
+export default ServerTable;
