@@ -27,7 +27,7 @@ const AuthProvider: FC<Props> = ({ children }) => {
     if (user && pathname === "/") router.push("/inicio");
 
     if (!user) router.push("/");
-  }, [pathname, user, loading]);
+  }, [pathname, router, user, loading]);
 
   useEffect(() => {
     const uns = onIdTokenChanged(auth, async (user: User | null) => {

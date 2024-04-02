@@ -2,25 +2,29 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  const url = request.url.split("?")[0];
-  const params: string | undefined = request.url.split("?")[1];
-  //cuidado con esta linea en prod hay que ajustarla
-  const pathname = `${url.split("http://localhost:3000")[1]}`;
-  const response = NextResponse.next();
+  const { pathname, searchParams } = request.nextUrl;
+  const page = searchParams.get("pagina");
+  const limit = searchParams.get("limite");
+  const pageCookie = request.cookies.get("page")?.value;
+  const limitCookie = request.cookies.get("limit")?.value;
 
-  if (params) {
-    const arrayParams = params.split("&");
+  if (page && limit && (pageCookie !== page || limitCookie !== limit)) {
+    const responseRedirect = NextResponse.redirect(request.url);
 
-    arrayParams.forEach((param) => {
-      const [key, value] = param.split("=");
+    responseRedirect.cookies.set("pathname", pathname);
+    responseRedirect.cookies.set("page", page);
+    responseRedirect.cookies.set("limit", limit);
 
-      if (["pagina", "limite"].includes(key)) {
-        response.cookies.set(key, value);
-      }
-    });
+    return responseRedirect;
   }
 
-  response.cookies.set("pathname", pathname);
+  const response = NextResponse.next();
+
+  if (page && limit) {
+    response.cookies.set("pathname", pathname);
+    response.cookies.set("page", page);
+    response.cookies.set("limit", limit);
+  }
 
   return response;
 }

@@ -8,7 +8,7 @@ import { Switch } from "antd";
 import { Get } from "@src/interfaces/services/http";
 import { get } from "@src/services/http";
 import { TableProps } from "@src/interfaces/components/table";
-import { urlImageDefaultProfile } from "@src/utils/constanst";
+import { urlImageDefaultProfile } from "@src/utils/constants";
 
 const ServerTable = async <T extends { id?: string; }>({ baseUrlType, columns, showEdit, showDelete }: TableProps<T>) => {
   const page = getCookie("pagina", { cookies }) as string;

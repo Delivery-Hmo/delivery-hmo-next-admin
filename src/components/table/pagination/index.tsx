@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import useModal from "@src/hooks/useModal";
-import { Pagination as PaginationAnt, message } from "antd";
+import { Pagination as PaginationAnt } from "antd";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { post } from "@src/services/http";
 import { setCookie } from "cookies-next";

@@ -1,6 +1,6 @@
 "use server";
 
-import { baseUrlCompaniesApi, baseUrlsApis } from "@src/utils/constanst";
+import { baseUrlCompaniesApi, baseUrlsApis } from "@src/utils/constants";
 import { getCurrentToken, getHeaders, handleError } from "@src/utils/functions";
 import { getCookie } from "cookies-next";
 import { cookies } from "next/headers";
@@ -13,6 +13,8 @@ export const get = async <T extends { total?: number; }>({ baseUrlType, url, abo
     const limit = getCookie("limit", { cookies }) as string;
 
     if (page && limit) url += `?page=${page}&limit=${limit}`;
+
+    console.log(page, limit);
 
     const response = await fetch(
       `${baseUrlsApis[baseUrlType]}${url}`,

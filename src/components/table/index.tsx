@@ -1,4 +1,3 @@
-
 import { Suspense } from "react";
 import { Skeleton } from "antd";
 import ServerTable from "./serverTable";
@@ -16,6 +15,7 @@ const Table = <T extends {}>(props: TableProps<T>) => {
     { name: "name", placeholder: "Filtrar por nombre" },
     { name: "email", placeholder: "Filtrar por email" },
   ];
+
   return (
     <>
       <Filters filters={filtersData} />
