@@ -61,7 +61,7 @@ const ServerTable = async <T extends { id?: string; }>({ baseUrlType, columns, s
         <tbody>
           {
             list.map((item) => {
-              const _item = (item as Record<string, string | number | boolean>);
+              const _item = item as Record<string, string | number | boolean>;
 
               return <tr key={item.id}>
                 {
@@ -90,22 +90,14 @@ const ServerTable = async <T extends { id?: string; }>({ baseUrlType, columns, s
                   })
                 }
                 {
-                  showEdit && <td
-                    style={{
-                      width: 50
-                    }}
-                  >
+                  showEdit && <td style={{ width: 50 }}>
                     <Link href={`${pathname}/editar?id=${item.id}`!}>
                       Editar
                     </Link>
                   </td>
                 }
                 {
-                  showDelete && <td
-                    style={{
-                      width: 50
-                    }}
-                  >
+                  showDelete && <td style={{ width: 50 }}>
                     <Link href={`${pathname}?pagina=${page}&limite=${limit}&idBorrar=${item.id}`}>
                       Borrar
                     </Link>

@@ -23,7 +23,7 @@ const Table = <T extends {}>(props: TableProps<T>) => {
         fallback={
           <Skeleton
             title={false}
-            paragraph={{ rows: 6, width: "100%" }}
+            paragraph={{ rows: 10, width: "100%" }}
           />
         }
       >

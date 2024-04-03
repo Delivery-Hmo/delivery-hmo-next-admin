@@ -27,9 +27,9 @@ export default function RootLayout({
         >
           <App>
             <AuthProvider>
-              <Layout style={{ height: "100vh" }}>
+              <Layout style={{ height: "100vh", backgroundColor: "grey" }}>
                 <Sider />
-                <div style={{ display: "block", padding: 20, width: "100%", backgroundColor: "grey" }}>
+                <div style={{ display: "block", padding: 20, width: "100%" }}>
                   <Breadcrumb />
                   <HeaderPage />
                   <ErrorBoundary fallback={<Error />}>

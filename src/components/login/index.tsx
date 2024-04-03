@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { Button, Card, Form, Input } from "antd";
 import styles from "./styles.module.css";
 import useIsSmallScreen from "@src/hooks/useIsSmallScreen";
-import { signInWithEmail } from "@src/firebase/auth";
+import { signInWithEmail } from "@src/services/firebase/auth";
 import useMessage from "@src/hooks/useMessage";
 
 interface User {

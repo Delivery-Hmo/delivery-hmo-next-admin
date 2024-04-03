@@ -16,7 +16,7 @@ const Pagination = () => {
   const pathname = usePathname();
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(10);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -31,7 +31,7 @@ const Pagination = () => {
 
     return () => {
       setPage(1);
-      setLimit(5);
+      setLimit(10);
       setTotal(0);
       clearInterval(interval);
     };
@@ -39,7 +39,7 @@ const Pagination = () => {
 
   useEffect(() => {
     const page = searchParams.get("pagina") || 1;
-    const limit = searchParams.get("limite") || 5;
+    const limit = searchParams.get("limite") || 10;
     const idDelete = searchParams.get("idBorrar");
     const idActive = searchParams.get("idActivo");
     const status = searchParams.get("estatus");
@@ -86,7 +86,7 @@ const Pagination = () => {
       pageSizeOptions={[5, 10, 25, 50, 100]}
       total={total}
       current={+page! || 1}
-      pageSize={+limit! || 5}
+      pageSize={+limit! || 10}
       onChange={(page, pageSize) => {
         setCookie("page", page);
         setCookie("limit", pageSize);
