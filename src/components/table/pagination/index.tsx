@@ -1,15 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import useModal from "@src/hooks/useModal";
-import { Pagination as PaginationAnt } from "antd";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { post } from "@src/services/http";
+import { Pagination as PaginationAnt } from "antd";
 import { setCookie } from "cookies-next";
+import useModal from "@src/hooks/useModal";
+import useMessage from "@src/hooks/useMessage";
+import { post } from "@src/services/http";
 
 const Pagination = () => {
   const searchParams = useSearchParams();
   const modal = useModal();
+  const message = useMessage();
   const router = useRouter();
   const pathname = usePathname();
   const [total, setTotal] = useState(0);
@@ -67,17 +69,15 @@ const Pagination = () => {
         onOk: async () => {
           try {
             //await post({ baseUrlType: "companiesApi", body: { active: !(status === "true") } });
-            modal.error({ title: "Error al cambiar el estatus." });
-
-          } catch (error) {
-            console.log(error);
-          } finally {
             router.push(`${pathname}?pagina=${page}&limite=${limit}`);
+          } catch (error) {
+            message.error("Error al cambiar el estatus.");
+            console.log(error);
           }
         }
       });
     }
-  }, [searchParams, pathname, modal, router]);
+  }, [searchParams, pathname, modal, router, message]);
 
   return (
     <PaginationAnt

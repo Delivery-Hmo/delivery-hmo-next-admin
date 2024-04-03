@@ -1,10 +1,11 @@
 "use client";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Button, Card, Form, Input } from "antd";
 import styles from "./styles.module.css";
-import React, { useState } from "react";
-import { App, Button, Card, Form, Input } from "antd";
 import useIsSmallScreen from "@src/hooks/useIsSmallScreen";
 import { signInWithEmail } from "@src/firebase/auth";
-import { useRouter } from "next/navigation";
+import useMessage from "@src/hooks/useMessage";
 
 interface User {
   email: string;
@@ -14,8 +15,8 @@ interface User {
 const Login = () => {
   const router = useRouter();
   const isSmallScreen = useIsSmallScreen();
+  const message = useMessage();
   const [loading, setLoading] = useState(false);
-  const { message } = App.useApp();
 
   const onFinish = async (values: User) => {
     if (loading) return;

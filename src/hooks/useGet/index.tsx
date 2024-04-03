@@ -5,13 +5,13 @@ import { get } from "@src/services/http";
 import { BaseUrlTypes } from "@src/types/services/http";
 
 export interface PropsUseGet {
-  baseUrl: BaseUrlTypes;
+  baseUrlType: BaseUrlTypes;
   url: string;
   wait?: boolean;
   mergeResponse?: boolean;
 }
 
-const useGet = <T extends {}>({ baseUrl, url, wait, mergeResponse }: PropsUseGet) => {
+const useGet = <T extends {}>({ baseUrlType, url, wait, mergeResponse }: PropsUseGet) => {
   const abortController = useAbortController();
   const [loading, setLoading] = useState(true);
   const [response, setResponse] = useState<T>();
@@ -23,7 +23,7 @@ const useGet = <T extends {}>({ baseUrl, url, wait, mergeResponse }: PropsUseGet
       setLoading(true);
 
       try {
-        const _response = await get<T>(baseUrl, url, abortController.current!);
+        const _response = await get<T>({ baseUrlType, url, abortController: abortController.current! });
 
         setResponse(r =>
           mergeResponse
@@ -47,7 +47,7 @@ const useGet = <T extends {}>({ baseUrl, url, wait, mergeResponse }: PropsUseGet
     };
 
     init();
-  }, [url, wait, mergeResponse, abortController]);
+  }, [baseUrlType, url, wait, mergeResponse, abortController]);
 
   return { loading, response, setResponse };
 };

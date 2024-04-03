@@ -12,7 +12,7 @@ interface FiltersProps {
 }
 
 const Filters = ({ filters }: FiltersProps) => {
-  const [filter, setFilter] = useState<{ [key: string]: string }>({});
+  const [filter, setFilter] = useState<{ [key: string]: string; }>({});
 
   const handleFilterChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -20,7 +20,7 @@ const Filters = ({ filters }: FiltersProps) => {
   };
 
   return (
-    <div>
+    <div style={{ marginBottom: 20 }}>
       {filters.map((filterItem, index) => (
         <input
           key={index}
@@ -32,7 +32,7 @@ const Filters = ({ filters }: FiltersProps) => {
         />
       ))}
     </div>
-  )
-}
+  );
+};
 
-export default Filters
+export default Filters;

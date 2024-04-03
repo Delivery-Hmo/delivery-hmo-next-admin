@@ -9,6 +9,7 @@ import { Get } from "@src/interfaces/services/http";
 import { get } from "@src/services/http";
 import { TableProps } from "@src/interfaces/components/table";
 import { urlImageDefaultProfile } from "@src/utils/constants";
+import Image from "next/image";
 
 const ServerTable = async <T extends { id?: string; }>({ baseUrlType, columns, showEdit, showDelete }: TableProps<T>) => {
   const page = getCookie("pagina", { cookies }) as string;
@@ -75,9 +76,11 @@ const ServerTable = async <T extends { id?: string; }>({ baseUrlType, columns, s
                               <Switch checked={value} />
                             </Link>
                             : column.key === "image"
-                              ? <img
+                              ? <Image
+                                alt={value.toString() || urlImageDefaultProfile}
                                 src={value.toString() || urlImageDefaultProfile}
-                                height={50}
+                                height={48}
+                                width={64}
                                 style={{ borderRadius: 10 }}
                               />
                               : value

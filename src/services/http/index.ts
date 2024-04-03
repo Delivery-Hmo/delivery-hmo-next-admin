@@ -14,8 +14,6 @@ export const get = async <T extends { total?: number; }>({ baseUrlType, url, abo
 
     if (page && limit) url += `?page=${page}&limit=${limit}`;
 
-    console.log(page, limit);
-
     const response = await fetch(
       `${baseUrlsApis[baseUrlType]}${url}`,
       {

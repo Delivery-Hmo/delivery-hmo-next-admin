@@ -19,7 +19,7 @@ const AuthProvider: FC<Props> = ({ children }) => {
   const pathname = usePathname();
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState<Boolean>(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (loading) return;
@@ -59,7 +59,7 @@ const AuthProvider: FC<Props> = ({ children }) => {
     return () => {
       uns();
     };
-  }, [pathname, searchParams]);
+  }, [pathname, searchParams, router]);
 
   if (loading) return <FullLoader />;
 
