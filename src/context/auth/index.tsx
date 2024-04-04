@@ -1,9 +1,9 @@
 import { useEffect, useState, useContext, createContext, FC, ReactNode } from "react";
-import { User } from "firebase/auth";
+import { onIdTokenChanged, User } from "firebase/auth";
 import { usePathname, useRouter } from "next/navigation";
 import FullLoader from "@src/components/fullLoader";
-import { getCurrentUser } from "@src/services/firebase/auth";
-import { set } from "firebase/database";
+import { deleteCookie, setCookie } from "cookies-next";
+import { auth } from "@src/services/firebase";
 
 interface Props {
   children: ReactNode;
@@ -21,21 +21,39 @@ const AuthProvider: FC<Props> = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const init = async () => {
+    const uns = onIdTokenChanged(auth, async (user: User | null) => {
       try {
-        const _user = await getCurrentUser();
+        setUser(user);
 
-        setUser(_user);
+        if (user) {
+          const token = await user.getIdToken();
+
+          setCookie("token", token);
+
+          if (pathname === "/") {
+            router.push("/inicio");
+          }
+
+          return;
+        }
+
+        deleteCookie("token");
+        deleteCookie("page");
+        deleteCookie("limit");
+        deleteCookie("pathname");
+
+        router.push("/");
       } catch (error) {
-        setUser(null);
         console.log(error);
       } finally {
         setLoading(false);
       }
-    };
+    });
 
-    init();
-  }, []);
+    return () => {
+      uns();
+    };
+  }, [pathname, router]);
 
   useEffect(() => {
     if (loading) return;

@@ -1,10 +1,11 @@
 "use server";
 
 import { baseUrlCompaniesApi, baseUrlsApis } from "@src/utils/constants";
-import { getCurrentToken, getHeaders, handleError } from "@src/utils/functions";
+import { getHeaders, handleError } from "@src/utils/functions";
 import { getCookie } from "cookies-next";
 import { cookies } from "next/headers";
 import { GetProps, PostProps } from "@src/interfaces/services/http";
+import { getCurrentToken } from "../firebase/auth";
 
 export const get = async <T extends { total?: number; }>({ baseUrlType, url, abortController }: GetProps) => {
   try {
