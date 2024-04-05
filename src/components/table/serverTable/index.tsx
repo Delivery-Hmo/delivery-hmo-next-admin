@@ -16,7 +16,7 @@ const ServerTable = async <T extends { id?: string; }>({ baseUrlType, columns, s
   const limit = getCookie("limite", { cookies }) as string;
   const pathname = getCookie("pathname", { cookies }) as string;
 
-  const { list, total } = await get<Get<T>>({ baseUrlType, url: `${pathname}/list` });
+  const { list, total } = await get<Get<T>>({ baseUrlType, url: `${pathname}/list`, page: +page, limit: +limit });
 
   return (
     <>

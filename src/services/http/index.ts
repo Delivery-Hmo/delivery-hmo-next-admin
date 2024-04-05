@@ -7,11 +7,9 @@ import { cookies } from "next/headers";
 import { GetProps, PostProps } from "@src/interfaces/services/http";
 import { getCurrentToken } from "../firebase/auth";
 
-export const get = async <T extends { total?: number; }>({ baseUrlType, url, abortController }: GetProps) => {
+export const get = async <T extends {}>({ baseUrlType, url, page, limit, abortController }: GetProps) => {
   try {
     const token = getCookie("token", { cookies }) as string;
-    const page = getCookie("page", { cookies }) as string;
-    const limit = getCookie("limit", { cookies }) as string;
 
     if (page && limit) url += `?page=${page}&limit=${limit}`;
 

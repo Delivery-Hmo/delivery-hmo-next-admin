@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-//import { getCurrentToken } from "./services/firebase/auth";
+import { get } from "./services/http";
 
 export async function middleware(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
@@ -8,23 +8,30 @@ export async function middleware(request: NextRequest) {
   const limit = searchParams.get("limite");
   const pageCookie = request.cookies.get("page")?.value;
   const limitCookie = request.cookies.get("limit")?.value;
-  let token = "";
 
-  /*   if (pathname !== "/") {
-      try {
-        //token = await getCurrentToken();
-      } catch (error) {
-        console.log("hola");
-        const responseRedirect = NextResponse.rewrite(new URL("/", request.url));
-  
-        responseRedirect.cookies.delete("pathname");
-        responseRedirect.cookies.delete("page");
-        responseRedirect.cookies.delete("limit");
-        responseRedirect.cookies.delete("token");
-  
-        return responseRedirect;
-      }
-    } */
+  try {
+    const { message } = await get<{ message: "ok" | "expired" | "Unauthorized"; }>({ baseUrlType: "companiesApi", url: "/auth/verifyToken" });
+
+    if (message === "expired") {
+      return NextResponse.redirect(request.url);
+    }
+
+    if (message === "Unauthorized") {
+      request.cookies.delete("pathname");
+      request.cookies.delete("page");
+      request.cookies.delete("limit");
+      request.cookies.delete("token");
+
+      return NextResponse.redirect(new URL("/", request.url));
+    }
+  } catch (error) {
+    request.cookies.delete("pathname");
+    request.cookies.delete("page");
+    request.cookies.delete("limit");
+    request.cookies.delete("token");
+
+    return NextResponse.redirect(new URL("/", request.url));
+  }
 
   if (page && limit && (pageCookie !== page || limitCookie !== limit)) {
     const responseRedirect = NextResponse.redirect(request.url);
