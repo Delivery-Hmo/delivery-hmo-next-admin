@@ -8,42 +8,54 @@ export async function middleware(request: NextRequest) {
   const limit = searchParams.get("limite");
   const pageCookie = request.cookies.get("page")?.value;
   const limitCookie = request.cookies.get("limit")?.value;
+  const pathnameCookie = request.cookies.get("pathname")?.value;
   const token = request.cookies.get("token")?.value;
+  const uid = request.cookies.get("uid")?.value;
 
-  if (token) {
+  if (token && uid) {
     try {
-      const { message } = await get<{ message: "ok" | "expired" | "Unauthorized"; }>({ baseUrlType: "companiesApi", url: "/auth/verifyToken" });
+      const { message, token } = await get<{ message: "ok" | "expired" | "Unauthorized"; token?: string; }>({ baseUrlType: "companiesApi", url: `/auth/verifyToken?uid=${uid}` });
 
-      if (message === "expired") {
-        return NextResponse.redirect(request.url);
+      if (message === "expired" && token) {
+        const response = NextResponse.redirect(request.url);
+
+        response.cookies.set("token", token);
+
+        return response;
       }
 
       if (message === "Unauthorized") {
-        request.cookies.delete("pathname");
-        request.cookies.delete("page");
-        request.cookies.delete("limit");
-        request.cookies.delete("token");
+        const response = NextResponse.redirect(new URL("/", request.url));
 
-        return NextResponse.redirect(new URL("/", request.url));
+        response.cookies.delete("pathname");
+        response.cookies.delete("page");
+        response.cookies.delete("limit");
+        response.cookies.delete("token");
+        response.cookies.delete("uid");
+
+        return;
       }
     } catch (error) {
-      request.cookies.delete("pathname");
-      request.cookies.delete("page");
-      request.cookies.delete("limit");
-      request.cookies.delete("token");
+      const response = NextResponse.redirect(new URL("/", request.url));
 
-      return NextResponse.redirect(new URL("/", request.url));
+      response.cookies.delete("pathname");
+      response.cookies.delete("page");
+      response.cookies.delete("limit");
+      response.cookies.delete("token");
+      response.cookies.delete("uid");
+
+      return response;
     }
   }
 
-  if (page && limit && (pageCookie !== page || limitCookie !== limit)) {
-    const responseRedirect = NextResponse.redirect(request.url);
+  if (page && limit && (pageCookie !== page || limitCookie !== limit || pathname !== pathnameCookie)) {
+    const response = NextResponse.redirect(request.url);
 
-    responseRedirect.cookies.set("pathname", pathname);
-    responseRedirect.cookies.set("page", page);
-    responseRedirect.cookies.set("limit", limit);
+    response.cookies.set("pathname", pathname);
+    response.cookies.set("page", page);
+    response.cookies.set("limit", limit);
 
-    return responseRedirect;
+    return response;
   }
 
   const response = NextResponse.next();

@@ -29,6 +29,7 @@ const AuthProvider: FC<Props> = ({ children }) => {
           const token = await user.getIdToken();
 
           setCookie("token", token);
+          setCookie("uid", user.uid);
 
           if (pathname === "/") {
             router.push("/inicio");
@@ -38,6 +39,7 @@ const AuthProvider: FC<Props> = ({ children }) => {
         }
 
         deleteCookie("token");
+        deleteCookie("uid");
         deleteCookie("page");
         deleteCookie("limit");
         deleteCookie("pathname");

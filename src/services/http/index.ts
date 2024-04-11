@@ -58,6 +58,7 @@ export const post = async <T extends {}>({ baseUrlType, url, body, abortControll
 
     return json;
   } catch (error) {
+    console.log(error);
     throw handleError(error);
   }
 };
