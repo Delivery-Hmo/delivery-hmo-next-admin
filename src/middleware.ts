@@ -8,15 +8,25 @@ export async function middleware(request: NextRequest) {
   const limit = searchParams.get("limite");
   const pageCookie = request.cookies.get("page")?.value;
   const limitCookie = request.cookies.get("limit")?.value;
+  const token = request.cookies.get("token")?.value;
 
-  try {
-    const { message } = await get<{ message: "ok" | "expired" | "Unauthorized"; }>({ baseUrlType: "companiesApi", url: "/auth/verifyToken" });
+  if (token) {
+    try {
+      const { message } = await get<{ message: "ok" | "expired" | "Unauthorized"; }>({ baseUrlType: "companiesApi", url: "/auth/verifyToken" });
 
-    if (message === "expired") {
-      return NextResponse.redirect(request.url);
-    }
+      if (message === "expired") {
+        return NextResponse.redirect(request.url);
+      }
 
-    if (message === "Unauthorized") {
+      if (message === "Unauthorized") {
+        request.cookies.delete("pathname");
+        request.cookies.delete("page");
+        request.cookies.delete("limit");
+        request.cookies.delete("token");
+
+        return NextResponse.redirect(new URL("/", request.url));
+      }
+    } catch (error) {
       request.cookies.delete("pathname");
       request.cookies.delete("page");
       request.cookies.delete("limit");
@@ -24,13 +34,6 @@ export async function middleware(request: NextRequest) {
 
       return NextResponse.redirect(new URL("/", request.url));
     }
-  } catch (error) {
-    request.cookies.delete("pathname");
-    request.cookies.delete("page");
-    request.cookies.delete("limit");
-    request.cookies.delete("token");
-
-    return NextResponse.redirect(new URL("/", request.url));
   }
 
   if (page && limit && (pageCookie !== page || limitCookie !== limit)) {
