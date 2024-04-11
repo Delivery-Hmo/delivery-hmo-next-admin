@@ -68,7 +68,8 @@ const Pagination = () => {
         },
         onOk: async () => {
           try {
-            //await post({ baseUrlType: "companiesApi", body: { active: !(status === "true") } });
+            console.log(page, limit, status);
+            await post({ baseUrlType: "companiesApi", url: `${pathname}/disable`, body: { active: !(status === "true") } });
             router.push(`${pathname}?pagina=${page}&limite=${limit}`);
           } catch (error) {
             message.error("Error al cambiar el estatus.");

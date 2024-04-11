@@ -4,16 +4,17 @@
 import Link from "next/link";
 import { cookies } from "next/headers";
 import { getCookie } from "cookies-next";
-import { Switch } from "antd";
+import { Switch, Tag } from "antd";
 import { Get } from "@src/interfaces/services/http";
 import { get } from "@src/services/http";
 import { TableProps } from "@src/interfaces/components/table";
-import { urlImageDefaultProfile } from "@src/utils/constants";
+import { colorsBranchStatus, textsBranchStatus, urlImageDefaultProfile } from "@src/utils/constants";
 import Image from "next/image";
+import { BranchStatus } from "@src/types";
 
-const ServerTable = async <T extends { id?: string; }>({ baseUrlType, columns, showEdit, showDelete }: TableProps<T>) => {
-  const page = getCookie("pagina", { cookies }) as string;
-  const limit = getCookie("limite", { cookies }) as string;
+const ServerTable = async <T extends { id?: string; }>({ baseUrlType, columns, showStatus, showEdit, showDelete }: TableProps<T>) => {
+  const page = getCookie("page", { cookies }) as string;
+  const limit = getCookie("limit", { cookies }) as string;
   const pathname = getCookie("pathname", { cookies }) as string;
 
   const { list, total } = await get<Get<T>>({ baseUrlType, url: `${pathname}/list`, page: +page, limit: +limit });
@@ -62,6 +63,7 @@ const ServerTable = async <T extends { id?: string; }>({ baseUrlType, columns, s
           {
             list.map((item) => {
               const _item = item as Record<string, string | number | boolean>;
+              const branchStatus = _item.estatus as BranchStatus | undefined;
 
               return <tr key={item.id}>
                 {
@@ -88,6 +90,17 @@ const ServerTable = async <T extends { id?: string; }>({ baseUrlType, columns, s
                       </td>
                     );
                   })
+                }
+                {
+                  showStatus && <td>
+                    <Link href={`${pathname}/estatus`}>
+                      <Tag
+                        color={colorsBranchStatus[branchStatus!]}
+                        children={textsBranchStatus[branchStatus!]}
+                        title={textsBranchStatus[branchStatus!]}
+                      />
+                    </Link>
+                  </td>
                 }
                 {
                   showEdit && <td style={{ width: 50 }}>
