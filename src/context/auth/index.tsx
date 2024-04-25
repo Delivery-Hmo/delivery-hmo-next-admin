@@ -2,7 +2,7 @@ import { useEffect, useState, useContext, createContext, FC, ReactNode } from "r
 import { onIdTokenChanged, User } from "firebase/auth";
 import { usePathname, useRouter } from "next/navigation";
 import FullLoader from "@src/components/fullLoader";
-import { deleteCookie, setCookie } from "cookies-next";
+import { deleteCookie, setCookie, getCookies } from "cookies-next";
 import { auth } from "@src/services/firebase";
 
 interface Props {
@@ -38,11 +38,7 @@ const AuthProvider: FC<Props> = ({ children }) => {
           return;
         }
 
-        deleteCookie("token");
-        deleteCookie("uid");
-        deleteCookie("page");
-        deleteCookie("limit");
-        deleteCookie("pathname");
+        Object.keys(getCookies()).forEach((key) => deleteCookie(key));
 
         router.push("/");
       } catch (error) {

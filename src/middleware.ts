@@ -2,49 +2,47 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { get } from "./services/http";
 
+const toLogin = (request: NextRequest) => {
+  const response = NextResponse.redirect(new URL("/", request.url));
+
+  request.cookies.getAll().forEach(c => {
+    response.cookies.set(c.name, "", { expires: new Date() });
+  });
+
+  return response;
+};
+
 export async function middleware(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
   const page = searchParams.get("pagina");
   const limit = searchParams.get("limite");
+  const activeId = searchParams.get("idActivo");
+  const status = searchParams.get("estatus");
+
+  const pathnameCookie = request.cookies.get("pathname")?.value;
   const pageCookie = request.cookies.get("page")?.value;
   const limitCookie = request.cookies.get("limit")?.value;
-  const pathnameCookie = request.cookies.get("pathname")?.value;
+  const activeIdCookie = request.cookies.get("activeId")?.value;
+  const statusCookie = request.cookies.get("status")?.value;
   const token = request.cookies.get("token")?.value;
-  const uid = request.cookies.get("uid")?.value;
 
-  if (token && uid) {
+  if (token) {
     try {
-      const { message, token } = await get<{ message: "ok" | "expired" | "Unauthorized"; token?: string; }>({ baseUrlType: "companiesApi", url: `/auth/verifyToken?uid=${uid}` });
+      const { message } = await get<{ message: "ok" | "expired" | "Unauthorized"; token?: string; }>({
+        baseUrlType: "companiesApi",
+        url: `/auth/verifyToken`
+      });
 
-      if (message === "expired" && token) {
+      if (message === "expired") {
         const response = NextResponse.redirect(request.url);
-
-        response.cookies.set("token", token);
-
         return response;
       }
 
       if (message === "Unauthorized") {
-        const response = NextResponse.redirect(new URL("/", request.url));
-
-        response.cookies.delete("pathname");
-        response.cookies.delete("page");
-        response.cookies.delete("limit");
-        response.cookies.delete("token");
-        response.cookies.delete("uid");
-
-        return;
+        return toLogin(request);
       }
     } catch (error) {
-      const response = NextResponse.redirect(new URL("/", request.url));
-
-      response.cookies.delete("pathname");
-      response.cookies.delete("page");
-      response.cookies.delete("limit");
-      response.cookies.delete("token");
-      response.cookies.delete("uid");
-
-      return response;
+      return toLogin(request);
     }
   }
 
@@ -58,12 +56,29 @@ export async function middleware(request: NextRequest) {
     return response;
   }
 
+  if (page && limit && activeId && status && (activeId !== activeIdCookie || status !== statusCookie)) {
+    const response = NextResponse.redirect(request.url);
+
+    response.cookies.set("pathname", pathname);
+    response.cookies.set("page", page);
+    response.cookies.set("limit", limit);
+    response.cookies.set("activeId", activeId);
+    response.cookies.set("status", status);
+
+    return response;
+  }
+
   const response = NextResponse.next();
 
   if (page && limit) {
     response.cookies.set("pathname", pathname);
     response.cookies.set("page", page);
     response.cookies.set("limit", limit);
+
+    if (activeId && status) {
+      response.cookies.set("activeId", activeId);
+      response.cookies.set("status", status);
+    }
   }
 
   return response;

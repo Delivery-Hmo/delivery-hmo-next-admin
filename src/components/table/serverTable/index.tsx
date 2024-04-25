@@ -1,6 +1,4 @@
 
-"use server";
-
 import Link from "next/link";
 import { cookies } from "next/headers";
 import { getCookie } from "cookies-next";
@@ -16,13 +14,13 @@ const ServerTable = async <T extends { id?: string; }>({ baseUrlType, columns, s
   const page = getCookie("page", { cookies }) as string;
   const limit = getCookie("limit", { cookies }) as string;
   const pathname = getCookie("pathname", { cookies }) as string;
-
   const { list, total } = await get<Get<T>>({ baseUrlType, url: `${pathname}/list`, page: +page, limit: +limit });
 
   return (
     <>
       <div id="total" style={{ display: "none" }}>{total}</div>
       <table
+        id="table"
         style={{
           width: "100%",
           border: "1px solid #ccc",
@@ -69,18 +67,21 @@ const ServerTable = async <T extends { id?: string; }>({ baseUrlType, columns, s
                 {
                   columns.map((column) => {
                     const value = _item[column.key] as string | number | boolean;
+                    const keyTd = column.key.toString();
 
                     return (
-                      <td key={column.key.toString()}>
+                      <td key={keyTd} id={keyTd}>
                         {
                           typeof value === "boolean" && column.key === "active"
-                            ? <Link href={`${pathname}?pagina=${page}&limite=${limit}&idActivo=${item.id}&estatus=${value}`}>
-                              <Switch checked={value} />
+                            ? <Link
+                              href={`${pathname}?pagina=${page}&limite=${limit}&idActivo=${item.id}&estatus=${value}`}
+                            >
+                              <Switch value={value} />
                             </Link>
                             : column.key === "image"
                               ? <Image
-                                alt={value.toString() || urlImageDefaultProfile}
-                                src={value.toString() || urlImageDefaultProfile}
+                                alt={value.toString()}
+                                src={value.toString()}
                                 height={48}
                                 width={64}
                                 style={{ borderRadius: 10 }}
@@ -111,7 +112,8 @@ const ServerTable = async <T extends { id?: string; }>({ baseUrlType, columns, s
                 }
                 {
                   showDelete && <td style={{ width: 50 }}>
-                    <Link href={`${pathname}?pagina=${page}&limite=${limit}&idBorrar=${item.id}`}>
+                    <Link
+                      href={`${pathname}?pagina=${page}&limite=${limit}&idBorrar=${item.id}`}>
                       Borrar
                     </Link>
                   </td>
