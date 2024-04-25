@@ -13,6 +13,7 @@
     "@types/react": "18.2.60",
     "@types/react-dom": "18.2.19",
     "antd": "^5.14.2",
+    "antd-img-crop": "^4.21.0",
     "cookies-next": "^4.1.1",
     "eslint": "8.57.0",
     "eslint-config-next": "14.1.0",

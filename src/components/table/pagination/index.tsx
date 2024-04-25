@@ -6,7 +6,7 @@ import { Pagination as PaginationAnt } from "antd";
 import { setCookie } from "cookies-next";
 import useModal from "@src/hooks/useModal";
 import useMessage from "@src/hooks/useMessage";
-import { post } from "@src/services/http";
+import { post } from "@src/interfaces/components/services/http";
 
 const Pagination = () => {
   const searchParams = useSearchParams();

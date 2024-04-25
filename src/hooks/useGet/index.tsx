@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { message } from "antd";
 import useAbortController from "../useAbortController";
-import { get } from "@src/services/http";
+import { get } from "@src/interfaces/components/services/http";
 import { BaseUrlTypes } from "@src/types/services/http";
 
 export interface PropsUseGet {

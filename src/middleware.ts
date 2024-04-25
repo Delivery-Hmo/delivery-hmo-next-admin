@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { get } from "./services/http";
+import { get } from './services/http';
 
 export async function middleware(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;

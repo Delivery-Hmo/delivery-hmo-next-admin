@@ -6,7 +6,7 @@ import { cookies } from "next/headers";
 import { getCookie } from "cookies-next";
 import { Switch, Tag } from "antd";
 import { Get } from "@src/interfaces/services/http";
-import { get } from "@src/services/http";
+import { get } from "@src/interfaces/components/services/http";
 import { TableProps } from "@src/interfaces/components/table";
 import { colorsBranchStatus, textsBranchStatus, urlImageDefaultProfile } from "@src/utils/constants";
 import Image from "next/image";
