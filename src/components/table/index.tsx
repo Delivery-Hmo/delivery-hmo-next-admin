@@ -5,20 +5,21 @@ import Pagination from "./pagination";
 import { TableProps } from "@src/interfaces/components/table";
 import Filters from "./filters";
 
-interface Filter {
-  name: string;
-  placeholder: string;
-}
+const Table = <T extends {}, F extends undefined = undefined>(props: TableProps<T, F>) => {
+  const serverTableProps = { ...props } as TableProps<T>;
 
-const Table = <T extends {}>(props: TableProps<T>) => {
-  const filtersData: Filter[] = [
-    { name: "name", placeholder: "Filtrar por nombre" },
-    { name: "email", placeholder: "Filtrar por email" },
-  ];
+  delete serverTableProps.filters;
+  delete serverTableProps.onSearch;
 
   return (
     <>
-      <Filters filters={filtersData} />
+      {
+        props.filters && <Filters<F>
+          items={props.filters}
+          onSearch={props.onSearch}
+        />
+      }
+
       <Suspense
         fallback={
           <Skeleton
@@ -27,7 +28,7 @@ const Table = <T extends {}>(props: TableProps<T>) => {
           />
         }
       >
-        <ServerTable {...props} />
+        <ServerTable {...serverTableProps} />
       </Suspense>
       <Pagination />
     </>
