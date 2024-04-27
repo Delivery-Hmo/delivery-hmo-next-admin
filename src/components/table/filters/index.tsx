@@ -1,37 +1,40 @@
 "use client";
 
-import { ChangeEvent, useState } from "react";
-
+import { useState } from "react";
+import { Col, Form, FormProps, Input, Row } from "antd";
 interface Filter {
   name: string;
   placeholder: string;
 }
 
-interface FiltersProps {
-  filters: Filter[];
+interface FiltersProps<T> {
+  filters: T[];
 }
 
 const Filters = ({ filters }: FiltersProps) => {
   const [filter, setFilter] = useState<{ [key: string]: string; }>({});
 
-  const handleFilterChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFilter({ ...filter, [name]: value });
+  const onSearch: FormProps<FieldType>['onFinish'] = () => {
+    console.log(filter);
+
   };
 
   return (
-    <div style={{ marginBottom: 20 }}>
-      {filters.map((filterItem, index) => (
-        <input
-          key={index}
-          type="text"
-          name={filterItem.name}
-          value={filter[filterItem.name] || ''}
-          onChange={handleFilterChange}
-          placeholder={filterItem.placeholder}
-        />
-      ))}
-    </div>
+    <Form
+      onFinish={onSearch}
+    >
+      <Row style={{ marginBottom: 20 }} gutter={10}>
+        {filters.map((filterItem, index) => (
+          <Col key={index} md={6} >
+            <Input
+              type="text"
+              name={filterItem.name}
+              placeholder={filterItem.placeholder}
+            />
+          </Col>
+        ))}
+      </Row>
+    </Form>
   );
 };
 
