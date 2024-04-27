@@ -25,16 +25,21 @@ export async function middleware(request: NextRequest) {
   const activeIdCookie = request.cookies.get("activeId")?.value;
   const statusCookie = request.cookies.get("status")?.value;
   const token = request.cookies.get("token")?.value;
+  const uid = request.cookies.get("uid")?.value;
+  const customToken = request.cookies.get("customToken")?.value;
 
-  if (token) {
+  if (token && uid && !customToken) {
     try {
-      const { message } = await get<{ message: "ok" | "expired" | "Unauthorized"; token?: string; }>({
+      const { message, token: customToken } = await get<{ message: "ok" | "expired" | "Unauthorized"; token?: string; }>({
         baseUrlType: "companiesApi",
-        url: `/auth/verifyToken`
+        url: `/auth/verifyToken?uid=${uid}`
       });
 
       if (message === "expired") {
         const response = NextResponse.redirect(request.url);
+
+        response.cookies.set("customToken", customToken!);
+
         return response;
       }
 

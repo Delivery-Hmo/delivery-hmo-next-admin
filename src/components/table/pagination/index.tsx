@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Pagination as PaginationAnt } from "antd";
 import { deleteCookie, setCookie } from "cookies-next";
@@ -18,9 +18,50 @@ const Pagination = () => {
   const [total, setTotal] = useState(0);
   const [limit, setLimit] = useState(10);
 
+  const setCookieTable = useCallback((element: HTMLElement) => {
+    const table = element as HTMLTableElement;
+
+    const dataTable: Record<string, any> = [];
+    const { rows } = table;
+
+    for (let i = 1; i < rows.length; i++) {
+      const row = rows[i];
+      const { cells } = row;
+      const itemDataTable: Record<string, any> = {};
+
+      for (let j = 0; j < cells.length; j++) {
+        const { id: key, innerText: value, children } = cells[j];
+
+        if (!key) continue;
+
+        if (key === "active") {
+          const anchorElement = children[0];
+          const ariaChecked = anchorElement.children[0].ariaChecked!;
+          itemDataTable[key] = ariaChecked === "true";
+
+          continue;
+        }
+
+        if (key === "image") {
+          const imgElement = children[0] as HTMLImageElement;
+          itemDataTable[key] = imgElement.alt;
+
+          continue;
+        }
+
+        itemDataTable[key] = value;
+      }
+
+      dataTable.push(itemDataTable);
+    }
+
+    setCookie("dataTable", JSON.stringify(dataTable));
+  }, []);
+
   useEffect(() => {
     const totalInterval = setInterval(() => {
       const totalElement = window.document.getElementById("total");
+
       const _total = totalElement?.textContent || 0;
 
       setTotal(+_total);
@@ -31,63 +72,33 @@ const Pagination = () => {
       }
     }, 200);
 
-    let tableObserver: MutationObserver | undefined;
-
-    const tableInterval = setInterval(() => {
-      const table: HTMLTableElement | null = document.getElementById("table") as HTMLTableElement;
+    const totalTable = setInterval(() => {
+      const table = window.document.getElementById("table") as HTMLTableElement;
 
       if (table) {
-        clearInterval(tableInterval);
-
-        tableObserver = new MutationObserver((mutations) => {
-          if (!mutations.length) return;
-
-          const lastMutation = mutations[mutations.length - 1];
-
-          if (lastMutation.target.nodeName === "TBODY") {
-            console.log(lastMutation.target.nodeName);
-          }
-        });
-
-        tableObserver.observe(table, { childList: true, subtree: true });
-
-        const dataTable: Record<string, any> = [];
-        const { rows } = table;
-
-        for (let i = 1; i < rows.length; i++) {
-          const row = rows[i];
-          const { cells } = row;
-          const itemDataTable: Record<string, any> = {};
-
-          for (let j = 0; j < cells.length; j++) {
-            const { id: key, innerText: value, children } = cells[j];
-
-            if (!key) continue;
-
-            if (key === "active") {
-              const anchorElement = children[0];
-              const ariaChecked = anchorElement.children[0].ariaChecked!;
-              itemDataTable[key] = ariaChecked === "true";
-
-              continue;
-            }
-
-            if (key === "image") {
-              const imgElement = children[0] as HTMLImageElement;
-              itemDataTable[key] = imgElement.alt;
-
-              continue;
-            }
-
-            itemDataTable[key] = value;
-          }
-
-          dataTable.push(itemDataTable);
-        }
-
-        setCookie("dataTable", JSON.stringify(dataTable));
+        clearInterval(totalTable);
+        setCookieTable(table);
       }
     }, 200);
+
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        mutation.addedNodes.forEach((node) => {
+          const element = node as HTMLElement;
+
+          console.log(element);
+
+          if (element.id === "table") {
+            setCookieTable(element);
+          };
+        });
+      });
+    });
+
+    observer.observe(document, {
+      childList: true,
+      subtree: true,
+    });
 
     return () => {
       setPage(1);
@@ -95,15 +106,14 @@ const Pagination = () => {
       setTotal(0);
 
       clearInterval(totalInterval);
-      clearInterval(tableInterval);
 
       deleteCookie("dataTable");
       deleteCookie("activeId");
       deleteCookie("status");
 
-      tableObserver?.disconnect();
+      observer?.disconnect();
     };
-  }, []);
+  }, [setCookieTable]);
 
   useEffect(() => {
     const page = searchParams.get("pagina") || 1;
