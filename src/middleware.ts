@@ -2,68 +2,92 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { get } from "./services/http";
 
+const toLogin = (request: NextRequest) => {
+  const response = NextResponse.redirect(new URL("/", request.url));
+
+  request.cookies.getAll().forEach(c => {
+    response.cookies.set(c.name, "", { expires: new Date() });
+  });
+
+  return response;
+};
+
 export async function middleware(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
   const page = searchParams.get("pagina");
   const limit = searchParams.get("limite");
+  const activeId = searchParams.get("idActivo");
+  const status = searchParams.get("estatus");
+
+  const pathnameCookie = request.cookies.get("pathname")?.value;
   const pageCookie = request.cookies.get("page")?.value;
   const limitCookie = request.cookies.get("limit")?.value;
-  const pathnameCookie = request.cookies.get("pathname")?.value;
+  const activeIdCookie = request.cookies.get("activeId")?.value;
+  const statusCookie = request.cookies.get("status")?.value;
   const token = request.cookies.get("token")?.value;
   const uid = request.cookies.get("uid")?.value;
+  const dataTableCookie = request.cookies.get("dataTable")?.value;
+  const customToken = request.cookies.get("customToken")?.value;
 
-  if (token && uid) {
+  if (token && uid && !customToken) {
     try {
-      const { message, token } = await get<{ message: "ok" | "expired" | "Unauthorized"; token?: string; }>({ baseUrlType: "companiesApi", url: `/auth/verifyToken?uid=${uid}` });
+      const { message, token: customToken } = await get<{ message: "ok" | "expired" | "Unauthorized"; token?: string; }>({
+        baseUrlType: "companiesApi",
+        url: `/auth/verifyToken?uid=${uid}`
+      });
 
-      if (message === "expired" && token) {
+      if (message === "expired") {
         const response = NextResponse.redirect(request.url);
 
-        response.cookies.set("token", token);
+        response.cookies.set("customToken", customToken!);
 
         return response;
       }
 
       if (message === "Unauthorized") {
-        const response = NextResponse.redirect(new URL("/", request.url));
-
-        response.cookies.delete("pathname");
-        response.cookies.delete("page");
-        response.cookies.delete("limit");
-        response.cookies.delete("token");
-        response.cookies.delete("uid");
-
-        return;
+        return toLogin(request);
       }
     } catch (error) {
-      const response = NextResponse.redirect(new URL("/", request.url));
-
-      response.cookies.delete("pathname");
-      response.cookies.delete("page");
-      response.cookies.delete("limit");
-      response.cookies.delete("token");
-      response.cookies.delete("uid");
-
-      return response;
+      return toLogin(request);
     }
   }
 
-  if (page && limit && (pageCookie !== page || limitCookie !== limit || pathname !== pathnameCookie)) {
+  if (page && limit && dataTableCookie && (pageCookie !== page || limitCookie !== limit || pathname !== pathnameCookie || dataTableCookie !== dataTableCookie)) {
     const response = NextResponse.redirect(request.url);
 
     response.cookies.set("pathname", pathname);
     response.cookies.set("page", page);
     response.cookies.set("limit", limit);
+    response.cookies.set("dataTable", dataTableCookie);
+
+    return response;
+  }
+
+  if (page && limit && activeId && status && dataTableCookie && (activeId !== activeIdCookie || status !== statusCookie || pathname !== pathnameCookie || dataTableCookie !== dataTableCookie)) {
+    const response = NextResponse.redirect(request.url);
+
+    response.cookies.set("pathname", pathname);
+    response.cookies.set("page", page);
+    response.cookies.set("limit", limit);
+    response.cookies.set("activeId", activeId);
+    response.cookies.set("status", status);
+    response.cookies.set("dataTable", dataTableCookie);
 
     return response;
   }
 
   const response = NextResponse.next();
 
-  if (page && limit) {
+  if (page && limit && dataTableCookie) {
     response.cookies.set("pathname", pathname);
     response.cookies.set("page", page);
     response.cookies.set("limit", limit);
+    response.cookies.set("dataTable", dataTableCookie);
+
+    if (activeId && status) {
+      response.cookies.set("activeId", activeId);
+      response.cookies.set("status", status);
+    }
   }
 
   return response;

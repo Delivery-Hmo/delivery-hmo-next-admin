@@ -9,6 +9,17 @@ import { getCurrentToken } from "../firebase/auth";
 
 export const get = async <T extends {}>({ baseUrlType, url, page, limit, abortController }: GetProps) => {
   try {
+    const activeId = getCookie("activeId", { cookies }) as string;
+
+    if (activeId) {
+      let list = JSON.parse(getCookie("dataTable", { cookies })!) as Array<{ image: string; }>;
+      const total = +getCookie("totalDataTable", { cookies })!;
+
+      list = list.map(l => ({ ...l, image: l.image.replace("imagenesPerfil/", "imagenesPerfil%2F") }));
+
+      return { list, total } as unknown as T;
+    }
+
     const token = getCookie("token", { cookies }) as string;
 
     if (page && limit) url += `?page=${page}&limit=${limit}`;
