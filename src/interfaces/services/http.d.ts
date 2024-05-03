@@ -9,6 +9,8 @@ export interface Get<T> {
 export interface GetProps {
   baseUrlType: BaseUrlTypes;
   url?: string;
+  page?: number;
+  limit?: number;
   abortController?: AbortController;
 }
 

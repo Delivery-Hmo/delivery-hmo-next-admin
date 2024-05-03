@@ -4,8 +4,13 @@ import ServerTable from "./serverTable";
 import Pagination from "./pagination";
 import { TableProps } from "@src/interfaces/components/table";
 import Filters from "./filters";
+import { getCookie } from "cookies-next";
+import { cookies } from "next/headers";
 
 const Table = <T extends {}, F extends {} | undefined = undefined>(props: TableProps<T, F>) => {
+  const page = getCookie("page", { cookies }) as string;
+  const limit = getCookie("limit", { cookies }) as string;
+  const pathname = getCookie("pathname", { cookies }) as string;
   const serverTableProps = { ...props } as TableProps<T>;
 
   delete serverTableProps.filters;
@@ -21,6 +26,7 @@ const Table = <T extends {}, F extends {} | undefined = undefined>(props: TableP
       }
 
       <Suspense
+        key={`${pathname}-${page}-${limit}`}
         fallback={
           <Skeleton
             title={false}

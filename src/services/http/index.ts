@@ -7,11 +7,20 @@ import { cookies } from "next/headers";
 import { GetProps, PostProps } from "@src/interfaces/services/http";
 import { getCurrentToken } from "../firebase/auth";
 
-export const get = async <T extends { total?: number; }>({ baseUrlType, url, abortController }: GetProps) => {
+export const get = async <T extends {}>({ baseUrlType, url, page, limit, abortController }: GetProps) => {
   try {
+    const activeId = getCookie("activeId", { cookies }) as string;
+
+    if (activeId) {
+      let list = JSON.parse(getCookie("dataTable", { cookies })!) as Array<{ image: string; }>;
+      const total = +getCookie("totalDataTable", { cookies })!;
+
+      list = list.map(l => ({ ...l, image: l.image.replace("imagenesPerfil/", "imagenesPerfil%2F") }));
+
+      return { list, total } as unknown as T;
+    }
+
     const token = getCookie("token", { cookies }) as string;
-    const page = getCookie("page", { cookies }) as string;
-    const limit = getCookie("limit", { cookies }) as string;
 
     if (page && limit) url += `?page=${page}&limit=${limit}`;
 
@@ -60,6 +69,7 @@ export const post = async <T extends {}>({ baseUrlType, url, body, abortControll
 
     return json;
   } catch (error) {
+    console.log(error);
     throw handleError(error);
   }
 };
