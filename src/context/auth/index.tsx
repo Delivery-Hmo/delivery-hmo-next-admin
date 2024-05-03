@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext, createContext, FC, ReactNode } from "react";
-import { onIdTokenChanged, User } from "firebase/auth";
+import { onIdTokenChanged, signInWithCustomToken, User } from "firebase/auth";
 import { usePathname, useRouter } from "next/navigation";
 import FullLoader from "@src/components/fullLoader";
 import { deleteCookie, setCookie, getCookies, getCookie } from "cookies-next";
@@ -21,26 +21,23 @@ const AuthProvider: FC<Props> = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const uns = onIdTokenChanged(auth, async (user: User | null) => {
+    const uns = onIdTokenChanged(auth, async user => {
       try {
         setUser(user);
 
-        if (user) {
-          const token = await user.getIdToken();
+        if (!user) {
+          Object.keys(getCookies()).forEach((key) => deleteCookie(key));
 
-          setCookie("token", token);
-          setCookie("uid", user.uid);
-
-          if (pathname === "/") {
-            router.push("/inicio");
-          }
-
+          router.push("/");
           return;
         }
 
-        Object.keys(getCookies()).forEach((key) => deleteCookie(key));
+        const token = await user.getIdToken();
 
-        router.push("/");
+        setCookie("token", token);
+        setCookie("uid", user.uid);
+
+        if (pathname === "/") router.push("/inicio");
       } catch (error) {
         console.log(error);
       } finally {
@@ -54,18 +51,27 @@ const AuthProvider: FC<Props> = ({ children }) => {
   }, [pathname, router]);
 
   useEffect(() => {
-
     const init = async () => {
       if (loading) return;
 
       if (!user) router.push("/");
 
-      const token = getCookie("customToken");
-
       if (user && pathname === "/") router.push("/inicio");
+
+      const customToken = getCookie("customToken");
+
+      if (!customToken) return;
+
+      try {
+        await signInWithCustomToken(auth, customToken);
+
+        deleteCookie("customToken");
+      } catch (error) {
+        console.log(error);
+      }
     };
 
-
+    init();
   }, [pathname, router, user, loading]);
 
   if (loading) return <FullLoader />;

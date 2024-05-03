@@ -82,11 +82,17 @@ const Pagination = () => {
     }, 200);
 
     const observer = new MutationObserver((mutations) => {
+      console.log("hola 1");
       mutations.forEach((mutation) => {
         mutation.addedNodes.forEach((node) => {
           const element = node as HTMLElement;
 
-          console.log(element);
+          if (element.id === "total") {
+            const _total = element?.textContent || 0;
+
+            setTotal(+_total);
+            setCookie("totalDataTable", _total);
+          }
 
           if (element.id === "table") {
             setCookieTable(element);
@@ -97,7 +103,7 @@ const Pagination = () => {
 
     observer.observe(document, {
       childList: true,
-      subtree: true,
+      subtree: true
     });
 
     return () => {

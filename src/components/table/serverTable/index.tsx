@@ -97,9 +97,10 @@ const ServerTable = async <T extends { id?: string; }>({ baseUrlType, columns, s
                     <Link href={`${pathname}/estatus`}>
                       <Tag
                         color={colorsBranchStatus[branchStatus!]}
-                        children={textsBranchStatus[branchStatus!]}
                         title={textsBranchStatus[branchStatus!]}
-                      />
+                      >
+                        {textsBranchStatus[branchStatus!]}
+                      </Tag>
                     </Link>
                   </td>
                 }
