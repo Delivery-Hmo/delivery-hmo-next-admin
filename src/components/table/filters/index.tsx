@@ -1,11 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Col, Form, Input, Row } from "antd";
+import { Button, Col, Form, Input, Row } from "antd";
 import { FiltersProps } from "@src/interfaces/components/table";
 
-const Filters = <T extends undefined>({ items, onSearch }: FiltersProps<T>) => {
-  const [filter, setFilter] = useState<{ [key: string]: string; }>({});
+const Filters = <T extends {} | undefined>({ items, onSearch }: FiltersProps<T>) => {
 
   return (
     <Form onFinish={onSearch}>
@@ -24,6 +23,9 @@ const Filters = <T extends undefined>({ items, onSearch }: FiltersProps<T>) => {
             );
           })
         }
+        <Col md={6}>
+          <Button htmlType="submit">Buscar</Button>
+        </Col>
       </Row>
     </Form>
   );

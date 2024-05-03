@@ -4,7 +4,30 @@ import { UserAdmin } from "@src/interfaces/users";
 const Sellers = () => {
 
   return (
-    <Table<UserAdmin>
+    <Table<UserAdmin, { name: string; rfc: string[]; email: string; phone: string; }>
+      filters={[
+        {
+          name: "name",
+          placeholder: "Nombre",
+          value: "",
+        },
+        {
+          name: "rfc",
+          placeholder: "RFC",
+          multiple: true,
+          value: [],
+        },
+        {
+          name: "email",
+          placeholder: "Correo",
+          value: "",
+        },
+        {
+          name: "phone",
+          placeholder: "Telefono",
+          value: "",
+        },
+      ]}
       baseUrlType="companiesApi"
       columns={[
         {

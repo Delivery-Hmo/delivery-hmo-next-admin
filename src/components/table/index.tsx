@@ -5,7 +5,7 @@ import Pagination from "./pagination";
 import { TableProps } from "@src/interfaces/components/table";
 import Filters from "./filters";
 
-const Table = <T extends {}, F extends undefined = undefined>(props: TableProps<T, F>) => {
+const Table = <T extends {}, F extends {} | undefined = undefined>(props: TableProps<T, F>) => {
   const serverTableProps = { ...props } as TableProps<T>;
 
   delete serverTableProps.filters;
