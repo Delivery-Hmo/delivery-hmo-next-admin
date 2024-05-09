@@ -69,7 +69,6 @@ export async function middleware(request: NextRequest) {
   }
 
   const responseRedirect = NextResponse.redirect(request.url);
-
   let redirect = false;
 
   Object.entries(urlValues).forEach(([key, urlValue]) => {

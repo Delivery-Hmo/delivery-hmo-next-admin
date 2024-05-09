@@ -7,24 +7,24 @@ import Filters from "./filters";
 import { getCookie } from "cookies-next";
 import { cookies } from "next/headers";
 
-interface Filter {
-  name: string;
-  placeholder: string;
-}
-
-const Table = <T extends {}>(props: TableProps<T>) => {
+const Table = <T extends {}, F extends {} | undefined = undefined>(props: TableProps<T, F>) => {
   const page = getCookie("page", { cookies }) as string;
   const limit = getCookie("limit", { cookies }) as string;
   const pathname = getCookie("pathname", { cookies }) as string;
+  const serverTableProps = { ...props } as TableProps<T>;
 
-  const filtersData: Filter[] = [
-    { name: "name", placeholder: "Filtrar por nombre" },
-    { name: "email", placeholder: "Filtrar por email" },
-  ];
+  delete serverTableProps.filters;
+  delete serverTableProps.onSearch;
 
   return (
     <>
-      <Filters filters={filtersData} />
+      {
+        props.filters && <Filters<F>
+          items={props.filters}
+          onSearch={props.onSearch}
+        />
+      }
+
       <Suspense
         key={`${pathname}-${page}-${limit}`}
         fallback={
@@ -34,7 +34,7 @@ const Table = <T extends {}>(props: TableProps<T>) => {
           />
         }
       >
-        <ServerTable {...props} />
+        <ServerTable {...serverTableProps} />
       </Suspense>
       <Pagination />
     </>
