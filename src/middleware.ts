@@ -24,10 +24,26 @@ export async function middleware(request: NextRequest) {
   const limitCookie = request.cookies.get("limit")?.value;
   const activeIdCookie = request.cookies.get("activeId")?.value;
   const statusCookie = request.cookies.get("status")?.value;
+
   const token = request.cookies.get("token")?.value;
   const uid = request.cookies.get("uid")?.value;
-  const dataTableCookie = request.cookies.get("dataTable")?.value;
   const customToken = request.cookies.get("customToken")?.value;
+
+  const urlValues: Record<string, string | null> = {
+    pathname,
+    page,
+    limit,
+    activeId,
+    status
+  } as const;
+
+  const cookieValues: Record<string, string | undefined> = {
+    pathname: pathnameCookie,
+    page: pageCookie,
+    limit: limitCookie,
+    activeId: activeIdCookie,
+    status: statusCookie
+  } as const;
 
   if (token && uid && !customToken) {
     try {
@@ -52,43 +68,24 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  if (page && limit && dataTableCookie && (pageCookie !== page || limitCookie !== limit || pathname !== pathnameCookie || dataTableCookie !== dataTableCookie)) {
-    const response = NextResponse.redirect(request.url);
+  const responseRedirect = NextResponse.redirect(request.url);
 
-    response.cookies.set("pathname", pathname);
-    response.cookies.set("page", page);
-    response.cookies.set("limit", limit);
-    response.cookies.set("dataTable", dataTableCookie);
+  let redirect = false;
 
-    return response;
-  }
+  Object.entries(urlValues).forEach(([key, urlValue]) => {
+    const cookieValue = cookieValues[key];
 
-  if (page && limit && activeId && status && dataTableCookie && (activeId !== activeIdCookie || status !== statusCookie || pathname !== pathnameCookie || dataTableCookie !== dataTableCookie)) {
-    const response = NextResponse.redirect(request.url);
+    if (urlValue && urlValue !== cookieValue) {
+      responseRedirect.cookies.set(key, urlValue);
+      redirect = true;
+    }
+  });
 
-    response.cookies.set("pathname", pathname);
-    response.cookies.set("page", page);
-    response.cookies.set("limit", limit);
-    response.cookies.set("activeId", activeId);
-    response.cookies.set("status", status);
-    response.cookies.set("dataTable", dataTableCookie);
-
-    return response;
+  if (redirect) {
+    return responseRedirect;
   }
 
   const response = NextResponse.next();
-
-  if (page && limit && dataTableCookie) {
-    response.cookies.set("pathname", pathname);
-    response.cookies.set("page", page);
-    response.cookies.set("limit", limit);
-    response.cookies.set("dataTable", dataTableCookie);
-
-    if (activeId && status) {
-      response.cookies.set("activeId", activeId);
-      response.cookies.set("status", status);
-    }
-  }
 
   return response;
 }
