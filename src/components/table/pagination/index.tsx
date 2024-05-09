@@ -82,7 +82,6 @@ const Pagination = () => {
     }, 200);
 
     const observer = new MutationObserver((mutations) => {
-      console.log("hola 1");
       mutations.forEach((mutation) => {
         mutation.addedNodes.forEach((node) => {
           const element = node as HTMLElement;
