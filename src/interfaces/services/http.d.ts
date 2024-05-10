@@ -14,6 +14,7 @@ export interface GetProps {
   abortController?: AbortController;
 }
 
-export interface PostProps extends GetProps {
+export interface PostPutPatch extends GetProps {
   body: Record<string, any> | Record<string, any>[];
+  method?: "POST" | "PUT" | "PATCH";
 }

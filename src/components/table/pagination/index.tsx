@@ -3,10 +3,10 @@
 import { useCallback, useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Pagination as PaginationAnt } from "antd";
-import { deleteCookie, setCookie } from "cookies-next";
+import { deleteCookie, getCookie, setCookie } from "cookies-next";
 import useModal from "@src/hooks/useModal";
 import useMessage from "@src/hooks/useMessage";
-import { post } from "@src/services/http";
+import { patch } from "@src/services/http";
 
 const Pagination = () => {
   const searchParams = useSearchParams();
@@ -123,23 +123,12 @@ const Pagination = () => {
   useEffect(() => {
     const page = searchParams.get("pagina") || 1;
     const limit = searchParams.get("limite") || 10;
-    const deleteId = searchParams.get("idBorrar");
     const activeId = searchParams.get("idActivo");
     const status = searchParams.get("estatus");
+    const url = `${pathname}?pagina=${page}&limite=${limit}`;
 
     setPage(+page);
     setLimit(+limit);
-
-    if (deleteId) {
-      modal.confirm({
-        title: "¿Esta seguro de eliminar este registro?",
-        okText: "Aceptar",
-        cancelText: "Cancelar",
-        onCancel: () => {
-          router.push(`${pathname}?pagina=${page}&limite=${limit}`);
-        }
-      });
-    }
 
     if (activeId) {
       modal.confirm({
@@ -150,13 +139,33 @@ const Pagination = () => {
           deleteCookie("activeId");
           deleteCookie("status");
 
-          router.push(`${pathname}?pagina=${page}&limite=${limit}`);
+          router.push(url);
         },
         onOk: async () => {
           try {
-            console.log(page, limit, status);
-            await post({ baseUrlType: "companiesApi", url: `${pathname}/disable`, body: { active: !(status === "true") } });
-            router.push(`${pathname}?pagina=${page}&limite=${limit}`);
+            const newStatusActive = !(status === "true");
+
+            await patch({
+              baseUrlType: "companiesApi",
+              url: `${pathname.split("?")[0]}/disable`,
+              body: {
+                id: activeId,
+                active: newStatusActive
+              }
+            });
+
+            let dataTable = JSON.parse(getCookie("dataTable")!) as Array<{ id: string, image: string | undefined; active: boolean; }>;
+
+            dataTable = dataTable.map(l => ({
+              ...l,
+              image: l.image?.replace("imagenesPerfil/", "imagenesPerfil%2F"),
+              active: activeId === l.id ? newStatusActive : l.active
+            }));
+
+            setCookie("dataTable", dataTable);
+
+            message.success("Registro actualizado con éxito!.");
+            router.push(url);
           } catch (error) {
             message.error("Error al cambiar el estatus.");
             console.log(error);

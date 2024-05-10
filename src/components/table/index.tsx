@@ -19,7 +19,7 @@ const Table = <T extends {}>(props: TableProps<T>) => {
 
   const filtersData: Filter[] = [
     { name: "name", placeholder: "Filtrar por nombre" },
-    { name: "email", placeholder: "Filtrar por email" },
+    { name: "email", placeholder: "Filtrar por email" }
   ];
 
   return (
