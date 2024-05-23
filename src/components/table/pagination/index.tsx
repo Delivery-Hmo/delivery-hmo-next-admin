@@ -1,9 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Pagination as PaginationAnt } from "antd";
-import { deleteCookie, getCookie, setCookie } from "cookies-next";
+import { deleteCookie, setCookie } from "cookies-next";
 import useModal from "@src/hooks/useModal";
 import useMessage from "@src/hooks/useMessage";
 import { patch } from "@src/services/http";
@@ -17,46 +17,6 @@ const Pagination = () => {
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [limit, setLimit] = useState(10);
-
-  const setCookieTable = useCallback((element: HTMLElement) => {
-    const table = element as HTMLTableElement;
-
-    const dataTable: Record<string, any> = [];
-    const { rows } = table;
-
-    for (let i = 1; i < rows.length; i++) {
-      const row = rows[i];
-      const { cells } = row;
-      const itemDataTable: Record<string, any> = {};
-
-      for (let j = 0; j < cells.length; j++) {
-        const { id: key, innerText: value, children } = cells[j];
-
-        if (!key) continue;
-
-        if (key === "active") {
-          const anchorElement = children[0];
-          const ariaChecked = anchorElement.children[0].ariaChecked!;
-          itemDataTable[key] = ariaChecked === "true";
-
-          continue;
-        }
-
-        if (key === "image") {
-          const imgElement = children[0] as HTMLImageElement;
-          itemDataTable[key] = imgElement.alt;
-
-          continue;
-        }
-
-        itemDataTable[key] = value;
-      }
-
-      dataTable.push(itemDataTable);
-    }
-
-    setCookie("dataTable", JSON.stringify(dataTable));
-  }, []);
 
   useEffect(() => {
     const totalInterval = setInterval(() => {
@@ -77,7 +37,6 @@ const Pagination = () => {
 
       if (table) {
         clearInterval(totalTable);
-        setCookieTable(table);
       }
     }, 200);
 
@@ -92,10 +51,6 @@ const Pagination = () => {
             setTotal(+_total);
             setCookie("totalDataTable", _total);
           }
-
-          if (element.id === "table") {
-            setCookieTable(element);
-          };
         });
       });
     });
@@ -106,19 +61,14 @@ const Pagination = () => {
     });
 
     return () => {
-      setPage(1);
-      setLimit(10);
-      setTotal(0);
-
       clearInterval(totalInterval);
 
-      deleteCookie("dataTable");
       deleteCookie("activeId");
       deleteCookie("status");
 
       observer?.disconnect();
     };
-  }, [setCookieTable]);
+  }, []);
 
   useEffect(() => {
     const page = searchParams.get("pagina") || 1;
@@ -153,16 +103,6 @@ const Pagination = () => {
                 active: newStatusActive
               }
             });
-
-            let dataTable = JSON.parse(getCookie("dataTable")!) as Array<{ id: string, image: string | undefined; active: boolean; }>;
-
-            dataTable = dataTable.map(l => ({
-              ...l,
-              image: l.image?.replace("imagenesPerfil/", "imagenesPerfil%2F"),
-              active: activeId === l.id ? newStatusActive : l.active
-            }));
-
-            setCookie("dataTable", dataTable);
 
             message.success("Registro actualizado con éxito!.");
             router.push(url);

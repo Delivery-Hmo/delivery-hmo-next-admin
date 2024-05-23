@@ -5,20 +5,10 @@ import { getHeaders, handleError } from "@src/utils/functions";
 import { getCookie } from "cookies-next";
 import { cookies } from "next/headers";
 import { GetProps, PostPutPatch } from "@src/interfaces/services/http";
+import { unstable_cache } from "next/cache";
 
 export const get = async <T>({ baseUrlType, url, page, limit, abortController }: GetProps) => {
   try {
-    const activeId = getCookie("activeId", { cookies }) as string;
-
-    if (activeId) {
-      let list = JSON.parse(getCookie("dataTable", { cookies })!) as Array<{ image: string; }>;
-      const total = +getCookie("totalDataTable", { cookies })!;
-
-      list = list.map(l => ({ ...l, image: l.image.replace("imagenesPerfil/", "imagenesPerfil%2F") }));
-
-      return { list, total } as T;
-    }
-
     const token = getCookie("token", { cookies }) as string;
 
     if (page && limit) url += `?page=${page}&limit=${limit}`;
@@ -43,6 +33,21 @@ export const get = async <T>({ baseUrlType, url, page, limit, abortController }:
   } catch (error) {
     throw handleError(error);
   }
+};
+
+//podemos hacer un boton force reload para recargar la cache en las tablas y no tener que esperar los 5 minutos al revalidate
+export const getCache = <T>(props: GetProps) => {
+  const { page, limit } = props;
+
+  const cache = unstable_cache(
+    () => get<T>(props),
+    [`page-${page}`, `limit-${limit}`],
+    {
+      revalidate: 300
+    }
+  );
+
+  return cache;
 };
 
 export const post = async <T>(props: PostPutPatch) => postPutPatch<T>({ ...props, method: "POST" });

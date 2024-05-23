@@ -2,9 +2,7 @@ import { GetProps } from "../services/http";
 
 export interface TableProps<T> extends GetProps {
   columns: Column<T>[];
-  showStatus?: boolean;
-  showEdit?: boolean;
-  showDelete?: boolean;
+  url?: string;
 }
 
 interface Column<T> {

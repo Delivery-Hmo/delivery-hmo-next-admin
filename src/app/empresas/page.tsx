@@ -23,7 +23,6 @@ const Companies = () => {
           title: "Imagen",
         }
       ]}
-      showEdit
     />
   );
 };

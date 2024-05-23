@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { get } from "./services/http";
-import { url } from "inspector";
 
 const toLogin = (request: NextRequest) => {
   const response = NextResponse.redirect(new URL("/", request.url));
@@ -45,28 +44,20 @@ export async function middleware(request: NextRequest) {
   }
 
   if (page && limit) {
-    const activeId = searchParams.get("idActivo");
-    const status = searchParams.get("estatus");
     const pathnameCookie = request.cookies.get("pathname")?.value;
     const pageCookie = request.cookies.get("page")?.value;
     const limitCookie = request.cookies.get("limit")?.value;
-    const activeIdCookie = request.cookies.get("activeId")?.value;
-    const statusCookie = request.cookies.get("status")?.value;
 
     const urlValues: Record<string, string | null> = {
       pathname,
       page,
       limit,
-      activeId,
-      status
     };
 
     const cookieValues: Record<string, string | undefined> = {
       pathname: pathnameCookie,
       page: pageCookie,
       limit: limitCookie,
-      activeId: activeIdCookie,
-      status: statusCookie
     };
 
     const responseRedirect = NextResponse.redirect(request.url);
@@ -88,7 +79,6 @@ export async function middleware(request: NextRequest) {
         redirect = true;
       }
     }
-
     if (redirect) {
       return responseRedirect;
     }
