@@ -1,37 +1,33 @@
 "use client";
 
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
+import { Button, Col, Form, Input, Row } from "antd";
+import { FiltersProps } from "@src/interfaces/components/table";
 
-interface Filter {
-  name: string;
-  placeholder: string;
-}
-
-interface FiltersProps {
-  filters: Filter[];
-}
-
-const Filters = ({ filters }: FiltersProps) => {
-  const [filter, setFilter] = useState<{ [key: string]: string; }>({});
-
-  const handleFilterChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFilter({ ...filter, [name]: value });
-  };
+const Filters = <T extends {} | undefined>({ items, onSearch }: FiltersProps<T>) => {
 
   return (
-    <div style={{ marginBottom: 20 }}>
-      {filters.map((filterItem, index) => (
-        <input
-          key={index}
-          type="text"
-          name={filterItem.name}
-          value={filter[filterItem.name] || ''}
-          onChange={handleFilterChange}
-          placeholder={filterItem.placeholder}
-        />
-      ))}
-    </div>
+    <Form onFinish={onSearch}>
+      <Row style={{ marginBottom: 20 }} gutter={10}>
+        {
+          items.map((item) => {
+            const { name } = item;
+
+            return (
+              <Col key={name as string} md={6}>
+                <Input
+                  {...item}
+                  name={name as string}
+                />
+              </Col>
+            );
+          })
+        }
+        <Col md={6}>
+          <Button htmlType="submit">Buscar</Button>
+        </Col>
+      </Row>
+    </Form>
   );
 };
 

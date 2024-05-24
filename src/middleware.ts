@@ -63,6 +63,7 @@ export async function middleware(request: NextRequest) {
     const responseRedirect = NextResponse.redirect(request.url);
     let redirect = false;
 
+
     const entries = Object.entries(urlValues);
 
     for (const [key, urlValue] of entries) {

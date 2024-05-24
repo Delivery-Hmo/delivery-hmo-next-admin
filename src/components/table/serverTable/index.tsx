@@ -8,8 +8,8 @@ import { TableProps } from "@src/interfaces/components/table";
 //import { colorsBranchStatus, textsBranchStatus, urlImageDefaultProfile } from "@src/utils/constants";
 import Image from "next/image";
 import Link from "next/link";
-import { revalidateTag } from "next/cache";
 //import { BranchStatus } from "@src/types";
+import "./index.css"
 
 const ServerTable = async <T extends { id?: string; }>({ baseUrlType, columns, url }: TableProps<T>) => {
   const page = getCookie("page", { cookies }) as string;
@@ -20,23 +20,13 @@ const ServerTable = async <T extends { id?: string; }>({ baseUrlType, columns, u
 
   return (
     <>
-      <div id="total" style={{ display: "none" }}>{total}</div>
-      <table
-        id="table"
-        style={{
-          width: "100%",
-          border: "1px solid #ccc",
-          boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
-          backgroundColor: "#fff",
-          padding: 20,
-          borderRadius: 20
-        }}
-      >
+      <table className="ant-table">
         <thead>
-          <tr>
+          <tr className="tr">
             {
               columns.map((column) => (
                 <th
+                  className="th"
                   key={column.key.toString()}
                   style={{
                     textAlign: "start",
