@@ -10,22 +10,26 @@ const Sellers = () => {
           name: "name",
           placeholder: "Nombre",
           value: "",
+          label: "Nombre",
         },
         {
           name: "rfc",
           placeholder: "RFC",
           multiple: true,
           value: [],
+          label: "RFC",
         },
         {
           name: "email",
           placeholder: "Correo",
           value: "",
+          label: "Correo",
         },
         {
           name: "phone",
           placeholder: "Telefono",
           value: "",
+          label: "Telefono",
         },
       ]}
       baseUrlType="companiesApi"

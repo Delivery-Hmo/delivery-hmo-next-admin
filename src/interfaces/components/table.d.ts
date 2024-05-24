@@ -17,6 +17,7 @@ interface Column<T> {
 
 export interface Item<K> extends Omit<InputProps, "name"> {
   name: K;
+  label: string;
 }
 
 interface FiltersProps<T> {
