@@ -32,14 +32,6 @@ const Pagination = () => {
       }
     }, 200);
 
-    const totalTable = setInterval(() => {
-      const table = window.document.getElementById("table") as HTMLTableElement;
-
-      if (table) {
-        clearInterval(totalTable);
-      }
-    }, 200);
-
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         mutation.addedNodes.forEach((node) => {

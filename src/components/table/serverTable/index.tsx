@@ -9,7 +9,7 @@ import { TableProps } from "@src/interfaces/components/table";
 import Image from "next/image";
 import Link from "next/link";
 //import { BranchStatus } from "@src/types";
-import "./index.css"
+import "./index.css";
 
 const ServerTable = async <T extends { id?: string; }>({ baseUrlType, columns, url }: TableProps<T>) => {
   const page = getCookie("page", { cookies }) as string;
@@ -20,6 +20,7 @@ const ServerTable = async <T extends { id?: string; }>({ baseUrlType, columns, u
 
   return (
     <>
+      <div id="total" style={{ display: "none" }}>{total}</div>
       <table className="ant-table">
         <thead>
           <tr className="tr">
