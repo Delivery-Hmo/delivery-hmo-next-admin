@@ -17,10 +17,10 @@ export const colorsBranchStatus: Record<BranchStatus, LiteralUnion<PresetColorTy
   "validating-images": "orange",
   "hidden-in-app": "yellow",
   "showing-in-app": "green"
-} as const;
+};
 
 export const textsBranchStatus: Record<BranchStatus, string> = {
   "validating-images": "Validando imagenes",
   "hidden-in-app": "Oculto en app",
   "showing-in-app": "Mostrando en app"
-} as const;
+};

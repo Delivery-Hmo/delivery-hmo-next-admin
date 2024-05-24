@@ -1,21 +1,22 @@
 
-import Link from "next/link";
 import { cookies } from "next/headers";
 import { getCookie } from "cookies-next";
-import { Switch, Tag } from "antd";
+import { Switch, /* Tag */ } from "antd";
 import { Get } from "@src/interfaces/services/http";
-import { get } from "@src/services/http";
+import { getCache } from "@src/services/http";
 import { TableProps } from "@src/interfaces/components/table";
-import { colorsBranchStatus, textsBranchStatus, urlImageDefaultProfile } from "@src/utils/constants";
+//import { colorsBranchStatus, textsBranchStatus, urlImageDefaultProfile } from "@src/utils/constants";
 import Image from "next/image";
-import { BranchStatus } from "@src/types";
+import Link from "next/link";
+//import { BranchStatus } from "@src/types";
 import "./index.css"
 
-const ServerTable = async <T extends { id?: string; }>({ baseUrlType, columns, showStatus, showEdit, showDelete }: TableProps<T>) => {
+const ServerTable = async <T extends { id?: string; }>({ baseUrlType, columns, url }: TableProps<T>) => {
   const page = getCookie("page", { cookies }) as string;
   const limit = getCookie("limit", { cookies }) as string;
   const pathname = getCookie("pathname", { cookies }) as string;
-  const { list, total } = await get<Get<T>>({ baseUrlType, url: `${pathname}/list`, page: +page, limit: +limit });
+  const cache = getCache<Get<T>>({ baseUrlType, url: `${pathname}/${url || "list"}`, page: +page, limit: +limit });
+  const { list, total } = await cache();
 
   return (
     <>
@@ -29,22 +30,12 @@ const ServerTable = async <T extends { id?: string; }>({ baseUrlType, columns, s
                   key={column.key.toString()}
                   style={{
                     textAlign: "start",
-                    width: "40%"
+                    width: "50%"
                   }}
                 >
                   {column.title}
                 </th>
               ))
-            }
-            {
-              showEdit && <th className="th" style={{ textAlign: "start" }}>
-                Editar
-              </th>
-            }
-            {
-              showDelete && <th className="th" style={{ textAlign: "start" }}>
-                Eliminar
-              </th>
             }
           </tr>
         </thead>
@@ -52,7 +43,7 @@ const ServerTable = async <T extends { id?: string; }>({ baseUrlType, columns, s
           {
             list.map((item) => {
               const _item = item as Record<string, string | number | boolean>;
-              const branchStatus = _item.estatus as BranchStatus | undefined;
+              //const branchStatus = _item.estatus as BranchStatus | undefined;
 
               return <tr key={item.id}>
                 {
@@ -61,15 +52,18 @@ const ServerTable = async <T extends { id?: string; }>({ baseUrlType, columns, s
                     const keyTd = column.key.toString();
 
                     return (
-                      <td key={keyTd} id={keyTd}>
+                      <td
+                        key={keyTd}
+                        id={keyTd}
+                      >
                         {
-                          typeof value === "boolean" && column.key === "active"
+                          typeof value === "boolean" && keyTd === "active"
                             ? <Link
                               href={`${pathname}?pagina=${page}&limite=${limit}&idActivo=${item.id}&estatus=${value}`}
                             >
                               <Switch value={value} />
                             </Link>
-                            : column.key === "image"
+                            : keyTd === "image"
                               ? <Image
                                 alt={value.toString()}
                                 src={value.toString()}
@@ -83,35 +77,21 @@ const ServerTable = async <T extends { id?: string; }>({ baseUrlType, columns, s
                     );
                   })
                 }
-                {
-                  showStatus && <td>
-                    <Link href={`${pathname}/estatus`}>
-                      <Tag
-                        color={colorsBranchStatus[branchStatus!]}
-                        title={textsBranchStatus[branchStatus!]}
-                      >
-                        {textsBranchStatus[branchStatus!]}
-                      </Tag>
-                    </Link>
-                  </td>
-                }
-                {
-                  showEdit && <td style={{ width: 50 }}>
-                    <Link href={`${pathname}/editar?id=${item.id}`!}>
-                      Editar
-                    </Link>
-                  </td>
-                }
-                {
-                  showDelete && <td style={{ width: 50 }}>
-                    <Link
-                      href={`${pathname}?pagina=${page}&limite=${limit}&idBorrar=${item.id}`}>
-                      Borrar
-                    </Link>
-                  </td>
-                }
               </tr>;
+              /*  {
+                 showStatus && <td>
+                   <Link href={`${pathname}/estatus`}>
+                     <Tag
+                       color={colorsBranchStatus[branchStatus!]}
+                       title={textsBranchStatus[branchStatus!]}
+                     >
+                       {textsBranchStatus[branchStatus!]}
+                     </Tag>
+                   </Link>
+                 </td>;
+               } */
             })
+
           }
         </tbody>
       </table>

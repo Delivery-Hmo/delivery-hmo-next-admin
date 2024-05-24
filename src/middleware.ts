@@ -14,36 +14,11 @@ const toLogin = (request: NextRequest) => {
 
 export async function middleware(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
-  const page = searchParams.get("pagina");
-  const limit = searchParams.get("limite");
-  const activeId = searchParams.get("idActivo");
-  const status = searchParams.get("estatus");
-
-  const pathnameCookie = request.cookies.get("pathname")?.value;
-  const pageCookie = request.cookies.get("page")?.value;
-  const limitCookie = request.cookies.get("limit")?.value;
-  const activeIdCookie = request.cookies.get("activeId")?.value;
-  const statusCookie = request.cookies.get("status")?.value;
-
   const token = request.cookies.get("token")?.value;
   const uid = request.cookies.get("uid")?.value;
   const customToken = request.cookies.get("customToken")?.value;
-
-  const urlValues: Record<string, string | null> = {
-    pathname,
-    page,
-    limit,
-    activeId,
-    status
-  } as const;
-
-  const cookieValues: Record<string, string | undefined> = {
-    pathname: pathnameCookie,
-    page: pageCookie,
-    limit: limitCookie,
-    activeId: activeIdCookie,
-    status: statusCookie
-  } as const;
+  const page = searchParams.get("pagina");
+  const limit = searchParams.get("limite");
 
   if (token && uid && !customToken) {
     try {
@@ -68,25 +43,55 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  const responseRedirect = NextResponse.redirect(request.url);
-  let redirect = false;
+  if (page && limit) {
+    const pathnameCookie = request.cookies.get("pathname")?.value;
+    const pageCookie = request.cookies.get("page")?.value;
+    const limitCookie = request.cookies.get("limit")?.value;
 
-  Object.entries(urlValues).forEach(([key, urlValue]) => {
-    const cookieValue = cookieValues[key];
+    const urlValues: Record<string, string | null> = {
+      pathname,
+      page,
+      limit,
+    };
 
-    if (urlValue && urlValue !== cookieValue) {
-      responseRedirect.cookies.set(key, urlValue);
-      redirect = true;
+    const cookieValues: Record<string, string | undefined> = {
+      pathname: pathnameCookie,
+      page: pageCookie,
+      limit: limitCookie,
+    };
+
+    const responseRedirect = NextResponse.redirect(request.url);
+    let redirect = false;
+
+
+    const entries = Object.entries(urlValues);
+
+    for (const [key, urlValue] of entries) {
+      const cookieValue = cookieValues[key];
+
+      if (!urlValue && cookieValue) {
+        responseRedirect.cookies.set(key, "", { expires: new Date() });
+        redirect = true;
+        continue;
+      }
+
+      if (urlValue && urlValue !== cookieValue) {
+        responseRedirect.cookies.set(key, urlValue);
+        redirect = true;
+      }
     }
-  });
+    if (redirect) {
+      return responseRedirect;
+    }
 
-  if (redirect) {
-    return responseRedirect;
+    const response = NextResponse.next();
+
+    Object.entries(urlValues).forEach(([key, urlValue]) => {
+      responseRedirect.cookies.set(key, urlValue!);
+    });
+
+    return response;
   }
-
-  const response = NextResponse.next();
-
-  return response;
 }
 
 export const config = {

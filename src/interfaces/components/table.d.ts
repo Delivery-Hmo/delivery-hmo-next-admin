@@ -3,9 +3,7 @@ import { InputProps } from "antd";
 
 export interface TableProps<T, F = undefined> extends GetProps {
   columns: Column<T>[];
-  showStatus?: boolean;
-  showEdit?: boolean;
-  showDelete?: boolean;
+  url?: string;
   filters?: Item<keyof F>[];
   onSearch?: (values: F) => void;
 }
