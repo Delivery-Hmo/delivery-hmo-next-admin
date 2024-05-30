@@ -1,18 +1,30 @@
+/* Estilos para el contenedor de la tabla */
+.table-container {
+    overflow-x: auto; /* Permitir scroll horizontal */
+    max-width: 100%; /* Establecer un ancho máximo */
+    border-radius: 30px; /* Si deseas mantener el border-radius */
+}
+
+.scroll-container {
+    overflow-x: auto; /* Permitir scroll horizontal */
+}
+
+/* Estilos para la tabla en pantallas medianas y grandes */
 .ant-table {
     border: 1px solid #e8e8e8;
     border-collapse: collapse;
-    width: 100%;
-    border-radius: 30%;
+    width: auto; /* Permitir que la tabla se ajuste al contenido */
+    cursor: pointer;
 }
 
 .ant-table thead {
-    background-color: #DFDFDF;
+    background-color: #FAFAFA;
 }
 
 .ant-table thead th {
     padding: 14px 20px;
     font-weight: bold;
-    border-right: 1px solid #e8e8e8;
+    border-right: 1px solid #F0F0F0;
 }
 
 .ant-table thead th:last-child {
@@ -21,31 +33,51 @@
 
 .ant-table tbody td {
     padding: 1px 16px;
-    border-top: 1px solid #e8e8e8;
-    border-right: 1px solid #e8e8e8;
+    border-top: 1px solid #e8e8e8; 
+}
+
+.ant-table tbody tr {
+    background-color: #FFFFFF; 
+}
+
+.ant-table tbody tr:hover {   
+    background-color: #FAFAFA; 
 }
 
 .ant-table tbody td:last-child {
     border-right: none;
 }
 
-.ant-table tbody tr:nth-child(odd) {
-    background-color: #f5f5f5;
-}
-
-.ant-table tr:nth-child(even) {
-    background-color: #FAFAFA;
-  }
-
+/* Estilos para la tabla en dispositivos móviles */
 @media screen and (max-width: 768px) {
+    .ant-table {
+        display: inline-block; /* Mostrar la tabla en línea */
+        white-space: nowrap; /* Evitar saltos de línea en dispositivos móviles */
+    }
+
     .ant-table thead {
-        display: none;
+        display: block; /* Cambiar a bloque para que los th se muestren uno debajo del otro */
+    }
+
+    .ant-table thead th {
+        display: inline-block; /* Mostrar los th en la misma línea */
+        border-bottom: 1px solid #e8e8e8;
+        white-space: nowrap; /* Evitar saltos de línea en dispositivos móviles */
+        overflow: hidden; /* Ocultar contenido que desborde */
+        text-overflow: ellipsis; /* Mostrar puntos suspensivos cuando el contenido desborde */
+    }
+
+    .ant-table thead th:last-child {
+        border-bottom: none;
     }
 
     .ant-table tbody td {
-        display: block;
+        display: inline-block; /* Mostrar los datos en la misma línea */
         border: none;
         border-bottom: 1px solid #e8e8e8;
+        white-space: nowrap; /* Evitar saltos de línea en dispositivos móviles */
+        overflow: hidden; /* Ocultar contenido que desborde */
+        text-overflow: ellipsis; /* Mostrar puntos suspensivos cuando el contenido desborde */
     }
 
     .ant-table tbody td:last-child {
