@@ -1,11 +1,11 @@
 import { Suspense } from "react";
 import { Skeleton } from "antd";
-import ServerTable from "./serverTable";
-import Pagination from "./pagination";
-import { TableProps } from "@src/interfaces/components/table";
-import Filters from "./filters";
 import { getCookie } from "cookies-next";
 import { cookies } from "next/headers";
+import ServerTable from "./serverTable";
+import Pagination from "./pagination";
+import Filters from "./filters";
+import { TableProps } from "@src/interfaces/components/table";
 
 const Table = <T extends {}>(props: TableProps<T>) => {
   const page = getCookie("page", { cookies }) as string;
@@ -21,10 +21,9 @@ const Table = <T extends {}>(props: TableProps<T>) => {
       {
         props.filters && <Filters<T>
           items={props.filters}
-          onSearch={props.onSearch}
         />
       }
-
+      <br />
       <Suspense
         key={`${pathname}-${page}-${limit}`}
         fallback={

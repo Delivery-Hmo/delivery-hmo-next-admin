@@ -1,11 +1,11 @@
 "use server";
 
-import { baseUrlsApis } from "@src/utils/constants";
+import { baseUrlsApis, reloadTableTag } from "@src/utils/constants";
 import { getHeaders, handleError } from "@src/utils/functions";
 import { getCookie } from "cookies-next";
 import { cookies } from "next/headers";
 import { GetProps, PostPutPatch } from "@src/interfaces/services/http";
-import { unstable_cache } from "next/cache";
+import { revalidateTag, unstable_cache } from "next/cache";
 
 export const get = async <T>({ baseUrlType, url, page, limit, abortController }: GetProps) => {
   try {
@@ -35,7 +35,6 @@ export const get = async <T>({ baseUrlType, url, page, limit, abortController }:
   }
 };
 
-//podemos hacer un boton force reload para recargar la cache en las tablas y no tener que esperar los 5 minutos al revalidate
 export const getCache = <T>(props: GetProps) => {
   const { page, limit } = props;
 
@@ -43,7 +42,8 @@ export const getCache = <T>(props: GetProps) => {
     () => get<T>(props),
     [`page-${page}`, `limit-${limit}`],
     {
-      revalidate: 300
+      revalidate: 300,
+      tags: [reloadTableTag]
     }
   );
 
@@ -56,7 +56,7 @@ export const put = async <T>(props: PostPutPatch) => postPutPatch<T>({ ...props,
 
 export const patch = async <T>(props: PostPutPatch) => postPutPatch<T>({ ...props, method: "PATCH" });
 
-export const postPutPatch = async <T>({ baseUrlType, url, body, method, abortController }: PostPutPatch) => {
+export const postPutPatch = async <T>({ baseUrlType, url, body, method, abortController, pathToRevalidate }: PostPutPatch) => {
   const token = getCookie("token", { cookies }) as string;
 
   const response = await fetch(
@@ -73,6 +73,8 @@ export const postPutPatch = async <T>({ baseUrlType, url, body, method, abortCon
     const error = await response.json();
     throw handleError(error);
   }
+
+  if (pathToRevalidate) revalidateTag(pathToRevalidate);
 
   return response.json() as Promise<T>;
 }

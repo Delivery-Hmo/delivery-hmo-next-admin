@@ -7,6 +7,7 @@ import { deleteCookie, setCookie } from "cookies-next";
 import useModal from "@src/hooks/useModal";
 import useMessage from "@src/hooks/useMessage";
 import { patch } from "@src/services/http";
+import { reloadTableTag } from "@src/utils/constants";
 
 const Pagination = () => {
   const searchParams = useSearchParams();
@@ -94,6 +95,7 @@ const Pagination = () => {
                 id: activeId,
                 active: newStatusActive
               },
+              pathToRevalidate: reloadTableTag
             });
 
             message.success("Registro actualizado con éxito!.");

@@ -1,17 +1,20 @@
 "use client";
 
-import { useState } from "react";
 import { Button, Card, Col, Form, Input, Row } from "antd";
 import { FiltersProps } from "@src/interfaces/components/table";
 import { SearchOutlined } from "@ant-design/icons";
+import { onSearch } from "./actions";
 
-const Filters = <T extends {}>({ items, onSearch }: FiltersProps<T>) => {
+const Filters = <T extends {}>({ items }: FiltersProps<T>) => {
   return (
     <Card>
-      <Form onFinish={onSearch} layout="vertical">
-        <Row style={{ marginBottom: 10 }}
+      <form action={onSearch}>
+
+        <Row
+          style={{ marginBottom: 10 }}
           justify="space-between"
-          align="middle">
+          align="middle"
+        >
           <Col>
             <h3>Filtros</h3>
           </Col>
@@ -30,29 +33,28 @@ const Filters = <T extends {}>({ items, onSearch }: FiltersProps<T>) => {
           {
             items.map((item) => {
               const { name, label } = item;
+              const nameString = name as string;
 
               return (
-                <Col key={name as string} md={8}>
+                <Col key={nameString} md={8}>
                   <Form.Item
-                    name={name as string}
+                    name={nameString}
                     label={label}
                   >
-
                     <Input
-                      placeholder={name as string}
                       {...item}
-                      name={name as string}
+                      placeholder={nameString}
+                      name={nameString}
                     />
                   </Form.Item>
                 </Col>
               );
             })
           }
-
         </Row>
-      </Form>
+      </form >
     </Card>
   );
 };
 
-export default Filters;
+export default Filters;;;

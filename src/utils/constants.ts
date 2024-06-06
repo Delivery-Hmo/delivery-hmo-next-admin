@@ -1,3 +1,5 @@
+import { Column, Item } from "@src/interfaces/components/table";
+import { User, UserAdmin } from "@src/interfaces/users";
 import { BranchStatus } from "@src/types";
 import { BaseUrlTypes } from "@src/types/services/http";
 import { PresetColorType } from "antd/es/_util/colors";
@@ -24,3 +26,64 @@ export const textsBranchStatus: Record<BranchStatus, string> = {
   "hidden-in-app": "Oculto en app",
   "showing-in-app": "Mostrando en app"
 };
+
+export const baseTableFilters: Item<keyof UserAdmin>[] = [
+  {
+    name: "id",
+    placeholder: "ID",
+    label: "ID"
+  },
+  {
+    name: "name",
+    placeholder: "Nombre",
+    label: "Nombre"
+  },
+  {
+    name: "email",
+    placeholder: "Correo",
+    label: "Correo"
+  },
+  {
+    name: "phone",
+    placeholder: "Teléfono",
+    label: "Teléfono"
+  },
+  {
+    name: "rfc",
+    placeholder: "RFC",
+    label: "RFC",
+  }
+];
+
+export const baseColumnsFilters: Column<User>[] = [
+  {
+    key: "id",
+    title: "ID"
+  },
+  {
+    key: "name",
+    title: "Nombre"
+  },
+  {
+    key: "email",
+    title: "Correo"
+  },
+  {
+    key: "phone",
+    title: "Teléfono"
+  },
+  {
+    key: "rfc",
+    title: "RFC",
+  },
+  {
+    key: "active",
+    title: "Activo"
+  },
+  {
+    key: "image",
+    title: "Imagen"
+  }
+];
+
+export const reloadTableTag = "reloadTable";
