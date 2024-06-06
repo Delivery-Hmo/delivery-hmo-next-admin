@@ -93,14 +93,15 @@ const Pagination = () => {
               body: {
                 id: activeId,
                 active: newStatusActive
-              }
+              },
             });
 
             message.success("Registro actualizado con éxito!.");
-            router.push(url);
           } catch (error) {
             message.error("Error al cambiar el estatus.");
             console.log(error);
+          } finally {
+            router.push(url);
           }
         }
       });

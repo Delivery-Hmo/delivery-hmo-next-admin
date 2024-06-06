@@ -4,7 +4,7 @@ import { UserAdmin } from "@src/interfaces/users";
 const Sellers = () => {
 
   return (
-    <Table<UserAdmin, { name: string; rfc: string[]; email: string; phone: string; }>
+    <Table<UserAdmin>
       filters={[
         {
           name: "name",
@@ -67,7 +67,6 @@ const Sellers = () => {
           title: "Imagen",
         }
       ]}
-      showEdit
     />
   );
 };
