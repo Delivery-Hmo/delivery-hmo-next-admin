@@ -1,10 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import { Button, Col, Form, Input, Row } from "antd";
 import { FiltersProps } from "@src/interfaces/components/table";
 
-const Filters = <T extends {} | undefined>({ items, onSearch }: FiltersProps<T>) => {
+const Filters = <T extends {}>({ items, onSearch }: FiltersProps<T>) => {
 
   return (
     <Form onFinish={onSearch}>
