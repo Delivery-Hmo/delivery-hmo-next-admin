@@ -2,7 +2,6 @@ import Table from "@src/components/table";
 import { UserAdmin } from "@src/interfaces/users";
 
 const Sellers = () => {
-
   return (
     <Table<UserAdmin>
       filters={[
