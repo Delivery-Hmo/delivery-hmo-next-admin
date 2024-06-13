@@ -20,8 +20,11 @@ const ServerTable = async <T extends { id?: string; }>({ baseUrlType, columns, u
 
   return (
     <>
-      <div id="total" style={{ display: "none" }}>{total}</div>
-      <table className="ant-table">
+
+<div className="table-container">
+    <div className="scroll-container">
+    <div id="total" style={{ display: "none" }}>{total}</div>
+    <table className="ant-table">
         <thead>
           <tr className="tr">
             {
@@ -96,6 +99,11 @@ const ServerTable = async <T extends { id?: string; }>({ baseUrlType, columns, u
           }
         </tbody>
       </table>
+    </div>
+</div>
+
+     
+    
     </>
   );
 };

@@ -5,9 +5,7 @@ import { Button, Card, Col, Form, Input, Row } from "antd";
 import { FiltersProps } from "@src/interfaces/components/table";
 import { SearchOutlined } from "@ant-design/icons";
 
-
-const Filters = <T extends {} | undefined>({ items, onSearch }: FiltersProps<T>) => {
-
+const Filters = <T extends {}>({ items, onSearch }: FiltersProps<T>) => {
   return (
     <Card>
       <Form onFinish={onSearch} layout="vertical">

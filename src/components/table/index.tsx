@@ -7,7 +7,7 @@ import Filters from "./filters";
 import { getCookie } from "cookies-next";
 import { cookies } from "next/headers";
 
-const Table = <T extends {}, F extends {} | undefined = undefined>(props: TableProps<T, F>) => {
+const Table = <T extends {}>(props: TableProps<T>) => {
   const page = getCookie("page", { cookies }) as string;
   const limit = getCookie("limit", { cookies }) as string;
   const pathname = getCookie("pathname", { cookies }) as string;
@@ -19,7 +19,7 @@ const Table = <T extends {}, F extends {} | undefined = undefined>(props: TableP
   return (
     <>
       {
-        props.filters && <Filters<F>
+        props.filters && <Filters<T>
           items={props.filters}
           onSearch={props.onSearch}
         />

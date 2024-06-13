@@ -1,10 +1,10 @@
 import { GetProps } from "../services/http";
 import { InputProps } from "antd";
 
-export interface TableProps<T, F = undefined> extends GetProps {
+export interface TableProps<T> extends GetProps {
   columns: Column<T>[];
   url?: string;
-  filters?: Item<keyof F>[];
+  filters?: Item<keyof T>[];
   onSearch?: (values: F) => void;
 }
 
