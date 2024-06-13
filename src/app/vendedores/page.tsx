@@ -5,6 +5,7 @@ const Sellers = () => {
 
   return (
     <Table<UserAdmin, { name: string; rfc: string[]; email: string; phone: string; }>
+      url=""
       filters={[
         {
           name: "name",
@@ -67,7 +68,6 @@ const Sellers = () => {
           title: "Imagen",
         }
       ]}
-      showEdit
     />
   );
 };
