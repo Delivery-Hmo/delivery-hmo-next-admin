@@ -9,7 +9,7 @@ export const baseUrlCompaniesApi: string = "http://localhost:3001/";
 
 export const baseUrlsApis: Record<BaseUrlTypes, string> = {
   "companiesApi": "http://localhost:3001"
-};
+} as const;
 
 export const firstPage = "?pagina=1&limite=10";
 
@@ -19,13 +19,13 @@ export const colorsBranchStatus: Record<BranchStatus, LiteralUnion<PresetColorTy
   "validating-images": "orange",
   "hidden-in-app": "yellow",
   "showing-in-app": "green"
-};
+} as const;
 
 export const textsBranchStatus: Record<BranchStatus, string> = {
   "validating-images": "Validando imagenes",
   "hidden-in-app": "Oculto en app",
   "showing-in-app": "Mostrando en app"
-};
+} as const;
 
 export const baseTableFilters: Item<keyof UserAdmin>[] = [
   {
@@ -53,7 +53,7 @@ export const baseTableFilters: Item<keyof UserAdmin>[] = [
     placeholder: "RFC",
     label: "RFC",
   }
-];
+] as const;
 
 export const baseColumnsFilters: Column<User>[] = [
   {
@@ -84,6 +84,8 @@ export const baseColumnsFilters: Column<User>[] = [
     key: "image",
     title: "Imagen"
   }
-];
+] as const;
 
-export const reloadTableTag = "reloadTable";
+export const filterKeys = ["page", "limit", "id", "name", "email", "phone", "rfc"];
+
+export const allUrlParamKeys = [...filterKeys, "pathname"] as const;

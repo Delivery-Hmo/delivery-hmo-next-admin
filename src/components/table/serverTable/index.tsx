@@ -1,22 +1,19 @@
 
 import { cookies } from "next/headers";
-import { getCookie } from "cookies-next";
+import { getCookie, getCookies } from "cookies-next";
 import { Switch, /* Tag */ } from "antd";
 import { Get } from "@src/interfaces/services/http";
-import { getCache } from "@src/services/http";
+import { get } from "@src/services/http";
 import { TableProps } from "@src/interfaces/components/table";
 //import { colorsBranchStatus, textsBranchStatus, urlImageDefaultProfile } from "@src/utils/constants";
 import Image from "next/image";
-import Link from "next/link";
 //import { BranchStatus } from "@src/types";
 import "./index.css";
 
 const ServerTable = async <T extends { id?: string; }>({ baseUrlType, columns, url }: TableProps<T>) => {
-  const page = getCookie("page", { cookies }) as string;
-  const limit = getCookie("limit", { cookies }) as string;
   const pathname = getCookie("pathname", { cookies }) as string;
-  const cache = getCache<Get<T>>({ baseUrlType, url: `${pathname}/${url || "list"}`, page: +page, limit: +limit });
-  const { list, total } = await cache();
+
+  const { list, total } = await get<Get<T>>({ baseUrlType, url: `${pathname}/${url || "list"}` });
 
   return (
     <>
@@ -61,11 +58,7 @@ const ServerTable = async <T extends { id?: string; }>({ baseUrlType, columns, u
                           >
                             {
                               typeof value === "boolean" && keyTd === "active"
-                                ? <Link
-                                  href={`${pathname}?pagina=${page}&limite=${limit}&idActivo=${item.id}&estatus=${value}`}
-                                >
-                                  <Switch value={value} />
-                                </Link>
+                                ? <Switch defaultValue={value} id={`active=${item.id}`} />
                                 : keyTd === "image"
                                   ? <Image
                                     alt={value.toString()}

@@ -9,9 +9,8 @@ export interface Get<T> {
 export interface GetProps {
   baseUrlType: BaseUrlTypes;
   url?: string;
-  page?: number;
-  limit?: number;
   abortController?: AbortController;
+  searchParams?: Record<string, string>;
 }
 
 export interface PostPutPatch extends GetProps {

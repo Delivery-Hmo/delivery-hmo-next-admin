@@ -1,8 +1,6 @@
 "use server";
 
-import { reloadTableTag } from "@src/utils/constants";
-import { getCookie } from "cookies-next";
-import { revalidateTag } from "next/cache";
+import { getCookie, setCookie } from "cookies-next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -15,13 +13,17 @@ export const onSearch = (formData: FormData) => {
   const formEntries = formData.entries();
 
   for (const [key, value] of formEntries) {
-    if (!key || !value) continue;
+    if (key && !value) {
+      setCookie(key, "", { cookies, expires: new Date() });
+
+      continue;
+    };
 
     searchQuery += `&${key}=${value}`;
+    setCookie(key, value, { cookies });
   }
 
   const url = `${pathname}?pagina=${page}&limite=${limit}${searchQuery}`;
 
-  revalidateTag(reloadTableTag);
   redirect(url);
 };

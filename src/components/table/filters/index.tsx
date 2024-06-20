@@ -7,11 +7,15 @@ import { onSearch } from "./actions";
 
 const Filters = <T extends {}>({ items }: FiltersProps<T>) => {
   return (
-    <Card>
+    <Card
+      styles={{
+        body: {
+          marginBottom: 20
+        }
+      }}
+    >
       <form action={onSearch}>
-
         <Row
-          style={{ marginBottom: 10 }}
           justify="space-between"
           align="middle"
         >
@@ -29,24 +33,18 @@ const Filters = <T extends {}>({ items }: FiltersProps<T>) => {
             </Button>
           </Col>
         </Row>
-        <Row style={{ marginBottom: -20 }} gutter={[10, 0]}>
+        <Row style={{ marginBottom: -20 }} gutter={[10, 20]}>
           {
             items.map((item) => {
               const { name, label } = item;
               const nameString = name as string;
 
               return (
-                <Col key={nameString} md={8}>
-                  <Form.Item
+                <Col key={nameString} xs={24} md={8}>
+                  <Input
+                    {...item}
                     name={nameString}
-                    label={label}
-                  >
-                    <Input
-                      {...item}
-                      placeholder={nameString}
-                      name={nameString}
-                    />
-                  </Form.Item>
+                  />
                 </Col>
               );
             })
