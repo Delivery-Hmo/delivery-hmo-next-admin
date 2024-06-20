@@ -1,7 +1,7 @@
 export interface User {
   readonly id?: string;
   uid?: string;
-  readonly role: Rols;
+  readonly role: Roles;
   name: string;
   email: string;
   description?: string;
@@ -9,7 +9,42 @@ export interface User {
   image?: string;
   password?: string;
   rfc?: string;
-}
-export interface UserAdmin extends User {
   phone?: number;
+}
+
+export interface UserAdmin extends User {
+}
+
+export interface SuperAdmin extends User {
+}
+
+export interface BranchOffice extends User {
+  userAdmin?: string | UserAdmin;
+  salesGoalByMonth: number;
+  facebook: string;
+  phones: number[];
+  latLng: LatLng;
+  center: LatLng;
+  radius: number;
+  address: string;
+  comments: CommentsBranchOffice[];
+  totalSales?: number;
+  showInApp: boolean;
+  validatedImages: boolean;
+  validatingImages: boolean;
+  products: string[] | Product[];
+  images: string[];
+}
+
+export interface UserSeller extends User {
+  branchOffice?: string | BranchOffice;
+  userAdmin?: string | UserAdmin;
+  validatedImages: boolean;
+  validatingImages: boolean;
+}
+
+export interface UserDeliveryMan extends User {
+  branchOffice?: string | BranchOffice;
+  userAdmin?: string | UserAdmin;
+  latLng?: LatLng;
 }

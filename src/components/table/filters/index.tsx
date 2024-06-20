@@ -1,17 +1,24 @@
 "use client";
 
-import { useState } from "react";
 import { Button, Card, Col, Form, Input, Row } from "antd";
 import { FiltersProps } from "@src/interfaces/components/table";
 import { SearchOutlined } from "@ant-design/icons";
+import { onSearch } from "./actions";
 
-const Filters = <T extends {}>({ items, onSearch }: FiltersProps<T>) => {
+const Filters = <T extends {}>({ items }: FiltersProps<T>) => {
   return (
-    <Card>
-      <Form onFinish={onSearch} layout="vertical">
-        <Row style={{ marginBottom: 10 }}
+    <Card
+      styles={{
+        body: {
+          marginBottom: 20
+        }
+      }}
+    >
+      <form action={onSearch}>
+        <Row
           justify="space-between"
-          align="middle">
+          align="middle"
+        >
           <Col>
             <h3>Filtros</h3>
           </Col>
@@ -26,33 +33,26 @@ const Filters = <T extends {}>({ items, onSearch }: FiltersProps<T>) => {
             </Button>
           </Col>
         </Row>
-        <Row style={{ marginBottom: -20 }} gutter={[10, 0]}>
+        <Row style={{ marginBottom: -20 }} gutter={[10, 20]}>
           {
             items.map((item) => {
               const { name, label } = item;
+              const nameString = name as string;
 
               return (
-                <Col key={name as string} md={8}>
-                  <Form.Item
-                    name={name as string}
-                    label={label}
-                  >
-
-                    <Input
-                      placeholder={name as string}
-                      {...item}
-                      name={name as string}
-                    />
-                  </Form.Item>
+                <Col key={nameString} xs={24} md={8}>
+                  <Input
+                    {...item}
+                    name={nameString}
+                  />
                 </Col>
               );
             })
           }
-
         </Row>
-      </Form>
+      </form >
     </Card>
   );
 };
 
-export default Filters;
+export default Filters;;;

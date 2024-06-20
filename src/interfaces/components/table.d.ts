@@ -20,5 +20,4 @@ export interface Item<K> extends Omit<InputProps, "name"> {
 
 interface FiltersProps<T> {
   items: Item<keyof T>[];
-  onSearch: ((values: T) => void) | undefined;
 }
