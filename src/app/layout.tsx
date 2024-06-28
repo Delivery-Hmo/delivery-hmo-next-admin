@@ -2,7 +2,7 @@
 
 import "./globals.css";
 import { ReactNode } from "react";
-import { App, ConfigProvider, Layout, Row } from "antd";
+import { App, ConfigProvider, Layout } from "antd";
 import AuthProvider from "@src/context/auth";
 import ErrorBoundary from "@src/components/errorBoundary";
 import Sider from "@src/components/sider";

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { allUrlParamKeys, filterKeys } from "./utils/constants";
+import { get, getCache, post } from "./services/http";
 
 const toLogin = (request: NextRequest) => {
   const response = NextResponse.redirect(new URL("/", request.url));
@@ -14,13 +15,36 @@ const toLogin = (request: NextRequest) => {
 
 export async function middleware(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
-  const token = request.cookies.get("token")?.value;
+  const token = request.cookies.get("uid")?.value;
+  const uid = request.cookies.get("token")?.value;
+
   const page = searchParams.get("pagina");
   const limit = searchParams.get("limite");
 
   if (!token && pathname !== "/") return toLogin(request);
 
   if (token && pathname === "/") return NextResponse.redirect(new URL("/inicio", request.url));
+
+  if (token && uid) {
+    try {
+      const { message } = await getCache<{ message: "ok" | "expired" | "Unauthorized"; token?: string; }>({
+        baseUrlType: "companiesApi",
+        url: `/auth/verifyToken?uid=${uid}`
+      });
+
+      if (message === "expired") {
+        const encodedPath = encodeURIComponent(request.url);
+
+        NextResponse.redirect(new URL(`/refreshToken?redirect=${encodedPath}`, request.url));
+      }
+
+      if (message === "Unauthorized") {
+        return toLogin(request);
+      }
+    } catch (error) {
+      return toLogin(request);
+    }
+  }
 
   if (page && limit) {
     const pathnameCookie = request.cookies.get("pathname")?.value;

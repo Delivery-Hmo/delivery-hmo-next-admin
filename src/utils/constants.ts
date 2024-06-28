@@ -8,7 +8,8 @@ import { LiteralUnion } from "antd/es/_util/type";
 export const baseUrlCompaniesApi: string = "http://localhost:3001/";
 
 export const baseUrlsApis: Record<BaseUrlTypes, string> = {
-  "companiesApi": "http://localhost:3001"
+  "companiesApi": "http://localhost:3001",
+  "refreshTokenApi": "https://securetoken.googleapis.com/v1"
 } as const;
 
 export const firstPage = "?pagina=1&limite=10";

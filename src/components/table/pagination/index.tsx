@@ -71,8 +71,6 @@ const Pagination = () => {
 
           const elementId = element.id;
 
-          console.log(element)
-
           if (elementId.includes("activeId=") && mutation.addedNodes.length) {
             const { activeId, active: activeString } = queryString.parse(elementId);
             const active = activeString === "true"

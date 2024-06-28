@@ -46,29 +46,18 @@ export const get = async <T>({ baseUrlType, url, abortController }: GetProps) =>
   }
 };
 
-/* export const getCache = async <T>(props: GetProps) => {
-  const { page, limit, pathname, searchParams } = props;
-
-  const keyParts = [`pathname=${pathname}`, `page-${page}`, `limit-${limit}`];
-
-  if (searchParams) {
-    Object.entries(searchParams).forEach(([key, value]) => {
-      if (filterKeys.includes(key)) {
-        keyParts.push(`${key}=${value}`);
-      };
-    });
-  }
-
-  return unstable_cache(
+export const getCache = async <T>(props: GetProps) => {
+  const cache = unstable_cache(
     () => get<T>(props),
-    keyParts,
+    [],
     {
-      revalidate: 300,
-      tags: []
+      revalidate: 3000,
     }
   );
+
+  return cache();
 };
- */
+
 export const post = <T>(props: PostPutPatch) => postPutPatch<T>({ ...props, method: "POST" });
 
 export const put = <T>(props: PostPutPatch) => postPutPatch<T>({ ...props, method: "PUT" });
