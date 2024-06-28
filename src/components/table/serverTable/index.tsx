@@ -20,7 +20,7 @@ const ServerTable = async <T extends { id?: string; }>({ baseUrlType, columns, u
       <div className="table-container">
         <div className="scroll-container">
           <div id="total" style={{ display: "none" }}>{total}</div>
-          <table className="ant-table">
+          <table className="ant-table" id="table-server">
             <thead>
               <tr className="tr">
                 {
@@ -58,7 +58,7 @@ const ServerTable = async <T extends { id?: string; }>({ baseUrlType, columns, u
                           >
                             {
                               typeof value === "boolean" && keyTd === "active"
-                                ? <Switch defaultValue={value} id={`active=${item.id}`} />
+                                ? <Switch value={value} id={`activeId=${item.id}&active=${value}`} />
                                 : keyTd === "image"
                                   ? <Image
                                     alt={value.toString()}

@@ -7,6 +7,7 @@ import { setCookie } from "cookies-next";
 import useModal from "@src/hooks/useModal";
 import useMessage from "@src/hooks/useMessage";
 import { patch } from "@src/services/http";
+import queryString from "query-string";
 
 const Pagination = () => {
   const searchParams = useSearchParams();
@@ -17,24 +18,28 @@ const Pagination = () => {
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [limit, setLimit] = useState(10);
-  const [activeId, setActiveId] = useState("");
 
   useEffect(() => {
-    let observer: MutationObserver | null = null;
+    let observerTotal: MutationObserver | null = null;
+    let observerTable: MutationObserver | null = null;
 
     const totalInterval = setInterval(() => {
       const totalElement = window.document.getElementById("total");
+
+      if (!totalElement) return;
+
+      clearInterval(totalInterval);
+
       const _total = totalElement?.textContent || 0;
 
       setTotal(+_total);
       setCookie("totalDataTable", _total);
 
-      if (!totalElement || !_total) return;
-
-      observer = new MutationObserver((mutations) => {
+      observerTotal = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
           const element = mutation.target as HTMLElement;
           const newTotal = element.textContent;
+
 
           if (newTotal) {
             setTotal(+newTotal);
@@ -43,50 +48,82 @@ const Pagination = () => {
         });
       });
 
-      observer.observe(totalElement, {
+      observerTotal.observe(totalElement, {
         attributeFilter: ["id"],
         childList: true,
         subtree: true,
         characterData: true
       });
-
-      clearInterval(totalInterval);
     }, 1);
 
-    //hacer un set interval para el onClick de los checks de la tabla
+    const tableInterval = setInterval(() => {
+      const tableElement = window.document.getElementById("table-server");
 
-    /* const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        const element = mutation.target as HTMLElement;
+      if (!tableElement) return;
 
-        console.log(element);
+      clearInterval(tableInterval);
 
-        if (element.id?.includes("active")) {
-          console.log(element.id);
-        }
+      observerTable = new MutationObserver((mutations) => {
+        for (const mutation of mutations) {
+          const element = mutation.target as HTMLElement | null;
 
-        if (element.id?.includes("total")) {
-          console.log(element.id);
+          if (!element) continue;
+
+          const elementId = element.id;
+
+          console.log(element)
+
+          if (elementId.includes("activeId=") && mutation.addedNodes.length) {
+            const { activeId, active: activeString } = queryString.parse(elementId);
+            const active = activeString === "true"
+
+            modal.confirm({
+              title: "¿Esta seguro de desactivar este registro?",
+              okText: "Aceptar",
+              cancelText: "Cancelar",
+              onOk: async () => {
+                try {
+                  await patch({
+                    baseUrlType: "companiesApi",
+                    url: `${pathname.split("?")[0]}/disable`,
+                    body: { id: activeId, active: !active }
+                  });
+
+                  message.success("Registro actualizado con éxito!.");
+                  router.refresh();
+                } catch (error) {
+                  message.error("Error al cambiar el estatus.");
+                  console.log(error);
+                }
+              }
+            });
+          }
         }
       });
-    });
 
-    observer.observe(document, {
-      attributeFilter: ["id"],
-      childList: true,
-      subtree: true,
-      characterData: true
-    }); */
+      observerTable.observe(document, {
+        attributeFilter: ["id"],
+        childList: true,
+        subtree: true,
+      });
+    }, 1);
 
     return () => {
       clearInterval(totalInterval);
-      observer?.disconnect();
+      clearInterval(tableInterval);
+
+      observerTotal?.disconnect();
     };
   }, []);
 
   useEffect(() => {
-    const _page = searchParams.get("pagina") || 1;
-    const _limit = searchParams.get("limite") || 10;
+    const _page = searchParams.get("pagina");
+    const _limit = searchParams.get("limite");
+
+    if (!_page || !_limit) {
+      router.push(`${pathname}?pagina=1&limite=10`);
+      return;
+    }
 
     setPage(+_page);
     setLimit(+_limit);
