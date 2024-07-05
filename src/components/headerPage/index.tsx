@@ -39,13 +39,13 @@ const HeaderView = () => {
     <>
       <Row justify="space-between" align="middle">
         <Col>
-          <h1>
+          <h2>
             {
               inPathRegister
                 ? "Registrar " + textButtonsCreate[firstPath]
                 : firstPath.charAt(0).toUpperCase() + firstPath.slice(1)
             }
-          </h1>
+          </h2>
         </Col>
         {
           Object.keys(textButtonsCreate).some(k => k === firstPath) && <Col>
