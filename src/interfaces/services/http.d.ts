@@ -14,8 +14,9 @@ export interface GetProps {
 }
 
 export interface PostPutPatch extends GetProps {
-  body: Record<string, any> | Record<string, any>[];
+  body: Record<string, unknown>;
   method?: "POST" | "PUT" | "PATCH";
   pathToRevalidate?: string;
   formUrlencoded?: boolean;
+  headers?: Record<string, string>;
 }

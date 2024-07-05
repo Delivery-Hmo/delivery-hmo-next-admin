@@ -15,31 +15,47 @@ const toLogin = (request: NextRequest) => {
 
 export async function middleware(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
-  const token = request.cookies.get("uid")?.value;
-  const uid = request.cookies.get("token")?.value;
-
+  const token = request.cookies.get("token")?.value;
+  const refreshToken = request.cookies.get("refreshToken")?.value;
+  const uid = request.cookies.get("uid")?.value;
   const page = searchParams.get("pagina");
   const limit = searchParams.get("limite");
+  let newToken = "";
+  let newRefreshToken = "";
 
   if (!token && pathname !== "/") return toLogin(request);
 
   if (token && pathname === "/") return NextResponse.redirect(new URL("/inicio", request.url));
 
-  if (token && uid) {
+  const responseRedirect = NextResponse.redirect(request.url);
+
+  if (token && uid && refreshToken) {
     try {
-      const { message } = await getCache<{ message: "ok" | "expired" | "Unauthorized"; token?: string; }>({
+      const { message } = await get<{ message: "ok" | "expired" | "Unauthorized"; token?: string; }>({
         baseUrlType: "companiesApi",
         url: `/auth/verifyToken?uid=${uid}`
       });
 
+      if (message === "Unauthorized") return toLogin(request);
+
       if (message === "expired") {
-        const encodedPath = encodeURIComponent(request.url);
+        const key = process.env.FIREBASE_API_KEY;
 
-        NextResponse.redirect(new URL(`/refreshToken?redirect=${encodedPath}`, request.url));
-      }
+        const { id_token, refresh_token } = await post<{ id_token: string; refresh_token: string }>({ 
+          baseUrlType: "refreshTokenApi",
+          url: `/token?key=${key}`,
+          headers: { "Content-Type": "application/json" },
+          body: {
+            "grant_type": "refresh_token",
+            "refresh_token": refreshToken
+          },
+        });
 
-      if (message === "Unauthorized") {
-        return toLogin(request);
+        responseRedirect.cookies.set("token", id_token);
+        responseRedirect.cookies.set("refreshToken", refresh_token);
+
+        newToken = id_token;
+        newRefreshToken = refresh_token;
       }
     } catch (error) {
       return toLogin(request);
@@ -80,7 +96,6 @@ export async function middleware(request: NextRequest) {
       cookieValues[name] = value;
     });
 
-    const responseRedirect = NextResponse.redirect(request.url);
     let redirect = false;
 
     for (const key of allUrlParamKeys) {
@@ -106,7 +121,12 @@ export async function middleware(request: NextRequest) {
     const response = NextResponse.next();
 
     Object.entries(urlValues).forEach(([key, urlValue]) => {
-      responseRedirect.cookies.set(key, urlValue!);
+      if(newToken) {
+        responseRedirect.cookies.set("token", newToken);
+        responseRedirect.cookies.set("refreshToken", newRefreshToken);
+      }
+     
+      response.cookies.set(key, urlValue!);
     });
 
     return response;
