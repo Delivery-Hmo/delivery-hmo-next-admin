@@ -13,20 +13,24 @@ import "./index.css";
 type TypeValueCell = string | number | boolean;
 
 const cellRenderers: Record<string, (value: TypeValueCell, item: { id: string; }) => JSX.Element> = {
-  'active': (value, item) => <Switch 
-    value={value as boolean} 
-    id={`activeId=${item.id}&active=${value}`} 
+  "active": (value, item) => <Switch
+    value={value as boolean}
+    id={`activeId=${item.id}&active=${value}`}
   />,
-  'image': (value) => (
+  "image": (value) => (
     <Image
       alt={value.toString()}
       src={value.toString()}
       height={42}
       width={54}
-      style={{ borderRadius: 10, margin: 10, objectFit: "cover" }}
+      style={{
+        borderRadius: 10,
+        margin: 10,
+        objectFit: "cover"
+      }}
     />
   ),
-  'default': (value) => <div>{value}</div>
+  "default": (value) => <div>{value}</div>
 };
 
 const ServerTable = async <T extends { id?: string; }>({ baseUrlType, columns, url }: TableProps<T>) => {
@@ -75,7 +79,7 @@ const ServerTable = async <T extends { id?: string; }>({ baseUrlType, columns, u
                             id={keyTd}
                           >
                             {
-                              cellRenderers[["active", "image"].includes(keyTd) ? keyTd : "default"](value, item as { id: string })
+                              cellRenderers[["active", "image"].includes(keyTd) ? keyTd : "default"](value, item as { id: string; })
                             }
                           </td>
                         );
