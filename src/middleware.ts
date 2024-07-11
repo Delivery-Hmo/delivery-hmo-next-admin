@@ -122,8 +122,8 @@ export async function middleware(request: NextRequest) {
 
     Object.entries(urlValues).forEach(([key, urlValue]) => {
       if(newToken) {
-        responseRedirect.cookies.set("token", newToken);
-        responseRedirect.cookies.set("refreshToken", newRefreshToken);
+        response.cookies.set("token", newToken);
+        response.cookies.set("refreshToken", newRefreshToken);
       }
      
       response.cookies.set(key, urlValue!);
