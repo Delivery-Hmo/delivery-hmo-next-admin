@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { Breadcrumb as BreadcrumbAnt, Col, Row } from "antd";
-import items from "../sider/items";
+import items from "../menu/items";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@src/context/auth";
 import { firstPage } from "@src/utils/constants";

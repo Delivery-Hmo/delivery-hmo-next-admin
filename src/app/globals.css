@@ -4,3 +4,22 @@ body {
   max-width: 100vw;
   overflow-x: hidden;
 }
+
+:root {
+  --primary: #304878;
+  /* --secondary: ; */
+  --borderRadius: 6px;
+}
+
+.ant-menu-item {
+  color: black !important;
+}
+
+.ant-menu-item-selected {
+  color: white !important;
+  background-color: var(--primary) !important;
+}
+
+.ant-menu-submenu-title {
+  color: black !important;
+}
