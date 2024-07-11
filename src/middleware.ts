@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { allUrlParamKeys, filterKeys } from "./utils/constants";
-import { get, getCache, post } from "./services/http";
+import { get, post } from "./services/http";
 
 const toLogin = (request: NextRequest) => {
   const response = NextResponse.redirect(new URL("/", request.url));
