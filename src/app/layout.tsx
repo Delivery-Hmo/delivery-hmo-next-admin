@@ -2,7 +2,7 @@
 
 import "./globals.css";
 import { ReactNode } from "react";
-import { App, ConfigProvider, Layout, Row } from "antd";
+import { App, ConfigProvider, Layout } from "antd";
 import AuthProvider from "@src/context/auth";
 import ErrorBoundary from "@src/components/errorBoundary";
 import Sider from "@src/components/menu/sider";
@@ -30,7 +30,12 @@ export default function RootLayout({
             <AuthProvider>
               <Layout style={{ height: "100vh", backgroundColor: "grey" }}>
                 <Menu />
-                <div style={{ display: "block", padding: 20, width: "100%", overflowY: "auto" }}>
+                <div style={{
+                  display: "block",
+                  padding: 20,
+                  width: "100%",
+                  overflow: "auto",
+                }}>
                   <Breadcrumb />
                   <HeaderPage />
                   <ErrorBoundary fallback={<Error />}>

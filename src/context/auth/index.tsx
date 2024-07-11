@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext, createContext, FC, ReactNode } from "react";
-import { onIdTokenChanged, signInWithCustomToken, User } from "firebase/auth";
+import { onIdTokenChanged, User } from "firebase/auth";
 import { usePathname, useRouter } from "next/navigation";
 import FullLoader from "@src/components/fullLoader";
 import { deleteCookie, setCookie, getCookies, getCookie } from "cookies-next";
@@ -36,8 +36,10 @@ const AuthProvider: FC<Props> = ({ children }) => {
 
         setCookie("token", token);
         setCookie("uid", user.uid);
-
+        setCookie("refreshToken", user.refreshToken);
+        
         if (pathname === "/") router.push("/inicio");
+
       } catch (error) {
         console.log(error);
       } finally {
@@ -49,30 +51,6 @@ const AuthProvider: FC<Props> = ({ children }) => {
       uns();
     };
   }, [pathname, router]);
-
-  useEffect(() => {
-    const init = async () => {
-      if (loading) return;
-
-      if (!user) router.push("/");
-
-      if (user && pathname === "/") router.push("/inicio");
-
-      const customToken = getCookie("customToken");
-
-      if (!customToken) return;
-
-      try {
-        await signInWithCustomToken(auth, customToken);
-
-        deleteCookie("customToken");
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    init();
-  }, [pathname, router, user, loading]);
 
   if (loading) return <FullLoader />;
 
