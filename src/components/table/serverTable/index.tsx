@@ -1,6 +1,6 @@
 
 import { cookies } from "next/headers";
-import { getCookie, getCookies } from "cookies-next";
+import { getCookie } from "cookies-next";
 import { Switch, /* Tag */ } from "antd";
 import { Get } from "@src/interfaces/services/http";
 import { get } from "@src/services/http";
@@ -10,9 +10,31 @@ import Image from "next/image";
 //import { BranchStatus } from "@src/types";
 import "./index.css";
 
+type TypeValueCell = string | number | boolean;
+
+const cellRenderers: Record<string, (value: TypeValueCell, item: { id: string; }) => JSX.Element> = {
+  "active": (value, item) => <Switch
+    value={value as boolean}
+    id={`activeId=${item.id}&active=${value}`}
+  />,
+  "image": (value) => (
+    <Image
+      alt={value.toString()}
+      src={value.toString()}
+      height={42}
+      width={54}
+      style={{
+        borderRadius: 10,
+        margin: 10,
+        objectFit: "cover"
+      }}
+    />
+  ),
+  "default": (value) => <div>{value}</div>
+};
+
 const ServerTable = async <T extends { id?: string; }>({ baseUrlType, columns, url }: TableProps<T>) => {
   const pathname = getCookie("pathname", { cookies }) as string;
-
   const { list, total } = await get<Get<T>>({ baseUrlType, url: `${pathname}/${url || "list"}` });
 
   return (
@@ -20,7 +42,7 @@ const ServerTable = async <T extends { id?: string; }>({ baseUrlType, columns, u
       <div className="table-container">
         <div className="scroll-container">
           <div id="total" style={{ display: "none" }}>{total}</div>
-          <table className="ant-table">
+          <table className="ant-table" id="table-server">
             <thead>
               <tr className="tr">
                 {
@@ -57,17 +79,7 @@ const ServerTable = async <T extends { id?: string; }>({ baseUrlType, columns, u
                             id={keyTd}
                           >
                             {
-                              typeof value === "boolean" && keyTd === "active"
-                                ? <Switch defaultValue={value} id={`active=${item.id}`} />
-                                : keyTd === "image"
-                                  ? <Image
-                                    alt={value.toString()}
-                                    src={value.toString()}
-                                    height={48}
-                                    width={64}
-                                    style={{ borderRadius: 10 }}
-                                  />
-                                  : value
+                              cellRenderers[["active", "image"].includes(keyTd) ? keyTd : "default"](value, item as { id: string; })
                             }
                           </td>
                         );
@@ -87,15 +99,11 @@ const ServerTable = async <T extends { id?: string; }>({ baseUrlType, columns, u
                      </td>;
                    } */
                 })
-
               }
             </tbody>
           </table>
         </div>
       </div>
-
-
-
     </>
   );
 };

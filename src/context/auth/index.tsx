@@ -36,8 +36,10 @@ const AuthProvider: FC<Props> = ({ children }) => {
 
         setCookie("token", token);
         setCookie("uid", user.uid);
-
+        setCookie("refreshToken", user.refreshToken);
+        
         if (pathname === "/") router.push("/inicio");
+
       } catch (error) {
         console.log(error);
       } finally {
