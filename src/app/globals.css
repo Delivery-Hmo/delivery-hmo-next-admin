@@ -11,6 +11,20 @@ body {
   --borderRadius: 6px;
 }
 
+.ant-menu {
+  background-color: white !important;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.ant-layout-sider-children {
+  background-color: white !important;
+}
+
+.ant-layout-sider-trigger {
+  background-color: var(--secondary) !important;
+}
+
 .ant-menu-item {
   color: black !important;
 }
@@ -23,3 +37,4 @@ body {
 .ant-menu-submenu-title {
   color: black !important;
 }
+

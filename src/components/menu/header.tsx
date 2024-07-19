@@ -12,7 +12,7 @@ const Header: React.FC = () => {
 
   return (
     <>
-      <HeaderAnt style={{ backgroundColor: '#001529' }}>
+      <HeaderAnt style={{ backgroundColor: '#304878' }}>
         <Button
           onClick={showDrawer}
           type="primary"
