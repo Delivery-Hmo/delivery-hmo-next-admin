@@ -1,10 +1,11 @@
+import { type } from "os";
 import { GetProps } from "../services/http";
-import { InputProps } from "antd";
+import { InputProps, SelectProps } from "antd";
 
 export interface TableProps<T> extends GetProps {
   columns: Column<T>[];
   url?: string;
-  filters?: Item<keyof T>[];
+  filters?: (ItemInput<keyof T> | ItemSelect<keyof T>)[];
   onSearch?: (values: F) => void;
 }
 
@@ -13,11 +14,17 @@ interface Column<T> {
   title: string;
 }
 
-export interface Item<K> extends Omit<InputProps, "name"> {
+export interface ItemInput<K> extends Omit<InputProps, "name"> {
   name: K;
   label: string;
+  typeInput?: "input";
 }
 
+export interface ItemSelect<K> extends Omit<SelectProps, "name"> {
+  name: K;
+  label: string;
+  typeInput?: "select";
+}
 interface FiltersProps<T> {
-  items: Item<keyof T>[];
+  items: (ItemInput<keyof T> | ItemSelect<keyof T>)[];
 }
