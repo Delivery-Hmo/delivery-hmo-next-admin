@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Avatar, Col, Row } from 'antd';
+import { Avatar, Row } from 'antd';
 import { UserOutlined } from '@ant-design/icons'
 import { Grid } from 'antd';
 import { useAuth } from '@src/context/auth';
@@ -17,24 +17,20 @@ const RowHeader: FC<Props> = ({ collapsed }) => {
   return (
     <Row
       justify="center"
-      align="middle"
-      gutter={10}
       style={
         screens.xs ?
           { textAlign: "center" } :
-          { textAlign: "center", backgroundColor: "#fff", margin: 10, paddingTop: 20, paddingBottom: 20, borderRadius: "8px" }
+          { textAlign: "center", backgroundColor: "#304878", margin: 5, paddingTop: 20, paddingBottom: 10, borderRadius: "8px" }
       }
     >
-      <Col>
-        <Avatar style={{ backgroundColor: "#87D068" }} size={collapsed ? 48 : 64} icon={<UserOutlined />} />
-      </Col>
-      <Col>
-        {
-          !collapsed && <div style={screens.xs ? { color: "black" } : { color: "white" }}>
+      <Avatar style={{ backgroundColor: "#87D068" }} size={collapsed ? 48 : 64} icon={<UserOutlined />} />
+      {
+        !collapsed && <div style={screens.xs ? { color: "black" } : { color: "white" }}>
+          <div style={{ margin: 10 }}>
             <b>{user?.email}</b>
           </div>
-        }
-      </Col>
+        </div>
+      }
     </Row>
   )
 }
