@@ -20,7 +20,8 @@ export interface ItemInput<K> extends Omit<InputProps, "name"> {
   typeInput?: "input";
 }
 
-export interface ItemSelect<K> extends Omit<SelectProps, "name"> {
+
+export interface ItemSelect<K> extends Omit<select, "name"> {
   name: K;
   label: string;
   typeInput?: "select";

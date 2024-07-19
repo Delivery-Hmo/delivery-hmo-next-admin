@@ -1,7 +1,7 @@
 "use client";
 
-import { Button, Card, Col, Form, Input, Row, Select } from "antd";
-import { FiltersProps, ItemInput } from "@src/interfaces/components/table";
+import { Button, Card, Col, Input, Row } from "antd";
+import { FiltersProps } from "@src/interfaces/components/table";
 import { SearchOutlined } from "@ant-design/icons";
 import { onSearch } from "./actions";
 
@@ -41,23 +41,18 @@ const Filters = <T extends {}>({ items }: FiltersProps<T>) => {
 
               return (
                 <Col key={nameString} xs={24} md={8}>
-                  {typeInput === "select" ?
-                    <Select
-                      showSearch
-                      placeholder="Select a person"
-                      filterOption={(input, option) =>
-                        (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                      }
-                      options={[
-                        { value: '1', label: 'Jack' },
-                        { value: '2', label: 'Lucy' },
-                        { value: '3', label: 'Tom' },
-                      ]}
-                    /> :
-                    <Input
-                      {...item as ItemInput<keyof T>}
+                  {
+                    typeInput === "input" && <Input
+                      {...item}
                       name={nameString}
-                    />}
+                    />
+                  }
+                  {
+                    typeInput === "select" && <select
+                      {...item}
+                      name={nameString}
+                    />
+                  }
                 </Col>
               );
             })

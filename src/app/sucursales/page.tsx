@@ -1,16 +1,16 @@
 import Table from "@src/components/table";
-import { UserAdmin } from "@src/interfaces/users";
+import { BranchOffice, UserAdmin } from "@src/interfaces/users";
 import { baseTableFilters } from "@src/utils/constants";
 
 const BranchOffices = () => {
   return (
-    <Table<UserAdmin>
+    <Table<BranchOffice>
       filters={[
         ...baseTableFilters,
         {
           typeInput: "select",
-          name: "status",
-          label: "Estatus",
+          label: "Empresa",
+          name: "userAdmin"
         }
       ]}
       baseUrlType="companiesApi"
