@@ -28,26 +28,26 @@ export const textsBranchStatus: Record<BranchStatus, string> = {
   "showing-in-app": "Mostrando en app"
 } as const;
 
-export const baseTableFilters: Item<keyof UserAdmin>[] = [
+export const baseFiltersTable: Item<keyof UserAdmin>[] = [
   {
     name: "id",
     placeholder: "ID",
-    label: "ID"
+    label: "ID",
   },
   {
     name: "name",
     placeholder: "Nombre",
-    label: "Nombre"
+    label: "Nombre",
   },
   {
     name: "email",
     placeholder: "Correo",
-    label: "Correo"
+    label: "Correo",
   },
   {
     name: "phone",
     placeholder: "Teléfono",
-    label: "Teléfono"
+    label: "Teléfono",
   },
   {
     name: "rfc",
@@ -56,7 +56,7 @@ export const baseTableFilters: Item<keyof UserAdmin>[] = [
   }
 ] as const;
 
-export const baseColumnsFilters: Column<User>[] = [
+export const baseColumnsTable: Column<User>[] = [
   {
     key: "id",
     title: "ID"

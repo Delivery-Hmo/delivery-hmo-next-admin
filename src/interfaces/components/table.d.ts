@@ -20,12 +20,12 @@ export interface ItemInput<K> extends Omit<InputProps, "name"> {
   typeInput?: "input";
 }
 
-
 export interface ItemSelect<K> extends Omit<select, "name"> {
   name: K;
   label: string;
   typeInput?: "select";
 }
+
 interface FiltersProps<T> {
   items: (ItemInput<keyof T> | ItemSelect<keyof T>)[];
 }

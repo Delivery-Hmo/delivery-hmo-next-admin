@@ -42,7 +42,7 @@ const Filters = <T extends {}>({ items }: FiltersProps<T>) => {
               return (
                 <Col key={nameString} xs={24} md={8}>
                   {
-                    typeInput === "input" && <Input
+                    (!typeInput || typeInput === "input") && <Input
                       {...item}
                       name={nameString}
                     />

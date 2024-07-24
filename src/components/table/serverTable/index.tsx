@@ -10,9 +10,10 @@ import Image from "next/image";
 //import { BranchStatus } from "@src/types";
 import "./index.css";
 
-type TypeValueCell = string | number | boolean;
+type CellKey = "active" | "image" | "default";
+type ValueCell = string | number | boolean;
 
-const cellRenderers: Record<string, (value: TypeValueCell, item: { id: string; }) => JSX.Element> = {
+const cellRenderers: Record<CellKey, (value: ValueCell, item: { id: string; }) => JSX.Element> = {
   "active": (value, item) => <Switch
     value={value as boolean}
     id={`activeId=${item.id}&active=${value}`}
@@ -33,7 +34,7 @@ const cellRenderers: Record<string, (value: TypeValueCell, item: { id: string; }
   "default": (value) => <div>{value}</div>
 };
 
-const ServerTable = async <T extends { id?: string; }>({ baseUrlType, columns, url }: TableProps<T>) => {
+const ServerTable = async <T extends { id: string; }>({ baseUrlType, columns, url }: TableProps<T>) => {
   const pathname = getCookie("pathname", { cookies }) as string;
   const { list, total } = await get<Get<T>>({ baseUrlType, url: `${pathname}/${url || "list"}` });
 
@@ -79,7 +80,9 @@ const ServerTable = async <T extends { id?: string; }>({ baseUrlType, columns, u
                             id={keyTd}
                           >
                             {
-                              cellRenderers[["active", "image"].includes(keyTd) ? keyTd : "default"](value, item as { id: string; })
+                              cellRenderers[["active", "image"].includes(keyTd) 
+                                ? (keyTd as CellKey) 
+                                : "default"](value, item as { id: string; })
                             }
                           </td>
                         );
