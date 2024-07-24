@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Card, Col, Form, Input, Row } from "antd";
+import { Button, Card, Col, Input, Row } from "antd";
 import { FiltersProps } from "@src/interfaces/components/table";
 import { SearchOutlined } from "@ant-design/icons";
 import { onSearch } from "./actions";
@@ -36,15 +36,23 @@ const Filters = <T extends {}>({ items }: FiltersProps<T>) => {
         <Row style={{ marginBottom: -20 }} gutter={[10, 20]}>
           {
             items.map((item) => {
-              const { name, label } = item;
+              const { name, typeInput } = item;
               const nameString = name as string;
 
               return (
                 <Col key={nameString} xs={24} md={8}>
-                  <Input
-                    {...item}
-                    name={nameString}
-                  />
+                  {
+                    (!typeInput || typeInput === "input") && <Input
+                      {...item}
+                      name={nameString}
+                    />
+                  }
+                  {
+                    typeInput === "select" && <select
+                      {...item}
+                      name={nameString}
+                    />
+                  }
                 </Col>
               );
             })

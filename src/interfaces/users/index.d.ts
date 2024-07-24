@@ -1,7 +1,7 @@
 export interface User {
-  readonly id?: string;
+  id: string;
   uid?: string;
-  readonly role: Roles;
+  role: Roles;
   name: string;
   email: string;
   description?: string;
