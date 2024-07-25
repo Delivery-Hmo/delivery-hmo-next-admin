@@ -1,12 +1,12 @@
 import Table from "@src/components/table";
-import { BranchOffice, UserAdmin } from "@src/interfaces/users";
-import { baseColumnsTable, baseTableFilters } from "@src/utils/constants";
+import { BranchOffice } from "@src/interfaces/models/users";
+import { baseColumnsTable, baseFiltersTable } from "@src/utils/constants";
 
 const BranchOffices = () => {
   return (
     <Table<BranchOffice>
       filters={[
-        ...baseTableFilters,
+        ...baseFiltersTable,
         {
           typeInput: "select",
           label: "Empresa",

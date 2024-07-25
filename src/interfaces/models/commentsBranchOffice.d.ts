@@ -1,4 +1,4 @@
-import { BranchOffice } from "../users";
+import { BranchOffice } from "./users";
 
 export interface CommentsBranchOffice {
   readonly id?: string;

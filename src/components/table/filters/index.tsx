@@ -1,5 +1,3 @@
-"use client";
-
 import { Button, Card, Col, Input, Row } from "antd";
 import { FiltersProps } from "@src/interfaces/components/table";
 import { SearchOutlined } from "@ant-design/icons";
