@@ -1,5 +1,5 @@
 import Table from "@src/components/table";
-import { UserAdmin } from "@src/interfaces/users";
+import { UserAdmin } from "@src/interfaces/models/users";
 import { baseColumnsTable, baseFiltersTable } from "@src/utils/constants";
 
 const Companies = () => {

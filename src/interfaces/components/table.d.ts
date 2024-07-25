@@ -9,7 +9,7 @@ export interface TableProps<T> extends GetProps {
   onSearch?: (values: F) => void;
 }
 
-interface Column<T> {
+export interface Column<T> {
   key: keyof T;
   title: string;
 }
@@ -26,6 +26,6 @@ export interface ItemSelect<K> extends Omit<select, "name"> {
   typeInput?: "select";
 }
 
-interface FiltersProps<T> {
+export interface FiltersProps<T> {
   items: (ItemInput<keyof T> | ItemSelect<keyof T>)[];
 }

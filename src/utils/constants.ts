@@ -1,6 +1,7 @@
 import { Column } from "@src/interfaces/components/table";
-import { User, UserAdmin } from "@src/interfaces/users";
-import { BranchStatus, Item } from "@src/types";
+import { BranchStatus } from "@src/interfaces/models/branchOffice";
+import { User, UserAdmin } from "@src/interfaces/models/users";
+import { Item } from "@src/types";
 import { BaseUrlTypes } from "@src/types/services/http";
 import { PresetColorType } from "antd/es/_util/colors";
 import { LiteralUnion } from "antd/es/_util/type";
