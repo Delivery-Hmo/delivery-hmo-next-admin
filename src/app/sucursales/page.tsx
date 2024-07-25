@@ -10,11 +10,11 @@ const BranchOffices = () => {
         {
           typeInput: "select",
           label: "Empresa",
-          name: "userAdmin"
+          name: "userAdmin",
         }
       ]}
       baseUrlType="companiesApi"
-      columns={baseColumnsTable}
+      columns={baseColumnsTable.filter((column) => column.key !== "image")}
     />
   );
 };

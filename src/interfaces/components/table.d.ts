@@ -24,6 +24,8 @@ export interface ItemSelect<K> extends Omit<select, "name"> {
   name: K;
   label: string;
   typeInput?: "select";
+  loading?: boolean;
+  options?: { value: string | number, label: string }[];
 }
 
 export interface FiltersProps<T> {

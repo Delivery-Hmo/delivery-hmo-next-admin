@@ -11,17 +11,17 @@ import Image from "next/image";
 import "./index.css";
 
 type CellKey = "active" | "image" | "default";
-type ValueCell = string | number | boolean;
+type CellValue = string | number | boolean;
 
-const cellRenderers: Record<CellKey, (value: ValueCell, item: { id: string; }) => JSX.Element> = {
+const cellRenderers: Record<CellKey, (value: CellValue, item: { id: string; }) => JSX.Element> = {
   "active": (value, item) => <Switch
     value={value as boolean}
     id={`activeId=${item.id}&active=${value}`}
   />,
   "image": (value) => (
     <Image
-      alt={value.toString()}
-      src={value.toString()}
+      alt={value?.toString()}
+      src={value?.toString()}
       height={42}
       width={54}
       style={{
@@ -80,8 +80,8 @@ const ServerTable = async <T extends { id: string; }>({ baseUrlType, columns, ur
                             id={keyTd}
                           >
                             {
-                              cellRenderers[["active", "image"].includes(keyTd) 
-                                ? (keyTd as CellKey) 
+                              cellRenderers[["active", "image"].includes(keyTd)
+                                ? (keyTd as CellKey)
                                 : "default"](value, item as { id: string; })
                             }
                           </td>
