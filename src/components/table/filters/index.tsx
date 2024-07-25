@@ -49,7 +49,15 @@ const Filters = <T extends {}>({ items }: FiltersProps<T>) => {
                     typeInput === "select" && <select
                       {...item}
                       name={nameString}
-                    />
+                    >
+                      {
+                        item.options?.map((option) => (
+                          <option key={option.value} value={option.value}>
+                            {option.label}
+                          </option>
+                        ))
+                      }
+                    </select>
                   }
                 </Col>
               );
@@ -61,4 +69,4 @@ const Filters = <T extends {}>({ items }: FiltersProps<T>) => {
   );
 };
 
-export default Filters;;;
+export default Filters;
