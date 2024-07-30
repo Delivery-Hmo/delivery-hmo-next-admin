@@ -20,8 +20,8 @@ const cellRenderers: Record<CellKey, (value: ValueCell, item: { id: string; }) =
   />,
   "image": (value) => (
     <Image
-      alt={value.toString()}
-      src={value.toString()}
+      alt={value?.toString()}
+      src={value?.toString()}
       height={42}
       width={54}
       style={{
@@ -34,9 +34,9 @@ const cellRenderers: Record<CellKey, (value: ValueCell, item: { id: string; }) =
   "default": (value) => <div>{value}</div>
 };
 
-const ServerTable = async <T extends { id: string; }>({ baseUrlType, columns, url }: TableProps<T>) => {
+const ServerTable = async <T extends { id: string; }>({ baseUrl, columns, url }: TableProps<T>) => {
   const pathname = getCookie("pathname", { cookies }) as string;
-  const { list, total } = await get<Get<T>>({ baseUrlType, url: `${pathname}/${url || "list"}` });
+  const { list, total } = await get<Get<T>>({ baseUrl, url: `${pathname}/${url || "list"}` });
 
   return (
     <>
@@ -80,8 +80,8 @@ const ServerTable = async <T extends { id: string; }>({ baseUrlType, columns, ur
                             id={keyTd}
                           >
                             {
-                              cellRenderers[["active", "image"].includes(keyTd) 
-                                ? (keyTd as CellKey) 
+                              cellRenderers[["active", "image"].includes(keyTd)
+                                ? (keyTd as CellKey)
                                 : "default"](value, item as { id: string; })
                             }
                           </td>

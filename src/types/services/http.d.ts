@@ -1,1 +1,1 @@
-export type BaseUrlTypes = "companiesApi" | "refreshTokenApi";
+export type BaseUrl = "companiesApi" | "refreshTokenApi";

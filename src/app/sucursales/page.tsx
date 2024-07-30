@@ -8,13 +8,16 @@ const BranchOffices = () => {
       filters={[
         ...baseFiltersTable,
         {
-          typeInput: "select",
+          type: "select",
           label: "Empresa",
-          name: "userAdmin"
+          name: "userAdmin",
+          baseUrl: "companiesApi",
+          url: "/empresas/listaFiltrosSucursales",
+          loading: true,
         }
       ]}
-      baseUrlType="companiesApi"
-      columns={baseColumnsTable}
+      baseUrl="companiesApi"
+      columns={baseColumnsTable.filter(column => column.key !== "image")}
     />
   );
 };

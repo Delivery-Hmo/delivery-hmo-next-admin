@@ -82,7 +82,7 @@ const Pagination = () => {
               onOk: async () => {
                 try {
                   await patch({
-                    baseUrlType: "companiesApi",
+                    baseUrl: "companiesApi",
                     url: `${pathname.split("?")[0]}/disable`,
                     body: { id: activeId, active: !active }
                   });

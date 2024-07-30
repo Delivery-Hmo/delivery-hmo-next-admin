@@ -31,7 +31,7 @@ const Sellers = () => {
           label: "Telefono",
         },
       ]}
-      baseUrlType="companiesApi"
+      baseUrl="companiesApi"
       columns={[
         {
           key: "id",

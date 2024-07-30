@@ -1,29 +1,34 @@
 import { useEffect, useState } from "react";
-import { message } from "antd";
 import useAbortController from "../useAbortController";
-import { get } from "@src/services/http";
-import { BaseUrlTypes } from "@src/types/services/http";
+import { BaseUrl } from "@src/types/services/http";
+import useMessage from "../useMessage";
+import { get } from "@src/services/http/client";
 
 export interface PropsUseGet {
-  baseUrlType: BaseUrlTypes;
+  baseUrl: BaseUrl;
   url: string;
   wait?: boolean;
   mergeResponse?: boolean;
+  initLoading?: boolean;
 }
 
-const useGet = <T extends {}>({ baseUrlType, url, wait, mergeResponse }: PropsUseGet) => {
+const useGet = <T extends {}>({ baseUrl, url, wait, mergeResponse, initLoading }: PropsUseGet) => {
   const abortController = useAbortController();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(typeof initLoading === "boolean" ? initLoading : true);
   const [response, setResponse] = useState<T>();
+  const message = useMessage();
+
 
   useEffect(() => {
-    if (wait || !url) return;
+    console.log(baseUrl, url);
+
+    if (wait || !url || !baseUrl) return;
 
     const init = async () => {
       setLoading(true);
 
       try {
-        const _response = await get<T>({ baseUrlType, url, abortController: abortController.current! });
+        const _response = await get<T>({ baseUrl, url, abortController: abortController.current! });
 
         setResponse(r =>
           mergeResponse
@@ -47,7 +52,7 @@ const useGet = <T extends {}>({ baseUrlType, url, wait, mergeResponse }: PropsUs
     };
 
     init();
-  }, [baseUrlType, url, wait, mergeResponse, abortController]);
+  }, [baseUrl, url, wait, mergeResponse, abortController, initLoading]);
 
   return { loading, response, setResponse };
 };

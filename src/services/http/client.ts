@@ -1,29 +1,13 @@
-"use server";
+"use client";
 
-import { baseUrlsApis, filterKeys } from "@src/utils/constants";
+import { baseUrlsApis } from "@src/utils/constants";
 import { getHeaders, handleError } from "@src/utils/functions";
-import { getCookie, getCookies } from "cookies-next";
-import { cookies } from "next/headers";
 import { GetProps, PostPutPatch } from "@src/interfaces/services/http";
-import { revalidateTag, unstable_cache } from "next/cache";
+import { getCurrentToken } from "../firebase/auth";
 
 export const get = async <T>({ baseUrl, url, abortController }: GetProps) => {
   try {
-    const token = getCookie("token", { cookies }) as string;
-    const allCookies = getCookies({ cookies });
-    const cookieEntries = Object.entries(allCookies).filter(([key, value]) => value && filterKeys.includes(key));
-
-    for (let i = 0; i < cookieEntries.length; i++) {
-      const [key, value] = cookieEntries[i];
-
-      if (i === 0) {
-        url += `?${key}=${value}`;
-        continue;
-      }
-
-      url += `&${key}=${value}`;
-    }
-
+    const token = await getCurrentToken();
     const response = await fetch(
       `${baseUrlsApis[baseUrl]}${url}`,
       {
@@ -46,19 +30,14 @@ export const get = async <T>({ baseUrl, url, abortController }: GetProps) => {
   }
 };
 
-export const getCache = unstable_cache(
-  async <T>(props: GetProps) => get<T>(props),
-  ['my-app-user'],
-);
-
 export const post = <T>(props: PostPutPatch) => postPutPatch<T>({ ...props, method: "POST" });
 
 export const put = <T>(props: PostPutPatch) => postPutPatch<T>({ ...props, method: "PUT" });
 
 export const patch = <T>(props: PostPutPatch) => postPutPatch<T>({ ...props, method: "PATCH" });
 
-export const postPutPatch = async <T>({ baseUrl, url, body, method, abortController, pathToRevalidate, headers }: PostPutPatch) => {
-  const token = getCookie("token", { cookies }) as string;
+export const postPutPatch = async <T>({ baseUrl, url, body, method, abortController, headers }: PostPutPatch) => {
+  const token = await getCurrentToken();
 
   const response = await fetch(
     `${baseUrlsApis[baseUrl]}${url}`,
@@ -75,8 +54,6 @@ export const postPutPatch = async <T>({ baseUrl, url, body, method, abortControl
     throw handleError(error);
   }
 
-  if (pathToRevalidate) revalidateTag(pathToRevalidate);
 
   return response.json() as Promise<T>;
-}
-
+};

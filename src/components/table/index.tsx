@@ -7,7 +7,7 @@ import Pagination from "./pagination";
 import Filters from "./filters";
 import { TableProps } from "@src/interfaces/components/table";
 
-const Table = <T extends { id: string }>(props: TableProps<T>) => {
+const Table = <T extends { id: string; }>(props: TableProps<T>) => {
   const page = getCookie("page", { cookies }) as string;
   const limit = getCookie("limit", { cookies }) as string;
   const pathname = getCookie("pathname", { cookies }) as string;
