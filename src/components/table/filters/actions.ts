@@ -2,15 +2,15 @@
 
 import { getCookie, setCookie } from "cookies-next";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { redirect, RedirectType } from "next/navigation";
 
-export const onSearch = (formData: FormData) => {
+export const onSearch = <T extends {}>(values: T) => {
   const page = getCookie("page", { cookies }) as string;
   const limit = getCookie("limit", { cookies }) as string;
   const pathname = getCookie("pathname", { cookies }) as string;
   let searchQuery = "";
 
-  const formEntries = formData.entries();
+  const formEntries = Object.entries(values);
 
   for (const [key, value] of formEntries) {
     if (key && !value) {
@@ -25,5 +25,5 @@ export const onSearch = (formData: FormData) => {
 
   const url = `${pathname}?pagina=${page}&limite=${limit}${searchQuery}`;
 
-  redirect(url);
+  redirect(url, RedirectType.replace);
 };

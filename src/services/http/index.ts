@@ -46,11 +46,6 @@ export const get = async <T>({ baseUrl, url, abortController }: GetProps) => {
   }
 };
 
-export const getCache = unstable_cache(
-  async <T>(props: GetProps) => get<T>(props),
-  ['my-app-user'],
-);
-
 export const post = <T>(props: PostPutPatch) => postPutPatch<T>({ ...props, method: "POST" });
 
 export const put = <T>(props: PostPutPatch) => postPutPatch<T>({ ...props, method: "PUT" });

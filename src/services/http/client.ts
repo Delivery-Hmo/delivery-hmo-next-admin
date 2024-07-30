@@ -13,8 +13,8 @@ export const get = async <T>({ baseUrl, url, abortController }: GetProps) => {
       {
         method: "GET",
         headers: getHeaders(token),
-        signal: abortController?.signal
-      }
+        signal: abortController?.signal,
+      },
     );
 
     if (!response.ok) {
