@@ -11,9 +11,9 @@ import Image from "next/image";
 import "./index.css";
 
 type CellKey = "active" | "image" | "default";
-type ValueCell = string | number | boolean;
+type CellValue = string | number | boolean;
 
-const cellRenderers: Record<CellKey, (value: ValueCell, item: { id: string; }) => JSX.Element> = {
+const cellRenderers: Record<CellKey, (value: CellValue, item: { id: string; }) => JSX.Element> = {
   "active": (value, item) => <Switch
     value={value as boolean}
     id={`activeId=${item.id}&active=${value}`}

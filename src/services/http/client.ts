@@ -41,6 +41,7 @@ export const postPutPatch = async <T>({ baseUrl, url, body, method, abortControl
 
   const response = await fetch(
     `${baseUrlsApis[baseUrl]}${url}`,
+
     {
       method,
       body: JSON.stringify(body),
