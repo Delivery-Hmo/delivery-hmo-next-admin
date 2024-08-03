@@ -2,13 +2,13 @@ import { Column } from "@src/interfaces/components/table";
 import { BranchStatus } from "@src/interfaces/models/branchOffice";
 import { User, UserAdmin } from "@src/interfaces/models/users";
 import { Item } from "@src/types";
-import { BaseUrlTypes } from "@src/types/services/http";
+import { BaseUrl } from "@src/types/services/http";
 import { PresetColorType } from "antd/es/_util/colors";
 import { LiteralUnion } from "antd/es/_util/type";
 
 export const baseUrlCompaniesApi: string = "http://localhost:3001/";
 
-export const baseUrlsApis: Record<BaseUrlTypes, string> = {
+export const baseUrlsApis: Record<BaseUrl, string> = {
   "companiesApi": "http://localhost:3001",
   "refreshTokenApi": "https://securetoken.googleapis.com/v1"
 } as const;
@@ -29,7 +29,7 @@ export const textsBranchStatus: Record<BranchStatus, string> = {
   "showing-in-app": "Mostrando en app"
 } as const;
 
-export const baseFiltersTable: Item<keyof UserAdmin>[] = [
+export const baseFiltersTable: Item<keyof User>[] = [
   {
     name: "id",
     placeholder: "ID",
@@ -88,6 +88,6 @@ export const baseColumnsTable: Column<User>[] = [
   }
 ] as const;
 
-export const filterKeys = ["page", "limit", "id", "name", "email", "phone", "rfc"];
+export const filterKeys = ["page", "limit", "id", "name", "email", "phone", "rfc", "userAdmin"];
 
 export const allUrlParamKeys = [...filterKeys, "pathname"] as const;

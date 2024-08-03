@@ -5,16 +5,16 @@ import { getHeaders, handleError } from "@src/utils/functions";
 import { GetProps, PostPutPatch } from "@src/interfaces/services/http";
 import { getCurrentToken } from "../firebase/auth";
 
-export const get = async <T>({ baseUrlType, url, abortController }: GetProps) => {
+export const get = async <T>({ baseUrl, url, abortController }: GetProps) => {
   try {
     const token = await getCurrentToken();
     const response = await fetch(
-      `${baseUrlsApis[baseUrlType]}${url}`,
+      `${baseUrlsApis[baseUrl]}${url}`,
       {
         method: "GET",
         headers: getHeaders(token),
-        signal: abortController?.signal
-      }
+        signal: abortController?.signal,
+      },
     );
 
     if (!response.ok) {
@@ -36,11 +36,12 @@ export const put = <T>(props: PostPutPatch) => postPutPatch<T>({ ...props, metho
 
 export const patch = <T>(props: PostPutPatch) => postPutPatch<T>({ ...props, method: "PATCH" });
 
-export const postPutPatch = async <T>({ baseUrlType, url, body, method, abortController, headers }: PostPutPatch) => {
+export const postPutPatch = async <T>({ baseUrl, url, body, method, abortController, headers }: PostPutPatch) => {
   const token = await getCurrentToken();
 
   const response = await fetch(
-    `${baseUrlsApis[baseUrlType]}${url}`,
+    `${baseUrlsApis[baseUrl]}${url}`,
+
     {
       method,
       body: JSON.stringify(body),
@@ -56,5 +57,4 @@ export const postPutPatch = async <T>({ baseUrlType, url, body, method, abortCon
 
 
   return response.json() as Promise<T>;
-}
-
+};

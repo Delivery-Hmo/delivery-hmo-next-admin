@@ -34,9 +34,9 @@ const cellRenderers: Record<CellKey, (value: CellValue, item: { id: string; }) =
   "default": (value) => <div>{value}</div>
 };
 
-const ServerTable = async <T extends { id: string; }>({ baseUrlType, columns, url }: TableProps<T>) => {
+const ServerTable = async <T extends { id: string; }>({ baseUrl, columns, url }: TableProps<T>) => {
   const pathname = getCookie("pathname", { cookies }) as string;
-  const { list, total } = await get<Get<T>>({ baseUrlType, url: `${pathname}/${url || "list"}` });
+  const { list, total } = await get<Get<T>>({ baseUrl, url: `${pathname}/${url || "list"}` });
 
   return (
     <>

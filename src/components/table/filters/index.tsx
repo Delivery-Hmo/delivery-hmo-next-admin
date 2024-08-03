@@ -1,9 +1,44 @@
-import { Button, Card, Col, Input, Row } from "antd";
-import { FiltersProps } from "@src/interfaces/components/table";
+"use client";
+
+import { useEffect } from "react";
+import { Button, Card, Col, Form, Row } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { onSearch } from "./actions";
+import FormControl from "../../formControl";
+import { useFormControl } from "@src/context/formControl";
+import { useRouter, useSearchParams } from "next/navigation";
 
-const Filters = <T extends {}>({ items }: FiltersProps<T>) => {
+const Filters = <T extends {}>() => {
+  const { items, onPopupScroll } = useFormControl<T>();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const [form] = Form.useForm();
+
+  useEffect(() => {
+    let defaultValues: T = {} as T;
+
+    items.forEach(item => {
+      const { name } = item;
+      const nameString = name as string;
+
+      let defaultValue: string | undefined = searchParams.get(nameString) || "";
+
+      if (defaultValue && item.type === "select") {
+        const options = item.options || [];
+
+        defaultValue = options.find(option => option.value === defaultValue)?.value?.toString() || undefined;
+      }
+
+      defaultValues = {
+        ...defaultValues,
+        [nameString]: defaultValue
+      };
+    });
+
+    form.setFieldsValue(defaultValues);
+    form.submit();
+  }, [form, items, searchParams]);
+
   return (
     <Card
       styles={{
@@ -12,7 +47,14 @@ const Filters = <T extends {}>({ items }: FiltersProps<T>) => {
         }
       }}
     >
-      <form action={onSearch}>
+      <Form<T>
+        onFinish={async (values) => {
+          const url = await onSearch(values);
+
+          router.push(url);
+        }}
+        form={form}
+      >
         <Row
           justify="space-between"
           align="middle"
@@ -34,37 +76,21 @@ const Filters = <T extends {}>({ items }: FiltersProps<T>) => {
         <Row style={{ marginBottom: -20 }} gutter={[10, 20]}>
           {
             items.map((item) => {
-              const { name, typeInput } = item;
+              const { name } = item;
               const nameString = name as string;
 
               return (
                 <Col key={nameString} xs={24} md={8}>
-                  {
-                    (!typeInput || typeInput === "input") && <Input
-                      {...item}
-                      name={nameString}
-                    />
-                  }
-                  {
-                    typeInput === "select" && <select
-                      {...item}
-                      name={nameString}
-                    >
-                      {
-                        item.options?.map((option) => (
-                          <option key={option.value} value={option.value}>
-                            {option.label}
-                          </option>
-                        ))
-                      }
-                    </select>
-                  }
+                  <FormControl
+                    item={item}
+                    onPopupScroll={onPopupScroll}
+                  />
                 </Col>
               );
             })
           }
         </Row>
-      </form >
+      </Form>
     </Card>
   );
 };

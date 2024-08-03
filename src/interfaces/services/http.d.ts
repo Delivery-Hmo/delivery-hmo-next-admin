@@ -1,5 +1,5 @@
 
-import { BaseUrlTypes } from "@src/types/services/http";
+import { BaseUrl } from "@src/types/services/http";
 
 export interface Get<T> {
   total: number;
@@ -7,7 +7,7 @@ export interface Get<T> {
 }
 
 export interface GetProps {
-  baseUrlType: BaseUrlTypes;
+  baseUrl: BaseUrl;
   url?: string;
   abortController?: AbortController;
   searchParams?: Record<string, string>;

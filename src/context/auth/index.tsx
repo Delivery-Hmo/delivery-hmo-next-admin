@@ -5,14 +5,23 @@ import FullLoader from "@src/components/fullLoader";
 import { deleteCookie, setCookie, getCookies, getCookie } from "cookies-next";
 import { auth } from "@src/services/firebase";
 
+
+
 interface Props {
   children: ReactNode;
 }
 
-const AuthContext = createContext<{ user: User | null, loading: boolean; }>({
+interface Context {
+  user: User | null,
+  loading: boolean;
+}
+
+const AuthContext = createContext<Context>({
   user: null,
   loading: true
 });
+
+export const useAuth = () => useContext(AuthContext);
 
 const AuthProvider: FC<Props> = ({ children }) => {
   const pathname = usePathname();
@@ -37,7 +46,7 @@ const AuthProvider: FC<Props> = ({ children }) => {
         setCookie("token", token);
         setCookie("uid", user.uid);
         setCookie("refreshToken", user.refreshToken);
-        
+
         if (pathname === "/") router.push("/inicio");
 
       } catch (error) {
@@ -58,5 +67,3 @@ const AuthProvider: FC<Props> = ({ children }) => {
 };
 
 export default AuthProvider;
-
-export const useAuth = () => useContext(AuthContext);

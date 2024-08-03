@@ -6,8 +6,9 @@ import ServerTable from "./serverTable";
 import Pagination from "./pagination";
 import Filters from "./filters";
 import { TableProps } from "@src/interfaces/components/table";
+import FormControlProvider from "@src/context/formControl";
 
-const Table = <T extends { id: string }>(props: TableProps<T>) => {
+const Table = <T extends { id: string; }>(props: TableProps<T>) => {
   const page = getCookie("page", { cookies }) as string;
   const limit = getCookie("limit", { cookies }) as string;
   const pathname = getCookie("pathname", { cookies }) as string;
@@ -19,9 +20,11 @@ const Table = <T extends { id: string }>(props: TableProps<T>) => {
   return (
     <>
       {
-        props.filters && <Filters<T>
-          items={props.filters}
-        />
+        props.filters && <FormControlProvider<T>
+          itemsProp={props.filters}
+        >
+          <Filters<T> />
+        </FormControlProvider>
       }
       <br />
       <Suspense

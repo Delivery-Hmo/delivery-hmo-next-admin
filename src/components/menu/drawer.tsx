@@ -10,7 +10,6 @@ interface Props {
 }
 
 const Drawer: FC<Props> = ({ open, onClose }) => {
-
   return (
     <DrawerAnt
       styles={{

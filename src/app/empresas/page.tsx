@@ -5,7 +5,7 @@ import { baseColumnsTable, baseFiltersTable } from "@src/utils/constants";
 const Companies = () => {
   return (
     <Table<UserAdmin>
-      baseUrlType="companiesApi"
+      baseUrl="companiesApi"
       filters={baseFiltersTable}
       columns={baseColumnsTable}
     />

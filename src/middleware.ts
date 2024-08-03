@@ -32,7 +32,7 @@ export async function middleware(request: NextRequest) {
   if (token && uid && refreshToken) {
     try {
       const { message } = await get<{ message: "ok" | "expired" | "Unauthorized"; token?: string; }>({
-        baseUrlType: "companiesApi",
+        baseUrl: "companiesApi",
         url: `/auth/verifyToken?uid=${uid}`
       });
 
@@ -41,14 +41,14 @@ export async function middleware(request: NextRequest) {
       if (message === "expired") {
         const key = process.env.FIREBASE_API_KEY;
 
-        const { id_token, refresh_token } = await post<{ id_token: string; refresh_token: string }>({ 
-          baseUrlType: "refreshTokenApi",
+        const { id_token, refresh_token } = await post<{ id_token: string; refresh_token: string; }>({
+          baseUrl: "refreshTokenApi",
           url: `/token?key=${key}`,
           headers: { "Content-Type": "application/json" },
           body: {
             "grant_type": "refresh_token",
             "refresh_token": refreshToken
-          },
+          }
         });
 
         responseRedirect.cookies.set("token", id_token);
@@ -121,11 +121,11 @@ export async function middleware(request: NextRequest) {
     const response = NextResponse.next();
 
     Object.entries(urlValues).forEach(([key, urlValue]) => {
-      if(newToken) {
+      if (newToken) {
         response.cookies.set("token", newToken);
         response.cookies.set("refreshToken", newRefreshToken);
       }
-     
+
       response.cookies.set(key, urlValue!);
     });
 

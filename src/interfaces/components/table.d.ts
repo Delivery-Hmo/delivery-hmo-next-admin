@@ -1,12 +1,13 @@
-import { type } from "os";
 import { GetProps } from "../services/http";
 import { InputProps, SelectProps } from "antd";
+import { baseUrls } from "@src/types/services/http";
+import { InputType } from "../../types/components/table";
 
 export interface TableProps<T> extends GetProps {
   columns: Column<T>[];
   url?: string;
-  filters?: (ItemInput<keyof T> | ItemSelect<keyof T>)[];
-  onSearch?: (values: F) => void;
+  filters?: InputType<T>[];
+  onSearch?: (values: T) => void;
 }
 
 export interface Column<T> {
@@ -17,17 +18,33 @@ export interface Column<T> {
 export interface ItemInput<K> extends Omit<InputProps, "name"> {
   name: K;
   label: string;
-  typeInput?: "input";
+  type?: "input";
 }
 
-export interface ItemSelect<K> extends Omit<select, "name"> {
+export interface SelectOption {
+  value: string;
+  label: string;
+}
+
+
+export interface ItemSelect<K> extends Omit<SelectProps, "name"> {
   name: K;
   label: string;
-  typeInput?: "select";
-  loading?: boolean;
-  options?: { value: string | number, label: string }[];
+  type?: "select";
+  keyValue?: string;
+  keyLabel?: string;
+  baseUrl?: baseUrls;
+  url?: string;
+  page?: number;
 }
 
-export interface FiltersProps<T> {
-  items: (ItemInput<keyof T> | ItemSelect<keyof T>)[];
+export interface SelectGet {
+  list: SelectResponse[],
+  total: number;
 }
+
+export interface SelectResponse {
+  id: string;
+  name?: string;
+  email?: string;
+};
