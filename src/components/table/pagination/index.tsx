@@ -112,7 +112,7 @@ const Pagination = () => {
 
       observerTotal?.disconnect();
     };
-  }, []);
+  }, [router, message, modal, pathname]);
 
   useEffect(() => {
     const _page = searchParams.get("pagina");
@@ -125,7 +125,7 @@ const Pagination = () => {
 
     setPage(+_page);
     setLimit(+_limit);
-  }, [searchParams]);
+  }, [searchParams, pathname, router]);
 
   return (
     <PaginationAnt

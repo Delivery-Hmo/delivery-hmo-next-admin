@@ -5,7 +5,7 @@ import { getHeaders, handleError } from "@src/utils/functions";
 import { getCookie, getCookies } from "cookies-next";
 import { cookies } from "next/headers";
 import { GetProps, PostPutPatch } from "@src/interfaces/services/http";
-import { revalidateTag, unstable_cache } from "next/cache";
+import { revalidateTag } from "next/cache";
 
 export const get = async <T>({ baseUrl, url, abortController }: GetProps) => {
   try {

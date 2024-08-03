@@ -6,11 +6,12 @@ import { SearchOutlined } from "@ant-design/icons";
 import { onSearch } from "./actions";
 import FormControl from "../../formControl";
 import { useFormControl } from "@src/context/formControl";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const Filters = <T extends {}>() => {
   const { items, onPopupScroll } = useFormControl<T>();
   const searchParams = useSearchParams();
+  const router = useRouter();
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -35,9 +36,8 @@ const Filters = <T extends {}>() => {
     });
 
     form.setFieldsValue(defaultValues);
-  }, [items]);
-
-  //falta que no se pueda hacer onFinish si values no cambia y hacer la busqueda en back para los selects, probar hacer submit si defaultValues no esta vacio.
+    form.submit();
+  }, [form, items, searchParams]);
 
   return (
     <Card
@@ -48,7 +48,11 @@ const Filters = <T extends {}>() => {
       }}
     >
       <Form<T>
-        onFinish={(values) => onSearch(values)}
+        onFinish={async (values) => {
+          const url = await onSearch(values);
+
+          router.push(url);
+        }}
         form={form}
       >
         <Row

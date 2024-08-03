@@ -52,7 +52,7 @@ const useGet = <T extends {}>({ baseUrl, url, wait, mergeResponse, initLoading }
     };
 
     init();
-  }, [baseUrl, url, wait, mergeResponse, abortController, initLoading]);
+  }, [baseUrl, url, wait, mergeResponse, abortController, initLoading, message]);
 
   return { loading, response, setResponse };
 };

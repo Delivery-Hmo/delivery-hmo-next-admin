@@ -59,7 +59,7 @@ const FormControlProvider = <T extends {}>({ children, itemsProp }: Props<T>) =>
     };
 
     init();
-  }, [itemsProp]);
+  }, [itemsProp, abortController, items, message]);
 
   const onPopupScroll = async (e: UIEvent<HTMLDivElement, globalThis.UIEvent>, item: ItemSelect<keyof T>) => {
     if (notLoadMore) return;

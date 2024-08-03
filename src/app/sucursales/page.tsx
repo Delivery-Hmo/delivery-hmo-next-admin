@@ -15,7 +15,7 @@ const BranchOffices = () => {
         baseUrl: "companiesApi",
         url: "/empresas/listaFiltrosSucursales",
         loading: true,
-        showSearch: true
+        showSearch: true,
       }
     ];
 

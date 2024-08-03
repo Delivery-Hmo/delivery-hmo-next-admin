@@ -48,7 +48,7 @@ export async function middleware(request: NextRequest) {
           body: {
             "grant_type": "refresh_token",
             "refresh_token": refreshToken
-          },
+          }
         });
 
         responseRedirect.cookies.set("token", id_token);
