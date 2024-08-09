@@ -1,8 +1,9 @@
 import { MdBusiness } from "react-icons/md";
-import { HomeOutlined, PoweroffOutlined, ShopOutlined } from "@ant-design/icons";
+import { HomeOutlined, PoweroffOutlined, ShopOutlined, TeamOutlined } from "@ant-design/icons";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { getAuth } from "firebase/auth";
 import { firstPage } from "@src/utils/constants";
+
 
 const items = [
   {
@@ -28,6 +29,12 @@ const items = [
     path: `/vendedores${firstPage}`,
     label: "Vendedores",
     icon: <AiOutlineUserAdd style={{ fontSize: 18 }} />,
+  },
+  {
+    key: "/repartidores",
+    path: `/repartidores${firstPage}`,
+    label: "Repartidores",
+    icon: <TeamOutlined style={{ fontSize: 18 }} />,
   },
   {
     key: "/cerrar-sesión",
