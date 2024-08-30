@@ -88,6 +88,6 @@ export const baseColumnsTable: Column<User>[] = [
   }
 ] as const;
 
-export const filterKeys = ["page", "limit", "id", "name", "email", "phone", "rfc", "userAdmin"];
+export const filterKeys = ["page", "limit", "id", "name", "email", "phone", "rfc", "userAdmin", "branchOffice"];
 
 export const allUrlParamKeys = [...filterKeys, "pathname"] as const;

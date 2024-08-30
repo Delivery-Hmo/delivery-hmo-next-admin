@@ -76,7 +76,7 @@ const FormControlProvider = <T extends {}>({ children, itemsProp }: Props<T>) =>
     setItems(prev => prev.map(i => {
       const parseItem = i as ItemSelect<keyof T>;
 
-      if (parseItem.id !== item.id) return parseItem;
+      if (parseItem.name !== item.name) return parseItem;
 
       parseItem.loading = true;
 
@@ -93,10 +93,9 @@ const FormControlProvider = <T extends {}>({ children, itemsProp }: Props<T>) =>
       setItems(items.map(i => {
         const parseItem = i as ItemSelect<keyof T>;
 
-        if (parseItem.id !== item.id) return parseItem;
+        if (parseItem.name !== item.name) return parseItem;
 
-        parseItem.options = [...parseItem.options || [], ...response.list.map((r) => ({ value: r.id, label: `${r.name || ""} ${r.email ? " - " + r.email : ""}` }))];
-        parseItem.loading = false;
+        parseItem.options = [...parseItem.options || [], ...response.list.map((r) => ({ value: r.name, label: `${r.name || ""} ${r.email ? " - " + r.email : ""}` }))];
         parseItem.page = page! + 1;
 
         return parseItem;
@@ -108,7 +107,7 @@ const FormControlProvider = <T extends {}>({ children, itemsProp }: Props<T>) =>
       setItems(prev => prev.map(i => {
         const parseItem = i as ItemSelect<keyof T>;
 
-        if (parseItem.id !== item.id) return parseItem;
+        if (parseItem.name !== item.name) return parseItem;
 
         parseItem.loading = false;
 
