@@ -1,73 +1,44 @@
 import Table from "@src/components/table";
-import { UserAdmin } from "@src/interfaces/models/users";
+import { UserSeller } from "@src/interfaces/models/users";
+import { InputType } from "@src/types/components/table";
+import { baseColumnsTable, baseFiltersTable } from "@src/utils/constants";
+import { useMemo } from "react";
 
-const Sellers = () => {
+const Seller = () => {
+  const filters = useMemo<InputType<UserSeller>[]>(() => {
+    const filters: InputType<UserSeller>[] = [
+      ...baseFiltersTable,
+      {
+        type: "select",
+        label: "Empresa",
+        name: "userAdmin",
+        baseUrl: "companiesApi",
+        url: "/empresas/listaFiltrosSucursales",
+        loading: true,
+        showSearch: true,
+      },
+      {
+        type: "select",
+        label: "Sucursal",
+        name: "branchOffice",
+        baseUrl: "companiesApi",
+        url: "/sucursales/listaFiltrosSucursales",
+        loading: true,
+        showSearch: true,
+      }
+    ];
+
+    return filters;
+  }, []);
+
   return (
-    <Table<UserAdmin>
-      filters={[
-        {
-          name: "name",
-          placeholder: "Nombre",
-          value: "",
-          label: "Nombre",
-        },
-        {
-          name: "rfc",
-          placeholder: "RFC",
-          multiple: true,
-          value: [],
-          label: "RFC",
-        },
-        {
-          name: "email",
-          placeholder: "Correo",
-          value: "",
-          label: "Correo",
-        },
-        {
-          name: "phone",
-          placeholder: "Telefono",
-          value: "",
-          label: "Telefono",
-        },
-      ]}
+    <Table<UserSeller>
+      filters={filters}
       baseUrl="companiesApi"
-      columns={[
-        {
-          key: "id",
-          title: "ID",
-        },
-        {
-          key: "name",
-          title: "Nombre",
-        },
-        {
-          key: "rfc",
-          title: "RFC",
-        },
-        {
-          key: "email",
-          title: "Correo",
-        },
-        {
-          key: "phone",
-          title: "Telefono",
-        },
-        {
-          key: "description",
-          title: "Descripcion",
-        },
-        {
-          key: "active",
-          title: "Activo",
-        },
-        {
-          key: "image",
-          title: "Imagen",
-        }
-      ]}
+      columns={baseColumnsTable}
+      url="listBySuperAdmin"
     />
   );
 };
 
-export default Sellers;
+export default Seller;
